@@ -1,6 +1,7 @@
 import React, {useState, useMemo, useCallback} from "react";
 import { FixedSizeList as List } from "react-window";
 import { RightOutlined, DownOutlined } from "@ant-design/icons";
+import styles from "./formation-tree.module.css"
 
 /**
  * Basic data contracts coming from .bpc
@@ -90,34 +91,27 @@ export function FormationTree(props: FormationTreeProps) {
     const isExpanded = expanded.has(id);
     const hasChildren = node.children.length > 0;
     const isReused = (reuseIndex[node.item_id]?.length || 0) > 1;
+    const rowClass = [
+      styles.row,
+      selectedId === id ? styles.selected : "",
+    ].filter(Boolean).join(" ");
 
     return (
       <div
+        className={rowClass}
         style={{
           ...style,
-          display: "flex",
-          alignItems: "center",
-          cursor: "pointer",
-          userSelect: "none",
           paddingLeft: 8 + depth * 16,
-          backgroundColor: selectedId === id ? "#ebf4ff" : undefined,
         }}
         onClick={() => onSelect(id)}
-        onMouseEnter={e => (e.currentTarget.style.backgroundColor = selectedId === id ? "#ebf4ff" : "#f9f9f9")}
-        onMouseLeave={e => (e.currentTarget.style.backgroundColor = selectedId === id ? "#ebf4ff" : "")}
       >
         {/* toggle icon */}
         {hasChildren ? (
           <button
+            className={styles["toggle"]}
             onClick={e => {
               e.stopPropagation();
               toggle(id);
-            }}
-            style={{
-              all: "unset",
-              marginRight: 4,
-              color: "#666",
-              cursor: "pointer",
             }}
           >
             {isExpanded ? <DownOutlined style={{ fontSize: 12 }} /> : <RightOutlined style={{ fontSize: 12 }} />}
@@ -127,24 +121,16 @@ export function FormationTree(props: FormationTreeProps) {
         )}
 
         {/* part label */}
-        <span style={{ flexShrink: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        <span className={styles["part-label"]}>
           {item?.name || node.item_id}
           {node.qty !== undefined && (
-            <span style={{ fontSize: "0.75rem", color: "#888" }}> ×{node.qty}</span>
+            <span className={styles["part-qty"]}> ×{node.qty}</span>
           )}
         </span>
 
         {/* reuse badge */}
         {isReused && (
-          <span style={{
-            marginLeft: 4,
-            fontSize: "10px",
-            lineHeight: 1,
-            color: "#b7791f",
-            backgroundColor: "#fefcbf",
-            borderRadius: 4,
-            padding: "0 4px",
-          }}>
+          <span className={styles["reuse-badge"]}>
             {reuseIndex[node.item_id].length}
           </span>
         )}

@@ -1,0 +1,42 @@
+.row {
+  display: flex;
+  align-items: center;
+  cursor: default;
+  height: 100%;
+}
+
+.selected {
+  background-color: #ebf4ff;
+}
+
+.row:hover:not(.selected) {
+  background-color: #f9f9f9;
+}
+
+.toggle {
+  all: unset;
+  margin-right: 4px;
+  color: #666;
+}
+
+.part-label {
+  flex-shrink: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.part-qty {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.reuse-badge {
+  margin-left: 4px;
+  font-size: 10px;
+  line-height: 1;
+  color: #b7791f;
+  background-color: #fefcbf;
+  border-radius: 4px;
+  padding: 0 4px;
+}
