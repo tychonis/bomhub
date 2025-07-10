@@ -1,4 +1,4 @@
-import { TestPage } from "pages/TestPage/TestPage";
+import { TestPage } from "pages/test-page/test-page";
 import { CarOutlined, HomeOutlined, ThunderboltOutlined, ToolOutlined } from "@ant-design/icons";
 import { Landing } from "pages/Landing/Landing";
 
