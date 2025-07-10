@@ -1,3 +1,5 @@
+import styles from "./context-panel.module.css"
+
 interface ContextPanelProps {
   variant: string;
   setVariant: (v: string) => void;
@@ -10,13 +12,12 @@ interface ContextPanelProps {
 
 export function ContextPanel({ variant, setVariant, gitInfo }: ContextPanelProps) {
   return (
-    <div style={{ padding: 16, width: "20%", borderLeft: "1px solid #eee", fontSize: 14 }}>
-      <div style={{ marginBottom: 24 }}>
-        <label style={{ display: "block", fontWeight: 600, marginBottom: 4 }}>Variant:</label>
+    <div className={styles["panel"]}>
+      <div className={styles["section"]}>
+        <label>Variant:</label>
         <select
           value={variant}
           onChange={(e) => setVariant(e.target.value)}
-          style={{ width: "100%", padding: 4 }}
         >
           <option value="">All</option>
           <option value="white">white</option>
@@ -26,12 +27,12 @@ export function ContextPanel({ variant, setVariant, gitInfo }: ContextPanelProps
 
       {gitInfo && (
         <div>
-          <div style={{ fontWeight: 600, marginBottom: 4 }}>Git Info:</div>
+          <div className={styles["title"]}>Git Info:</div>
           <div><strong>Branch:</strong> {gitInfo.branch || "—"}</div>
           <div><strong>Commit:</strong> {gitInfo.commit?.slice(0, 8) || "—"}</div>
-          <div style={{ marginTop: 4 }}>
+          <div className={styles["git-source"]}>
             <strong>Source:</strong>
-            <div style={{ fontSize: 12, color: "#555" }}>{gitInfo.sourcePath || "—"}</div>
+            <div>{gitInfo.sourcePath || "—"}</div>
           </div>
         </div>
       )}
