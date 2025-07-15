@@ -20,8 +20,8 @@ export function ContextPanel({ variant, setVariant, gitInfo }: ContextPanelProps
           onChange={(e) => setVariant(e.target.value)}
         >
           <option value="">All</option>
-          <option value="white">white</option>
-          <option value="black">black</option>
+          <option value="basic">basic</option>
+          <option value="luxury">luxury</option>
         </select>
       </div>
 
