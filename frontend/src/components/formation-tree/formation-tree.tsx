@@ -32,6 +32,11 @@ export interface FormationTreeProps {
   rowHeight?: number;
 }
 
+interface node {
+  id: string;
+  depth: number;
+}
+
 /**
  * A utility that flattens the visible part of the formation tree
  * into an array for virtualised rendering.
@@ -40,8 +45,8 @@ function buildVisibleRows(
   nodes: Record<string, ItemNode>,
   rootId: string,
   expanded: Set<string>
-): { id: string; depth: number }[] {
-  const out: { id: string; depth: number }[] = [];
+): node[] {
+  const out: node[] = [];
   const walk = (id: string, depth: number) => {
     out.push({ id, depth });
     if (expanded.has(id)) {
@@ -53,6 +58,7 @@ function buildVisibleRows(
   walk(rootId, 0);
   return out;
 }
+
 
 /**
  * FormationTree – left pane tree view for bomhub.

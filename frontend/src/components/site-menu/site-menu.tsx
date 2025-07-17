@@ -1,4 +1,4 @@
-import "./SiteMenu.css"
+import styles from "./site-menu.module.css"
 
 import { Menu, MenuProps } from "antd"
 import { useNavigate } from "react-router-dom";
@@ -17,10 +17,12 @@ export const SiteMenu = () => {
     }
 
     return (
-        <Menu className="site-menu" onClick={onClick} items={[{
-            type: 'divider',
-          },
-          ...Components,
-        ]}/>
+        <div>
+            <Menu className={styles["site-menu"]} onClick={onClick} items={[{
+                type: 'divider',
+            },
+            ...Components,
+            ]}/>
+        </div>
     )
 }

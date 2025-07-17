@@ -1,6 +1,6 @@
 import 'App.css'
-import { SiteHeader } from 'components/SiteHeader/SiteHeader'
-import { SiteMenu } from 'components/SiteMenu/SiteMenu'
+import { SiteHeader } from 'components/site-header/site-header'
+import { SiteMenu } from 'components/site-menu/site-menu'
 import { Outlet } from 'react-router-dom'
 
 function App() {
