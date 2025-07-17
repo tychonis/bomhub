@@ -1,6 +1,7 @@
 import { TestPage } from "pages/test-page/test-page";
 import { CarOutlined, HomeOutlined, ThunderboltOutlined, ToolOutlined } from "@ant-design/icons";
 import { Landing } from "pages/Landing/Landing";
+import { Bom } from "pages/bom/bom";
 
 interface Component {
     path: string;
@@ -23,7 +24,7 @@ export const Components: Component[] = [
         key: "parts",
         label: "Parts",
         icon: <ToolOutlined />,
-        element: <TestPage />
+        element: <Bom />
     },
     {
         path: "/thing",
