@@ -1,3 +1,3 @@
 export const TestPage = () => {
-  return <>Test</>
+  return <>Test</>;
 };

@@ -1,5 +1,5 @@
 import type { ItemNode, ItemMeta } from "../formation-tree/formation-tree";
-import styles from "./item-details-panel.module.css"
+import styles from "./item-details-panel.module.css";
 
 interface ItemDetailsPanelProps {
   node: ItemNode | null;
@@ -8,9 +8,16 @@ interface ItemDetailsPanelProps {
   onJumpToInstance?: (id: string) => void;
 }
 
-export function ItemDetailsPanel({ node, item, reuseCount, onJumpToInstance }: ItemDetailsPanelProps) {
+export function ItemDetailsPanel({
+  node,
+  item,
+  reuseCount,
+  onJumpToInstance,
+}: ItemDetailsPanelProps) {
   if (!node || !item) {
-    return <div className={styles["empty"]}>Select a part to view details.</div>;
+    return (
+      <div className={styles["empty"]}>Select a part to view details.</div>
+    );
   }
 
   return (

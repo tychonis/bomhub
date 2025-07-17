@@ -1,31 +1,31 @@
-import React, {useState, useMemo, useCallback} from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { FixedSizeList as List } from "react-window";
 import { RightOutlined, DownOutlined } from "@ant-design/icons";
-import styles from "./formation-tree.module.css"
+import styles from "./formation-tree.module.css";
 
 /**
  * Basic data contracts coming from .bpc
  */
 export interface ItemNode {
-  id: string;             // unique ItemNode ID
-  item_id: string;        // logical Item ID (for reuse highlighting)
-  children: string[];     // child ItemNode IDs (order preserved)
+  id: string; // unique ItemNode ID
+  item_id: string; // logical Item ID (for reuse highlighting)
+  children: string[]; // child ItemNode IDs (order preserved)
   parent_id?: string | null;
   qty?: number;
   variant?: string;
 }
 
 export interface ItemMeta {
-  id: string;             // logical Item ID
+  id: string; // logical Item ID
   name: string;
   part_number?: string;
 }
 
 export interface FormationTreeProps {
-  nodes: Record<string, ItemNode>;          // ItemNode ID -> node
-  items: Record<string, ItemMeta>;          // Item ID -> meta (for display)
-  rootId: string;                           // root ItemNode ID
-  reuseIndex: Record<string, string[]>;     // Item ID -> list of ItemNode IDs
+  nodes: Record<string, ItemNode>; // ItemNode ID -> node
+  items: Record<string, ItemMeta>; // Item ID -> meta (for display)
+  rootId: string; // root ItemNode ID
+  reuseIndex: Record<string, string[]>; // Item ID -> list of ItemNode IDs
   selectedId: string | null;
   onSelect: (id: string) => void;
   /** row height for react‑window */
@@ -59,7 +59,6 @@ function buildVisibleRows(
   return out;
 }
 
-
 /**
  * FormationTree – left pane tree view for bomhub.
  * - Virtualised for large BoMs (react‑window)
@@ -78,29 +77,39 @@ export function FormationTree(props: FormationTreeProps) {
     rowHeight = 28,
   } = props;
 
-  const [expanded, setExpanded] = useState<Set<string>>(() => new Set([rootId]));
+  const [expanded, setExpanded] = useState<Set<string>>(
+    () => new Set([rootId])
+  );
 
   const toggle = useCallback((id: string) => {
-    setExpanded(prev => {
+    setExpanded((prev) => {
       const next = new Set(prev);
       next.has(id) ? next.delete(id) : next.add(id);
       return next;
     });
   }, []);
 
-  const rows = useMemo(() => buildVisibleRows(nodes, rootId, expanded), [nodes, rootId, expanded]);
+  const rows = useMemo(
+    () => buildVisibleRows(nodes, rootId, expanded),
+    [nodes, rootId, expanded]
+  );
 
-  const Row = ({ index, style }: { index: number; style: React.CSSProperties }) => {
+  const Row = ({
+    index,
+    style,
+  }: {
+    index: number;
+    style: React.CSSProperties;
+  }) => {
     const { id, depth } = rows[index];
     const node = nodes[id];
     const item = items[node.item_id];
     const isExpanded = expanded.has(id);
     const hasChildren = node.children.length > 0;
     const isReused = (reuseIndex[node.item_id]?.length || 0) > 1;
-    const rowClass = [
-      styles.row,
-      selectedId === id ? styles.selected : "",
-    ].filter(Boolean).join(" ");
+    const rowClass = [styles.row, selectedId === id ? styles.selected : ""]
+      .filter(Boolean)
+      .join(" ");
 
     return (
       <div
@@ -115,12 +124,16 @@ export function FormationTree(props: FormationTreeProps) {
         {hasChildren ? (
           <button
             className={styles["toggle"]}
-            onClick={e => {
+            onClick={(e) => {
               e.stopPropagation();
               toggle(id);
             }}
           >
-            {isExpanded ? <DownOutlined style={{ fontSize: 12 }} /> : <RightOutlined style={{ fontSize: 12 }} />}
+            {isExpanded ? (
+              <DownOutlined style={{ fontSize: 12 }} />
+            ) : (
+              <RightOutlined style={{ fontSize: 12 }} />
+            )}
           </button>
         ) : (
           <span style={{ width: 16 }} />
