@@ -4,15 +4,11 @@ import { ItemMeta, ItemNode, FormationTree } from "components/formation-tree/for
 import { ItemDetailsPanel } from "components/items-details-panel/item-details-panel";
 import { ContextPanel } from "components/context-panel/context-panel";
 
-async function loadBpc() {
-  const data = await ky.get("https://raw.githubusercontent.com/tychonis/cyanotype-chess/refs/heads/master/chess.bpc").json();
-  return data;
-}
-
-async function loadGit() {
-  const data = await ky.get("https://api.github.com/repos/tychonis/cyanotype-chess/branches").json();
-  return data;
-}
+interface BpcRef {
+  name: string;
+  repo: string;
+  bpc: string;
+};
 
 interface BpcDocument {
   root: string;                                     // root node ID
@@ -28,36 +24,54 @@ interface GitInfo {
   path: string;
 }
 
+interface Bpc {
+  document: BpcDocument;
+  gitInfo: GitInfo;
+}
+
+async function getRawBPCs(): Promise<Bpc[]> {
+  const refs: BpcRef[] = await ky.get("https://api.bomhub.tychonis.com/boms").json();
+
+  const bpcs: Bpc[] = [];
+
+  for (const ref of refs) {
+    const match = ref.repo.match(/^https:\/\/github\.com\/([^\/]+)\/([^\/]+)(\/)?$/);
+    if (!match) continue;
+
+    const [_, owner, repo] = match;
+
+    const data:any = await ky.get("https://api.github.com/repos/tychonis/cyanotype-chess/branches").json();
+    const branchName = data[0].name;
+    const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/refs/heads/${branchName}/${ref.bpc}`;
+    const document = await ky.get(rawUrl).json();
+    const bpc:Bpc = {
+      document: document as BpcDocument,
+      gitInfo: {
+        branch:data[0].name,
+        commit:data[0].commit.sha,
+        path:ref.bpc,
+      }
+    }
+    bpcs.push(bpc);
+  }
+
+  return bpcs;
+}
+
+
 export const TestPage = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [bom, setBom] = useState<BpcDocument | null> (null);
-  const [gitInfo, setGitInfo] = useState<GitInfo | null> (null);
-
-  function parseBpc(data: any) {
-    const bom: BpcDocument = data as BpcDocument
-    setBom(bom)
-  };
-
-  function parseGitInfo(data: any) {
-    const info:GitInfo  = {
-      branch:data[0].name,
-      commit:data[0].commit.sha,
-      path:"chess.bpc"
-    }
-    setGitInfo(info)
-  };
+  const [bpcs, setBpcs] = useState<Bpc[] | null> (null);
 
   useEffect(() => {
-    loadBpc().then(parseBpc).catch(console.error);
+    getRawBPCs().then(setBpcs).catch(console.error);
   }, []);
 
-  useEffect(() => {
-    loadGit().then(parseGitInfo).catch(console.error);
-  }, []);
-
-  if (!bom) {
+  if (!bpcs) {
     return <></>
   }
+
+  const bom = bpcs[0].document;
 
   if (!selectedId) {
     setSelectedId(bom.root)
@@ -83,9 +97,9 @@ export const TestPage = () => {
         variant=""
         setVariant={() => {}}
         gitInfo={{
-            branch: gitInfo?.branch,
-            commit: gitInfo?.commit,
-            sourcePath: gitInfo?.path
+            branch: bpcs[0].gitInfo.branch,
+            commit: bpcs[0].gitInfo.commit,
+            sourcePath: bpcs[0].gitInfo.path
         }}
       />
     </div>
