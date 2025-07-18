@@ -10,7 +10,7 @@
 }
 
 .reused {
-  background-color: #ff0000;
+  font-weight: 800;
 }
 
 .row:hover:not(.selected) {

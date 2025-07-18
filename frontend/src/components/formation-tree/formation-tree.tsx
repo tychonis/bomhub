@@ -10,7 +10,7 @@ export interface ItemNode {
   id: string; // unique ItemNode ID
   item_id: string; // logical Item ID (for reuse highlighting)
   children: string[]; // child ItemNode IDs (order preserved)
-  parent_id?: string | null;
+  parent_id?: string;
   qty?: number;
   variant?: string;
 }
@@ -60,6 +60,42 @@ function buildVisibleRows(
 }
 
 /**
+ * A utility that flattens the reused part of the formation tree
+ * into an array for referencing.
+ */
+function buildReusedRows(
+  nodes: Record<string, ItemNode>,
+  visible: Set<string>,
+  reuseIndex: Record<string, string[]>,
+  current: string
+): string[] {
+  const out: string[] = [];
+  const walk = (id?: string) => {
+    if (!id) {
+      return;
+    }
+    if (visible.has(id)) {
+      out.push(id);
+      return;
+    }
+    const node = nodes[id];
+    walk(node.parent_id);
+  };
+  const node = nodes[current];
+  if (!node) {
+    return [];
+  }
+  const reused = reuseIndex[node.item_id];
+  if (!reused) {
+    return [];
+  }
+  for (const reuse of reused) {
+    walk(reuse);
+  }
+  return out;
+}
+
+/**
  * FormationTree – left pane tree view for bomhub.
  * - Virtualised for large BoMs (react‑window)
  * - Expand/collapse with in‑memory state
@@ -81,6 +117,8 @@ export function FormationTree(props: FormationTreeProps) {
     () => new Set([rootId])
   );
 
+  const [current, setCurrent] = useState<string>("");
+
   const toggle = useCallback((id: string) => {
     setExpanded((prev) => {
       const next = new Set(prev);
@@ -93,6 +131,17 @@ export function FormationTree(props: FormationTreeProps) {
     () => buildVisibleRows(nodes, rootId, expanded),
     [nodes, rootId, expanded]
   );
+
+  const visible = new Set<string>();
+  for (const row of rows) {
+    visible.add(row.id);
+  }
+
+  const reusedRows = useMemo(
+    () => buildReusedRows(nodes, visible, reuseIndex, current),
+    [nodes, visible, reuseIndex, current]
+  );
+  const reusedRowSet = new Set(reusedRows);
 
   const Row = ({
     index,
@@ -107,7 +156,11 @@ export function FormationTree(props: FormationTreeProps) {
     const isExpanded = expanded.has(id);
     const hasChildren = node.children.length > 0;
     const isReused = (reuseIndex[node.item_id]?.length || 0) > 1;
-    const rowClass = [styles.row, selectedId === id ? styles.selected : ""]
+    const rowClass = [
+      styles.row,
+      selectedId === id ? styles["selected"] : "",
+      reusedRowSet.has(id) ? styles["reused"] : "",
+    ]
       .filter(Boolean)
       .join(" ");
 
@@ -119,6 +172,12 @@ export function FormationTree(props: FormationTreeProps) {
           paddingLeft: 8 + depth * 16,
         }}
         onClick={() => onSelect(id)}
+        onMouseEnter={() => {
+          setCurrent(id);
+        }}
+        onMouseLeave={() => {
+          setCurrent("");
+        }}
       >
         {/* toggle icon */}
         {hasChildren ? (
