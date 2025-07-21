@@ -217,13 +217,15 @@ export function FormationTree(props: FormationTreeProps) {
   };
 
   return (
-    <List
-      height={window.innerHeight}
-      width={"25%"}
-      itemCount={rows.length}
-      itemSize={rowHeight}
-    >
-      {Row}
-    </List>
+    <div className={styles["formation-tree"]}>
+      <List
+        height={window.innerHeight}
+        width={"100%"}
+        itemCount={rows.length}
+        itemSize={rowHeight}
+      >
+        {Row}
+      </List>
+    </div>
   );
 }

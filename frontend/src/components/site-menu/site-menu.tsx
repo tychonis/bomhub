@@ -16,7 +16,7 @@ export const SiteMenu = () => {
   };
 
   return (
-    <div>
+    <div className={styles["site-menu-container"]}>
       <Menu
         className={styles["site-menu"]}
         onClick={onClick}

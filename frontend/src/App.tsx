@@ -7,8 +7,12 @@ function App() {
   return (
     <>
       <SiteHeader />
-      <SiteMenu />
-      <Outlet />
+      <div style={{ display: "flex" }}>
+        <SiteMenu />
+        <div style={{ flex: 1 }}>
+          <Outlet />
+        </div>
+      </div>
     </>
   );
 }

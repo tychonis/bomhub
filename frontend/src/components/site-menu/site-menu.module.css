@@ -1,3 +1,11 @@
+.site-menu-container {
+  position: fixed;
+  top: 4rem;
+  left: 0;
+  width: 10rem;
+  height: calc(100% - 4rem);
+}
+
 .site-menu {
   position: fixed;
   top: 4rem;

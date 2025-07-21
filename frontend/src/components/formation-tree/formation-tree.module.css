@@ -1,3 +1,7 @@
+.formation-tree {
+  width: 15%;
+}
+
 .row {
   display: flex;
   align-items: center;

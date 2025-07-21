@@ -1,3 +1,5 @@
+import styles from "./bom.module.css";
+
 import { useEffect, useState } from "react";
 import ky from "ky";
 import {
@@ -80,8 +82,8 @@ export const Bom = () => {
     return <></>;
   }
 
-  const bom = bpcs[0].document;
-  const git = bpcs[0].gitInfo;
+  const bom = bpcs[1].document;
+  const git = bpcs[1].gitInfo;
 
   if (!selectedId) {
     setSelectedId(bom.root);
@@ -89,7 +91,7 @@ export const Bom = () => {
   }
 
   return (
-    <div style={{ height: "80vh", width: "80vw", display: "flex" }}>
+    <div className={styles["bom-container"]}>
       <FormationTree
         nodes={bom.nodes}
         items={bom.items}
