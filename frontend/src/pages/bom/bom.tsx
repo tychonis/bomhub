@@ -81,6 +81,7 @@ export const Bom = () => {
   }
 
   const bom = bpcs[0].document;
+  const git = bpcs[0].gitInfo;
 
   if (!selectedId) {
     setSelectedId(bom.root);
@@ -106,9 +107,9 @@ export const Bom = () => {
         variant=""
         setVariant={() => {}}
         gitInfo={{
-          branch: bpcs[0].gitInfo.branch,
-          commit: bpcs[0].gitInfo.commit,
-          sourcePath: bpcs[0].gitInfo.path,
+          branch: git.branch,
+          commit: git.commit,
+          sourcePath: git.path,
         }}
       />
     </div>
