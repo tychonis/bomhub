@@ -70,20 +70,27 @@ async function getRawBPCs(): Promise<Bpc[]> {
   return bpcs;
 }
 
-export const Bom = () => {
+async function getRawBPC(index: number): Promise<Bpc> {
+  const bpcs = await getRawBPCs();
+  return bpcs[index];
+}
+
+export const Bom = ({ index }: { index: number }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [bpcs, setBpcs] = useState<Bpc[] | null>(null);
+  const [bpc, setBpc] = useState<Bpc | null>(null);
 
   useEffect(() => {
-    getRawBPCs().then(setBpcs).catch(console.error);
-  }, []);
+    setBpc(null);
+    setSelectedId(null);
+    getRawBPC(index).then(setBpc).catch(console.error);
+  }, [index]);
 
-  if (!bpcs) {
+  if (!bpc) {
     return <></>;
   }
 
-  const bom = bpcs[1].document;
-  const git = bpcs[1].gitInfo;
+  const bom = bpc.document;
+  const git = bpc.gitInfo;
 
   if (!selectedId) {
     setSelectedId(bom.root);

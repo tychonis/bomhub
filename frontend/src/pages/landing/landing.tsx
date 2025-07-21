@@ -14,8 +14,5 @@ export const Landing = () => (
       </a>
     </div>
     <h1>Bom Hub</h1>
-    <div className="card">
-      <p>Hello Tychonis!</p>
-    </div>
   </>
 );

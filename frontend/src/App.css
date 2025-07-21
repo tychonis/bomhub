@@ -5,5 +5,8 @@
 }
 
 .outlet-container {
+  display: flex;
   margin-left: 10rem;
+  width: calc(100vw - 10rem);
+  justify-content: center;
 }

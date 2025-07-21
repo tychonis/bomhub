@@ -1,10 +1,5 @@
-import { TestPage } from "pages/test-page/test-page";
-import {
-  CarOutlined,
-  HomeOutlined,
-  ThunderboltOutlined,
-  ToolOutlined,
-} from "@ant-design/icons";
+// import { TestPage } from "pages/test-page/test-page";
+import { ExperimentOutlined, HomeOutlined } from "@ant-design/icons";
 import { Landing } from "pages/landing/landing";
 import { Bom } from "pages/bom/bom";
 
@@ -25,26 +20,26 @@ export const Components: Component[] = [
     element: <Landing />,
   },
   {
-    path: "/parts",
-    key: "parts",
-    label: "Parts",
-    icon: <ToolOutlined />,
-    element: <Bom />,
+    path: "/chess",
+    key: "chess",
+    label: "Chess",
+    icon: <ExperimentOutlined />,
+    element: <Bom index={0} />,
   },
   {
-    path: "/thing",
-    key: "thing",
-    label: "Thing",
-    icon: <CarOutlined />,
-    element: <TestPage />,
+    path: "/factorio",
+    key: "factorio",
+    label: "Factorio",
+    icon: <ExperimentOutlined />,
+    element: <Bom index={1} />,
   },
-  {
-    path: "/test_page",
-    key: "test_page",
-    label: "Test Page",
-    icon: <ThunderboltOutlined />,
-    element: <TestPage />,
-  },
+  // {
+  //   path: "/test_page",
+  //   key: "test_page",
+  //   label: "Test Page",
+  //   icon: <ThunderboltOutlined />,
+  //   element: <TestPage />,
+  // },
 ];
 
 export const keyToIndex = new Map<string, number>();
