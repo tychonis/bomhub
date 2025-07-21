@@ -7,9 +7,9 @@ function App() {
   return (
     <>
       <SiteHeader />
-      <div style={{ display: "flex" }}>
+      <div>
         <SiteMenu />
-        <div style={{ flex: 1 }}>
+        <div className="outlet-container">
           <Outlet />
         </div>
       </div>
