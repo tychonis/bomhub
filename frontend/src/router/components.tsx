@@ -33,6 +33,13 @@ export const Components: Component[] = [
     icon: <ExperimentOutlined />,
     element: <Bom index={1} />,
   },
+  {
+    path: "/pnp",
+    key: "pnp",
+    label: "PnP",
+    icon: <ExperimentOutlined />,
+    element: <Bom index={2} />,
+  },
   // {
   //   path: "/test_page",
   //   key: "test_page",
