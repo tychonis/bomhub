@@ -51,7 +51,7 @@ async function getRawBPCs(): Promise<Bpc[]> {
     const [_, owner, repo] = match;
 
     const data: any = await ky
-      .get("https://api.github.com/repos/tychonis/cyanotype-chess/branches")
+      .get(`https://api.github.com/repos/${owner}/${repo}/branches`)
       .json();
     const branchName = data[0].name;
     const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/refs/heads/${branchName}/${ref.bpc}`;
