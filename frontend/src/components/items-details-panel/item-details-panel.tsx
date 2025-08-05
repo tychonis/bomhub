@@ -8,11 +8,47 @@ interface ItemDetailsPanelProps {
   onJumpToInstance?: (id: string) => void;
 }
 
+function DetailRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: React.ReactNode;
+}) {
+  return (
+    <tr>
+      <td className={styles["key"]}>{label}</td>
+      <td>{value}</td>
+    </tr>
+  );
+}
+
+function GenerateAttrList(
+  node: ItemNode,
+  item: ItemMeta,
+  extra: [string, React.ReactNode][]
+) {
+  const rows: [string, React.ReactNode][] = [
+    ["Part #:", item.part_number || "—"],
+    ["Item ID:", item.id],
+    ["Node ID:", node.id],
+  ];
+
+  if (node.qty !== undefined) {
+    rows.push(["Quantity:", node.qty]);
+  }
+
+  if (node.variant) {
+    rows.push(["Variant:", node.variant]);
+  }
+
+  return rows.concat(extra);
+}
+
 export function ItemDetailsPanel({
   node,
   item,
   reuseCount,
-  onJumpToInstance,
 }: ItemDetailsPanelProps) {
   if (!node || !item) {
     return (
@@ -20,53 +56,21 @@ export function ItemDetailsPanel({
     );
   }
 
+  let extra: [string, React.ReactNode][] = [];
+  if (reuseCount > 1) {
+    extra = extra.concat([["Used In:", <>{reuseCount} places</>]]);
+  }
+
+  const attrs = GenerateAttrList(node, item, extra);
+
   return (
     <div className={styles["panel"]}>
       <h2 className={styles["title"]}>{item.name}</h2>
       <table>
         <tbody>
-          <tr>
-            <td>Part #:</td>
-            <td>{item.part_number || "—"}</td>
-          </tr>
-          <tr>
-            <td>Item ID:</td>
-            <td>{item.id}</td>
-          </tr>
-          <tr>
-            <td>Node ID:</td>
-            <td>{node.id}</td>
-          </tr>
-          {node.qty !== undefined && (
-            <tr>
-              <td>Quantity:</td>
-              <td>{node.qty}</td>
-            </tr>
-          )}
-          {node.variant && (
-            <tr>
-              <td>Variant:</td>
-              <td>{node.variant}</td>
-            </tr>
-          )}
-          {reuseCount > 1 && (
-            <tr>
-              <td>Used In:</td>
-              <td>
-                {reuseCount} places
-                {onJumpToInstance && (
-                  <div style={{ marginTop: 4 }}>
-                    <button
-                      className={styles["jump-button"]}
-                      onClick={() => onJumpToInstance(node.id)}
-                    >
-                      Jump to this instance
-                    </button>
-                  </div>
-                )}
-              </td>
-            </tr>
-          )}
+          {attrs.map(([label, value], i) => (
+            <DetailRow key={i} label={label} value={value} />
+          ))}
         </tbody>
       </table>
     </div>

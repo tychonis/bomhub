@@ -19,6 +19,11 @@
 .panel td {
   vertical-align: top;
   padding-top: 2px;
+  text-align: left;
+}
+
+.key {
+  font-weight: 700;
 }
 
 .title {
