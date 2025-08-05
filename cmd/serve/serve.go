@@ -39,7 +39,7 @@ func run(cmd *cobra.Command, args []string) {
 		}
 		details, err := dbc.GetItemDetails(ctx, parsed)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, nil)
+			ctx.JSON(http.StatusNotFound, nil)
 			return
 		}
 		ctx.JSON(http.StatusOK, details)
