@@ -43,3 +43,17 @@
 .cell {
   padding-top: 2px;
 }
+
+.item-image {
+  width: 20%;
+}
+
+.item-attrs {
+  width: 70%;
+  margin: 1rem;
+}
+
+.panel-content {
+  display: flex;
+  align-items: flex-start;
+}

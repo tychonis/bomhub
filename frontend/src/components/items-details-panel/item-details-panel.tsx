@@ -1,11 +1,23 @@
 import type { ItemNode, ItemMeta } from "../formation-tree/formation-tree";
+import ky from "ky";
 import styles from "./item-details-panel.module.css";
+import { useEffect, useState } from "react";
 
 interface ItemDetailsPanelProps {
   node: ItemNode | null;
   item: ItemMeta | null;
   reuseCount: number;
   onJumpToInstance?: (id: string) => void;
+}
+
+const DEFAULT_IMAGE =
+  "https://media.printables.com/media/prints/32741/stls/320849_1e9f2158-27da-4374-a4b2-586850f4d47a/thumbs/cover/180x180/png/king-body-v2_preview.webp";
+
+async function GetItemDetails(itemID: string): Promise<any> {
+  const details = await ky
+    .get(`https://api.bomhub.tychonis.com/item/${itemID}`)
+    .json();
+  return details;
 }
 
 function DetailRow({
@@ -23,11 +35,7 @@ function DetailRow({
   );
 }
 
-function GenerateAttrList(
-  node: ItemNode,
-  item: ItemMeta,
-  extra: [string, React.ReactNode][]
-) {
+function GenerateAttrList(node: ItemNode, item: ItemMeta) {
   const rows: [string, React.ReactNode][] = [
     ["Part #:", item.part_number || "—"],
     ["Item ID:", item.id],
@@ -42,7 +50,7 @@ function GenerateAttrList(
     rows.push(["Variant:", node.variant]);
   }
 
-  return rows.concat(extra);
+  return rows;
 }
 
 export function ItemDetailsPanel({
@@ -50,29 +58,46 @@ export function ItemDetailsPanel({
   item,
   reuseCount,
 }: ItemDetailsPanelProps) {
+  const [attrs, setAttrs] = useState<[string, React.ReactNode][]>([]);
+  const [image, setImage] = useState<string>(DEFAULT_IMAGE);
   if (!node || !item) {
     return (
       <div className={styles["empty"]}>Select a part to view details.</div>
     );
   }
 
-  let extra: [string, React.ReactNode][] = [];
-  if (reuseCount > 1) {
-    extra = extra.concat([["Used In:", <>{reuseCount} places</>]]);
-  }
+  useEffect(() => {
+    const extra: [string, React.ReactNode][] = [];
 
-  const attrs = GenerateAttrList(node, item, extra);
+    if (reuseCount > 1) {
+      extra.push(["Used In:", <>{reuseCount} places</>]);
+    }
+
+    setImage(DEFAULT_IMAGE);
+    setAttrs(GenerateAttrList(node, item).concat(extra));
+
+    GetItemDetails(item.id).then((result) => {
+      const finalExtra = extra.concat([
+        ["Details:", <>{result["image"]}</>], // replace with actual content
+      ]);
+      setAttrs(GenerateAttrList(node, item).concat(finalExtra));
+      setImage(result["image"]);
+    });
+  }, [node, item, reuseCount]);
 
   return (
     <div className={styles["panel"]}>
       <h2 className={styles["title"]}>{item.name}</h2>
-      <table>
-        <tbody>
-          {attrs.map(([label, value], i) => (
-            <DetailRow key={i} label={label} value={value} />
-          ))}
-        </tbody>
-      </table>
+      <div className={styles["panel-content"]}>
+        <img src={image} className={styles["item-image"]} />
+        <table className={styles["item-attrs"]}>
+          <tbody>
+            {attrs.map(([label, value], i) => (
+              <DetailRow key={i} label={label} value={value} />
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
