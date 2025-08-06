@@ -18,12 +18,16 @@
 
 .panel td {
   vertical-align: top;
-  padding-top: 2px;
   text-align: left;
 }
 
 .key {
+  width: 15%;
   font-weight: 700;
+}
+
+.value {
+  font-family: "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
 }
 
 .title {

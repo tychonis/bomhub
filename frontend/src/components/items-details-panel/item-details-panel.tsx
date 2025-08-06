@@ -30,7 +30,7 @@ function DetailRow({
   return (
     <tr>
       <td className={styles["key"]}>{label}</td>
-      <td>{value}</td>
+      <td className={styles["value"]}>{value}</td>
     </tr>
   );
 }
