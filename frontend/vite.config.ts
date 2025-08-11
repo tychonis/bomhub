@@ -15,13 +15,11 @@ export default defineConfig({
     }),
   ],
   build: {
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         manualChunks(id) {
           if (id.includes("node_modules")) {
-            if (id.includes("ant")) {
-              return "vendor-antd";
-            }
             return "vendor";
           }
         },
