@@ -3,11 +3,11 @@ package auth
 import (
 	"crypto/rand"
 	"encoding/base64"
-	"fmt"
 	"net/http"
 
-	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/gin-gonic/gin"
+	"github.com/lestrrat-go/jwx/v3/jwk"
+	"github.com/lestrrat-go/jwx/v3/jwt"
 	"golang.org/x/oauth2"
 )
 
@@ -20,24 +20,31 @@ func randB64URL(n int) string {
 }
 
 type OIDCConfig struct {
-	OAuthConfig  oauth2.Config
-	Endpoint     string
-	ClientID     string
-	ClientSecret string
-	RedirectURL  string
+	OAuthConfig  *oauth2.Config
+	PublicKeyURL string
+	PublicKeySet *jwk.Cache
 }
 
 func (c *OIDCConfig) Authorize(ctx *gin.Context) {
-	cfg := oauth2.Config{
-		ClientID:     c.ClientID,
-		ClientSecret: c.ClientSecret,
-		Endpoint: oauth2.Endpoint{
-			AuthURL:  c.Endpoint + "/authorize",
-			TokenURL: c.Endpoint + "/oauth/token",
-		},
-		RedirectURL: c.RedirectURL,
-		Scopes:      []string{oidc.ScopeOpenID, "email"},
+	token, err := ctx.Cookie("id_token")
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
 	}
+	keySet, _ := c.PublicKeySet.Lookup(ctx, c.PublicKeyURL)
+	parsed, err := jwt.Parse([]byte(token),
+		jwt.WithKeySet(keySet),
+		jwt.WithAudience(""),
+	)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+	ctx.Set("user", parsed.Get("email", ""))
+	ctx.Next()
+}
+
+func (c *OIDCConfig) Login(ctx *gin.Context) {
 	state := randB64URL(32)
 	http.SetCookie(ctx.Writer, &http.Cookie{
 		Name:     "oidc_state",
@@ -47,7 +54,7 @@ func (c *OIDCConfig) Authorize(ctx *gin.Context) {
 		Secure:   true,
 	})
 
-	target := cfg.AuthCodeURL(state)
+	target := c.OAuthConfig.AuthCodeURL(state)
 	ctx.Redirect(http.StatusFound, target)
 }
 
@@ -58,5 +65,12 @@ func (c *OIDCConfig) Callback(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, nil)
 	}
 	token, _ := c.OAuthConfig.Exchange(ctx, ctx.Query("code"))
-	fmt.Print(token.Extra("id_token"))
+	http.SetCookie(ctx.Writer, &http.Cookie{
+		Name:     "oidc_state",
+		Value:    token.Extra("id_token").(string),
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   true,
+	})
+	ctx.Redirect(http.StatusFound, "http://localhost:5173")
 }
