@@ -37,5 +37,6 @@ func CreateDefaultAuthConfig() *auth.OIDCConfig {
 		},
 		PublicKeyURL: publicKeys,
 		PublicKeySet: cache,
+		Audience:     viper.GetString("oidc.client_id"),
 	}
 }

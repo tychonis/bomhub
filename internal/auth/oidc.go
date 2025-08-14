@@ -23,9 +23,18 @@ type OIDCConfig struct {
 	OAuthConfig  *oauth2.Config
 	PublicKeyURL string
 	PublicKeySet *jwk.Cache
+	Audience     string
 }
 
 func (c *OIDCConfig) Authorize(ctx *gin.Context) {
+	if ctx.FullPath() == "/login" {
+		ctx.Next()
+		return
+	}
+	if ctx.FullPath() == "/auth/callback" {
+		ctx.Next()
+		return
+	}
 	token, err := ctx.Cookie("id_token")
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusUnauthorized)
@@ -34,7 +43,7 @@ func (c *OIDCConfig) Authorize(ctx *gin.Context) {
 	keySet, _ := c.PublicKeySet.Lookup(ctx, c.PublicKeyURL)
 	parsed, err := jwt.Parse([]byte(token),
 		jwt.WithKeySet(keySet),
-		jwt.WithAudience(""),
+		jwt.WithAudience(c.Audience),
 	)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusUnauthorized)
@@ -66,11 +75,11 @@ func (c *OIDCConfig) Callback(ctx *gin.Context) {
 	}
 	token, _ := c.OAuthConfig.Exchange(ctx, ctx.Query("code"))
 	http.SetCookie(ctx.Writer, &http.Cookie{
-		Name:     "oidc_state",
+		Name:     "id_token",
 		Value:    token.Extra("id_token").(string),
 		Path:     "/",
 		HttpOnly: true,
 		Secure:   true,
 	})
-	ctx.Redirect(http.StatusFound, "http://localhost:5173")
+	ctx.Redirect(http.StatusFound, "http://localhost:5001/boms")
 }
