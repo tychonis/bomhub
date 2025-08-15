@@ -26,12 +26,16 @@ type OIDCConfig struct {
 	Audience     string
 }
 
+func (c *OIDCConfig) RegisterTo(router *gin.Engine) {
+	router.Use(c.Authorize)
+	GrantPublicAccess("/login")
+	router.GET("/login", c.Login)
+	GrantPublicAccess("/auth/callback")
+	router.GET("/auth/callback", c.Callback)
+}
+
 func (c *OIDCConfig) Authorize(ctx *gin.Context) {
-	if ctx.FullPath() == "/login" {
-		ctx.Next()
-		return
-	}
-	if ctx.FullPath() == "/auth/callback" {
+	if PublicResources.Contains(ctx.FullPath()) {
 		ctx.Next()
 		return
 	}
@@ -54,10 +58,18 @@ func (c *OIDCConfig) Authorize(ctx *gin.Context) {
 }
 
 func (c *OIDCConfig) Login(ctx *gin.Context) {
+	afterLogin := ctx.Query("redirect")
 	state := randB64URL(32)
 	http.SetCookie(ctx.Writer, &http.Cookie{
 		Name:     "oidc_state",
 		Value:    state,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   true,
+	})
+	http.SetCookie(ctx.Writer, &http.Cookie{
+		Name:     "after_login",
+		Value:    afterLogin,
 		Path:     "/",
 		HttpOnly: true,
 		Secure:   true,
@@ -73,6 +85,7 @@ func (c *OIDCConfig) Callback(ctx *gin.Context) {
 	if state != cState {
 		ctx.JSON(http.StatusBadRequest, nil)
 	}
+	afterLogin, _ := ctx.Cookie("after_login")
 	token, _ := c.OAuthConfig.Exchange(ctx, ctx.Query("code"))
 	http.SetCookie(ctx.Writer, &http.Cookie{
 		Name:     "id_token",
@@ -81,5 +94,5 @@ func (c *OIDCConfig) Callback(ctx *gin.Context) {
 		HttpOnly: true,
 		Secure:   true,
 	})
-	ctx.Redirect(http.StatusFound, "http://localhost:5001/boms")
+	ctx.Redirect(http.StatusFound, afterLogin)
 }
