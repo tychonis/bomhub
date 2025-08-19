@@ -1,7 +1,7 @@
 import styles from "./bom.module.css";
 
 import { useEffect, useState } from "react";
-import ky from "ky";
+import ky from "api/ky";
 import {
   ItemMeta,
   ItemNode,

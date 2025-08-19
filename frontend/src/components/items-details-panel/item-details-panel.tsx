@@ -1,5 +1,5 @@
 import type { ItemNode, ItemMeta } from "../formation-tree/formation-tree";
-import ky from "ky";
+import ky from "api/ky";
 import styles from "./item-details-panel.module.css";
 import { useEffect, useState } from "react";
 
