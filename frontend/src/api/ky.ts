@@ -5,8 +5,8 @@ const api = ky.create({
     afterResponse: [
       async (_request, _options, response) => {
         if (response.status === 401) {
-          // Redirect to your login page
-          window.location.href = "/login";
+          const current = encodeURIComponent(window.location.href);
+          window.location.href = `/login?redirect=${current}`;
         }
       },
     ],
