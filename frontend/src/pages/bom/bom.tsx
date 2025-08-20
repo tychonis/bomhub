@@ -9,6 +9,7 @@ import {
 } from "components/formation-tree/formation-tree";
 import { ItemDetailsPanel } from "components/items-details-panel/item-details-panel";
 import { ContextPanel } from "components/context-panel/context-panel";
+import { API_ROOT } from "api/constants";
 
 interface BpcRef {
   name: string;
@@ -36,9 +37,8 @@ interface Bpc {
 }
 
 async function getRawBPCs(): Promise<Bpc[]> {
-  const refs: BpcRef[] = await ky
-    .get("https://api.bomhub.tychonis.com/boms")
-    .json();
+  console.log(API_ROOT);
+  const refs: BpcRef[] = await ky.get(`${API_ROOT}/boms`).json();
 
   const bpcs: Bpc[] = [];
 

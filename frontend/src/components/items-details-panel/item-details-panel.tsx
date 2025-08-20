@@ -2,6 +2,7 @@ import type { ItemNode, ItemMeta } from "../formation-tree/formation-tree";
 import ky from "api/ky";
 import styles from "./item-details-panel.module.css";
 import { useEffect, useState } from "react";
+import { API_ROOT } from "api/constants";
 
 interface ItemDetailsPanelProps {
   node: ItemNode | null;
@@ -14,9 +15,7 @@ const DEFAULT_IMAGE =
   "https://media.printables.com/media/prints/32741/stls/320849_1e9f2158-27da-4374-a4b2-586850f4d47a/thumbs/cover/180x180/png/king-body-v2_preview.webp";
 
 async function GetItemDetails(itemID: string): Promise<any> {
-  const details = await ky
-    .get(`https://api.bomhub.tychonis.com/item/${itemID}`)
-    .json();
+  const details = await ky.get(`${API_ROOT}/item/${itemID}`).json();
   return details;
 }
 
