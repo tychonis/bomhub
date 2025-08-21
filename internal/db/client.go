@@ -41,3 +41,9 @@ func (c *Client) GetItemDetails(ctx context.Context, itemID uuid.UUID) (map[stri
 	err := row.Scan(&details)
 	return details, err
 }
+
+func (c *Client) LogActivity(ctx context.Context, email string, path string) error {
+	const sql = "INSERT INTO activity(email, path) VALUES ($1, $2);"
+	_, err := c.pool.Exec(ctx, sql, email, path)
+	return err
+}

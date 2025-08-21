@@ -46,6 +46,13 @@ func run(cmd *cobra.Command, args []string) {
 	}
 
 	router := setup.CreateDefaultRouter()
+	router.Use(func(ctx *gin.Context) {
+		user, ok := ctx.Get("user")
+		if !ok {
+			user = "unknown"
+		}
+		dbc.LogActivity(ctx, user.(string), ctx.FullPath())
+	})
 	router.GET("/boms", getBOMs)
 	router.GET("/item/:id", getItem)
 

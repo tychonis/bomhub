@@ -57,7 +57,13 @@ func (c *OIDCConfig) Authorize(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
-	ctx.Set("user", parsed.Get("email", ""))
+	var user string
+	err = parsed.Get("email", &user)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	ctx.Set("user", user)
 	ctx.Next()
 }
 

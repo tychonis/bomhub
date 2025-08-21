@@ -14,3 +14,10 @@ CREATE TABLE IF NOT EXISTS item (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
+
+CREATE TABLE IF NOT EXISTS activity (
+    activity_id SERIAL PRIMARY KEY,
+    email TEXT,
+    path TEXT,
+    activity_time TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
