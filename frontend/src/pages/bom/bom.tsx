@@ -1,7 +1,8 @@
 import styles from "./bom.module.css";
 
 import { useEffect, useState } from "react";
-import ky from "api/ky";
+import bomhub from "api/ky";
+import ky from "ky";
 import {
   ItemMeta,
   ItemNode,
@@ -38,7 +39,7 @@ interface Bpc {
 
 async function getRawBPCs(): Promise<Bpc[]> {
   console.log(API_ROOT);
-  const refs: BpcRef[] = await ky.get(`${API_ROOT}/boms`).json();
+  const refs: BpcRef[] = await bomhub.get(`${API_ROOT}/boms`).json();
 
   const bpcs: Bpc[] = [];
 

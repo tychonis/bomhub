@@ -2,6 +2,7 @@ import ky from "ky";
 import { API_ROOT } from "./constants";
 
 const api = ky.create({
+  credentials: "include",
   hooks: {
     afterResponse: [
       async (_request, _options, response) => {
