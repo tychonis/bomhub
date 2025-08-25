@@ -1,6 +1,7 @@
 package serve
 
 import (
+	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -24,6 +25,7 @@ func run(cmd *cobra.Command, args []string) {
 	getBOMs := func(ctx *gin.Context) {
 		boms, err := dbc.GetBOMItems(ctx)
 		if err != nil {
+			slog.Error("Error getting items", "error", err)
 			ctx.JSON(http.StatusInternalServerError, nil)
 			return
 		}
