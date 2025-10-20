@@ -21,3 +21,13 @@ CREATE TABLE IF NOT EXISTS activity (
     path TEXT,
     activity_time TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
+
+CREATE TABLE IF NOT EXISTS object (
+    object_id SERIAL PRIMARY KEY,
+    object_digest BYTEA,
+    content JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_object_digest_unique ON object(object_digest);

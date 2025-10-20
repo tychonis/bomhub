@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
@@ -46,4 +47,37 @@ func (c *Client) LogActivity(ctx context.Context, email string, path string) err
 	const sql = "INSERT INTO activity(email, path) VALUES ($1, $2);"
 	_, err := c.pool.Exec(ctx, sql, email, path)
 	return err
+}
+
+func (c *Client) SaveObject(ctx context.Context, digest []byte, content any) (json.RawMessage, error) {
+	body, err := json.Marshal(content)
+	if err != nil {
+		return nil, err
+	}
+
+	const q = `
+INSERT INTO object (object_digest, content)
+VALUES ($1, $2::jsonb)
+ON CONFLICT (object_digest)
+DO UPDATE SET
+  content = EXCLUDED.content,
+  updated_at = now()
+RETURNING content;
+`
+
+	var ret json.RawMessage
+	err = c.pool.QueryRow(ctx, q, digest, body).
+		Scan(&ret)
+	if err != nil {
+		return nil, err
+	}
+
+	return ret, nil
+}
+
+func (c *Client) GetObject(ctx context.Context, digest []byte) (json.RawMessage, error) {
+	const q = `SELECT content FROM object WHERE object_digest = $1;`
+	var raw json.RawMessage
+	err := c.pool.QueryRow(ctx, q, digest).Scan(&raw)
+	return raw, err
 }
