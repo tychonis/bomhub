@@ -1,12 +1,10 @@
 #root {
-  max-width: 1280px;
-  padding: 2rem;
   text-align: center;
 }
 
 .outlet-container {
   display: flex;
   margin-left: 10rem;
-  width: calc(100vw - 12rem);
+  width: calc(100vw - 10rem);
   justify-content: center;
 }
