@@ -32,5 +32,8 @@ func run(cmd *cobra.Command, args []string) {
 	router.GET("/boms", server.GetBOMs)
 	router.GET("/item/:id", server.GetItem)
 
+	router.POST("/obj/:digest", server.SaveObject)
+	router.GET("/obj/:digest", server.GetObject)
+
 	setup.WaitOnOSSignals()
 }
