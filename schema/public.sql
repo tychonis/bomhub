@@ -29,5 +29,13 @@ CREATE TABLE IF NOT EXISTS object (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
-
 CREATE UNIQUE INDEX IF NOT EXISTS idx_object_digest_unique ON object(object_digest);
+
+CREATE TABLE IF NOT EXISTS index (
+    index_id SERIAL PRIMARY KEY,
+    bom_id INT REFERENCES bom(bom_id),
+    content JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_bom_index ON index(bom_id);

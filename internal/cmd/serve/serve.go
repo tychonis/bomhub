@@ -73,5 +73,5 @@ func (s *Server) SaveObject(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	ctx.Status(http.StatusOK)
+	ctx.Status(http.StatusAccepted)
 }
