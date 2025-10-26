@@ -10,6 +10,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
+	"github.com/tychonis/cyanotype/core/parser/hcl"
+	"github.com/tychonis/cyanotype/model"
+
 	"github.com/tychonis/bomhub/internal/db"
 )
 
@@ -74,4 +77,25 @@ func (s *Server) SaveObject(ctx *gin.Context) {
 		return
 	}
 	ctx.Status(http.StatusAccepted)
+}
+
+func (s *Server) GetBOMTree(ctx *gin.Context) {
+	digest := ctx.Param("digest")
+	core := hcl.NewCore("local")
+	root, err := core.Catalog.Get(digest)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+	rootItem, ok := root.(*model.Item)
+	if !ok {
+		ctx.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+	rootNode, err := core.BuildTree(rootItem)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	ctx.JSON(http.StatusOK, json.RawMessage(rootNode.Export()))
 }
