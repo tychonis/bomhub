@@ -1,11 +1,13 @@
 import styles from "./tree-root-selector.module.css";
 
-export function TreeRootSelector() {
-  const roots = ["test1", "test2", "test3"];
+export function TreeRootSelector({ roots }: { roots: string[] }) {
+  const labels = roots.concat("+");
   return (
     <div className={styles["panel"]}>
-      {roots.map((label) => (
-        <p key={label}>{label}</p>
+      {labels.map((label) => (
+        <div className={styles["label"]} key={label}>
+          {label}
+        </div>
       ))}
     </div>
   );

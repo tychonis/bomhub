@@ -1,9 +1,13 @@
 import styles from "./workspace-summary.module.css";
 
 interface WorkspaceSummaryProps {
-  uniqueParts: number;
+  details: Record<string, string>;
 }
 
-export function WorkspaceSummary({ uniqueParts }: WorkspaceSummaryProps) {
-  return <div className={styles["panel"]}>Unique Parts: {uniqueParts}</div>;
+export function WorkspaceSummary({ details }: WorkspaceSummaryProps) {
+  return (
+    <div className={styles["panel"]}>
+      Unique Parts: {details["unique parts"]}
+    </div>
+  );
 }
