@@ -20,33 +20,26 @@ export const Components: Component[] = [
     element: <Landing />,
   },
   {
-    path: "/chess",
+    path: "/chess/bom",
     key: "chess",
     label: "Chess",
     icon: <ExperimentOutlined />,
     element: <Bom index={0} />,
   },
   {
-    path: "/factorio",
+    path: "/factorio/bom",
     key: "factorio",
     label: "Factorio",
     icon: <ExperimentOutlined />,
     element: <Bom index={1} />,
   },
   {
-    path: "/pnp",
+    path: "/pnp/bom",
     key: "pnp",
     label: "PnP",
     icon: <ExperimentOutlined />,
     element: <Bom index={2} />,
   },
-  // {
-  //   path: "/test_page",
-  //   key: "test_page",
-  //   label: "Test Page",
-  //   icon: <ThunderboltOutlined />,
-  //   element: <TestPage />,
-  // },
 ];
 
 export const keyToIndex = new Map<string, number>();
