@@ -1,3 +1,16 @@
 {
-    "roots": ["test1", "test2", "test3"]
+    "roots": [
+        {
+            "digest": "a610d1e6f2b0b83e600cc0a93cae9077bf275a5926398c7b5f5b8c0f82d05197",
+            "name": "test1"
+        },
+        {
+            "digest": "xxxx0000",
+            "name": "test2"
+        },
+        {
+            "digest": "0000xxxx",
+            "name": "test3"
+        }
+    ]
 }

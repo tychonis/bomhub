@@ -5,6 +5,12 @@ const getMockDataPath = (route: string) => {
   if (route.includes("/workspace")) {
     return "./mock/data/workspace-details.json";
   }
+  if (route.includes("/tree")) {
+    return "./mock/data/tree.json";
+  }
+  if (route.includes("/catalog")) {
+    return "./mock/data/catalog.json";
+  }
 };
 
 export const MockAPI = {

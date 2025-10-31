@@ -10,3 +10,8 @@
   padding: 0.25rem 0.5rem;
   background-color: beige;
 }
+
+.panel .link {
+  color: black;
+  cursor: default;
+}
