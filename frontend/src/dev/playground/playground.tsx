@@ -1,5 +1,5 @@
-import { Workspace } from "pages/workspace/workspace";
+import { TreePage } from "pages/tree/tree";
 
 export const Playground = () => {
-  return <Workspace></Workspace>;
+  return <TreePage />;
 };

@@ -1,1 +1,562 @@
-{"items":{"0054322fa061103ff341859f77814a62d6530d8f0ef0fe5dd6b39641c537bfab":{"name":"steam-engine"},"0059bade5752cb42c85f9c05e28097ed71b8a8c14ef26cef369e5140b849ea00":{"name":"personal-roboport-equipment"},"0506f21d1b9eded538a391a2c021045ec2c7288784040e2f190b69348437481f":{"name":"decider-combinator"},"0643ad938778f1d412abb3eac48f71a7109ad902d852a8d775ec44a7c85a4f47":{"name":"productivity-module"},"06af63a698404c05a844440bf1c555e53ba8196d43b9829cb86a3a5c1bb1cb5c":{"name":"battery-equipment"},"09eb4eca74ba417d5e8ac1daa963ba84b67bf659cd7413740dde8943cfbca7a8":{"name":"science-pack-2"},"0a12b0fe71eb58107f39f24bdef0055d4e6ca65364fe26946ccdf02f4063a62f":{"name":"copper-cable"},"0b071ae054947fb0ac3b50cdab2d3ce83c39cca38f5e7b4713ccba22ddfa2eec":{"name":"electronic-circuit"},"0c03c503aa74b15b94f8c2720299fca585fc6c01cfcc6a010def7ed50f752eed":{"name":"construction-robot"},"0c23324eb0ea09270265e239977f1ebad97aa09f343f0dfda08d8d8e0a8291cc":{"name":"productivity-module-3"},"0d0874f93767c7964c7256555c0853cdaa28afff826735c6eda94f0a19dd0dc4":{"name":"distractor-capsule"},"0e83d472426f1de10a847fab6603ac5098ab97f935177008790c4bc78be4b500":{"name":"uranium-fuel-cell"},"0fca1c0bdf8b45cf1b4d89b64498ecf9b27d326f987701eb6fc8e613b8f2ce3d":{"name":"tank"},"0ffd586df3f6efc2e89b84ff7118a22c6cb870962e36bb7c97ea9c6c499b5771":{"name":"substation"},"107e241f6bafc4c4e19e9220ca850dbb1fa64aa37ccd4db5b9d5731db082b1ee":{"name":"stack-inserter"},"10a720dc04b8db5657fa5ba5b891877e0004c975e63328f553868b2a76dbcbbe":{"name":"rocket-silo"},"14c1ba16c0e5356276b9b38d3c676fe5a782d4e52e5f0feb96907e1068c8329d":{"name":"pipe"},"14ea20b8a74fe7dc238da375282e30a851f77ca511131ac81a19fa675349af21":{"name":"cannon-shell"},"15b31dc5a3605cdf28bd3dc935ae5d33d396b584edd174b3a3d9c2cf5e717cb4":{"name":"stone"},"15cc7e98cd656947b9310de539076961aec1c6dd17f6d68cc5a9bc2e65b1c9ba":{"name":"assembling-machine-2"},"18389e35fe13cc4d77c36b8d0adcb47c038ab2886c33a1d93026070e434b187e":{"name":"discharge-defense-remote"},"1c6150450af1262023a90cf344dc070f8a616aa7935d3ba88c54643b14541736":{"name":"effectivity-module-2"},"1d372217938e6d4b2b7cb0164a2622c0dab621f78d1c21c376e586a4ef39e225":{"name":"rocket-fuel"},"1dff6c150c848247ef8f49f4bb48ba4b647c9a9523fe3c66780b455056ada68d":{"name":"effectivity-module-3"},"203a775cdaaeed444134d6999b1e06ea75e8e42ebc637b0b8fad138704b8e6fb":{"name":"electric-mining-drill"},"21a57905f344c5a1c1776ebbb409ab85084d09f93cf8d302042f1b243cc07cb2":{"name":"fast-inserter"},"249a990f16a2eb735d8560e61537b34e6591cb8ae8dad75d95dfa4379e24328f":{"name":"centrifuge"},"25e1fe272fffeee2a64d8727919a0f4501816b63a70dd1717ad908100edad656":{"name":"steel-plate"},"27d7e4250d02e6d3da79562b01c9e650b0a32bed99014bf85d8638dc430cb948":{"name":"wood"},"2a49811d287e57a25825d4ae869999d5fbb7aa6d4b63ca1ea43609a67a2b452c":{"name":"uranium-cannon-shell"},"2c235c97b7a8c1c6969151b0047e674d6036f2c095d8b89328c904e957d974f5":{"name":"pipe-to-ground"},"2ca471a64913f190df954a441e2efcf282e7610b7c98e4613b450f13e3530d52":{"name":"chemical-plant"},"2d09dcc8e61d93b11c473c232ff2757b98966cd5db8cf439fecc905ee95eba98":{"name":"explosive-rocket"},"2f2f65c4496b271cb44ef631b7f190432db851c05cec63d31782de38472e145b":{"name":"iron-plate"},"31c3fc3626c49dc29d0c0ec1d1e567782672f0b6f8e73bc3dd062108fba8a304":{"name":"heavy-armor"},"31d34fc9d37abce06bae3fc167f89688f50294f710214abeb3ddb8c9782b5e86":{"name":"rail-signal"},"338fc5e41536ec70b376e17d410ae7c5988ee5455367939387f137aad9f36e48":{"name":"car"},"345ec8ffd3876ff25e4a4d59298f0d1629251f67f688da41a89cae5627898297":{"name":"solid-fuel"},"36dcac2accf9114e297d9f46d4a365f24e901540ddd6efb495fbd77611ca735f":{"name":"fast-loader"},"3905597eee47d974ed1a4c84d15289d97028bad010502221b52767a37209f8d7":{"name":"programmable-speaker"},"3949e86ee908a6dba16309e973b30f99b1cf5079e730dc6e41e62c89bab0bc3b":{"name":"arithmetic-combinator"},"396c4f9c96599a99b48988024aebac092b00511e68d020884f085c08ac8a98e3":{"name":"logistic-robot"},"39e8016900e7a70d9c3011a9ebdb305f7cab8c6c5b5f54ac634779fce11fa502":{"name":"light-armor"},"3b9136134d9589bc40a5b7beec6014673e973d52a104740b58b7edcc05d48984":{"name":"electric-furnace"},"3c27df1a69502f42e790d9752c5466d3c6cac2b675689eb654adf611cd2dec72":{"name":"stone-furnace"},"3d0d29a78c4db66b6ff18039e92771e06ef5f2ce0e739840a41b0553bbc70903":{"name":"iron-chest"},"3e8ab255b1b58f5b513d22e6c064954c03e6fa5a8f08e9897e64164725cf3185":{"name":"grenade"},"3f1fda95b07569ee8239ec4055b995d3f04dc924d3ba982e22366cdd74d68312":{"name":"logistic-chest-requester"},"3f89c3691d6278c2c21c35256456816ba525fd9661862c6de3dcf5dba8aad1c2":{"name":"fluid-wagon"},"4039dc859d308bf1b1e2e999a44cf197da4160a8cf3ad100c8273bde03e410dc":{"name":"satellite"},"40cc8520f39d7703bc59738c4acb8717c00372b3369090f3f334ee24e5e31c91":{"name":"uranium-rounds-magazine"},"41e90589a1b05f3eee66624699796464868f7f0b671c9f2d9e0315666be8fbae":{"name":"gate"},"424f8b0595642b32bf11eaeeb5917b8a420afb53c524b8ad421428d51aa59429":{"name":"laser-turret"},"429e2a6c2245ac062b6485501b978a1f0365c208876a445add50ad99d82c7c27":{"name":"wooden-chest"},"4541426f29e1bd817f7df8e146e721016c20b73d68221f0cf259b93c97c98ac3":{"name":"rocket-launcher"},"45723f6f0d4314b51a7733f5626d5b33bbcf56da462ba1fa5a74894d3de61bc4":{"name":"offshore-pump"},"47d8a7e5ddebfa1a75b258565048d537276cff4befa1406dd9fc25f5f039e138":{"name":"logistic-chest-storage"},"49c93fb3fd14320f3eb5b50d81706d8198d661f020d1f9ddc68e1d2cf9f49eb7":{"name":"submachine-gun"},"4b0460afd962e908c15504367efab8d6f440260feeeca660140b1b434a069c50":{"name":"express-splitter"},"4b4b9c8cecfaee9f4b4e818bcd81694a48406149bd5e90d5ca74c251fc46bb26":{"name":"player-port"},"4e50a8c9786fe3f51cb77251cefaa1a6713e1b8943c5e3c02887ff9986596493":{"name":"effectivity-module"},"4f3d73210617f246901b252cbf22c08c6c2f21c5a8b7b9fae25c7471f2c635fd":{"name":"logistic-chest-active-provider"},"4f57de50f733f33ad282a9a34e1bb82d941acdd3e95b8838a04239ef82cf4840":{"name":"night-vision-equipment"},"5137224d54e636c2c35e1c0adb0c9e2d1eba08728f3ff670b3a64ca6cdcc63f3":{"name":"military-science-pack"},"5310dd75452c9f42253ad37e39f8b9cfcfa7c1e35fb5848186d3da4aea1747b1":{"name":"power-armor"},"583044f25089b2649c26f1e212939326b14a4c249334906fafc18798a0129122":{"name":"iron-ore"},"59292bb8afcd01d00604167094d95b8578bf1a819d1823a580ba8fda8da31c3d":{"name":"speed-module-2"},"597ac76eb81d0d74431ffcd93108e37905168009aed624173b282648089e98ae":{"name":"destroyer-capsule"},"5984ab37f91de459dad8e7b0ccf5f1bae257f3f1bcb667ce633fea59e3189a2b":{"name":"pump"},"5b1611158b42329a01f97bd94d3a10bfbe4d811e11c23d5db2473a3334997dd6":{"name":"explosive-uranium-cannon-shell"},"5c13ca2c4e5136b5fc02e3b335d17e4353044d01f9e0d781bf75410b137b6301":{"name":"fusion-reactor-equipment"},"609d7b985373ef4e3440a45ac41587e7ef7412237e23181b6161168c6428a80f":{"name":"assembling-machine-3"},"61a58debdb1b12cd10f6720846f9f96c1cd0a1b2362c4c13ed5d5f79d7412cd8":{"name":"medium-electric-pole"},"61a7555a284bb687f3a154c5fb3a90104733de82f58a8a98ec0b7cf9cd0c37cc":{"name":"gun-turret"},"659ef376aa054b7fdf6ccef0287554fd05b4f5b9b3554878b74382ed17db3089":{"name":"explosive-cannon-shell"},"66a40fb609400d67f6a2083b5f2c11733325e207cde324ea8cf083f9d36d9ae8":{"name":"accumulator"},"679eaf9f97a2a8cda2868b6094c3758464cfe81d5f4804e6ac9f79eba3449323":{"name":"logistic-chest-passive-provider"},"693703823bf3c6b7cf1ce3d5047429b2ce85c19c76ef24053ff8c0a74ee74592":{"name":"boiler"},"6b48506a487dde62acba0d8227d292298729e9be4072b44d5d20b56f0218e157":{"name":"combat-shotgun"},"6f6b3e43cc9ea2554aa5f036fb4b06cc74afba0952e05a0bb3c61491421d427d":{"name":"production-science-pack"},"70375b4c4a26be328db8e66101a6657aa85fe7a07ef0518fd2d53ac3ae9605dd":{"name":"piercing-shotgun-shell"},"705ef822b12e2c8a7fb22ec3b6349f77a977342fb9655d4353fa9bb6f4cda2b5":{"name":"green-wire"},"70970bd6d3eb649e58db58c1e0356bc2dddf06de04db69b6771ea87f2f38b1a6":{"name":"rocket"},"72cbc3f0c9bc5ad5ef6182cd253dba2c084857a2757c434fc733d19e7b7ab5e6":{"name":"battery"},"7612039ff50e9cb92884f95ef9f4f2147bcfe020c0fe216fdd3616547537f9fd":{"name":"flamethrower"},"762de76c8c203dd2ac3d26472125eb213cf3b5b6aa62853404a7c362f03e28dc":{"name":"poison-capsule"},"77aecffacc015c57d1174a9f29673afe320ef10eb8a306ebff6e2a3aa7d22669":{"name":"inserter"},"7bb07d74bdf3a5006f52bb8d6b08851031a480fee465182e8acde68ab0f138f9":{"name":"engine-unit"},"7c5160064ca916861da3d4d7cd06bdaeacb27726535a135bf44b19df14f44754":{"name":"train-stop"},"7de8293ca00daf672cf29a8f621fcc9405113b0d4e40ccc099de3bede9adccc6":{"name":"iron-gear-wheel"},"7e4ce5b22a74486aaf0483dc11261b0ad8920212ec1c90ed3f1b99d098dc427f":{"name":"express-loader"},"7f56c1986a54780e3ba3c0c1a72511335af3decb39bc937f8d8f251d38a1c129":{"name":"discharge-defense-equipment"},"7ff1e1dc7ecc989d9907a0dd09c6178efd6bf3db3fc5df376223116236ca2d24":{"name":"firearm-magazine"},"81a6f850cff5cbf82f4687b0c1113602899afe0255a1556a6fd0794864d8fa78":{"name":"red-wire"},"8495946abe8202c2cc36b087306b1e5d1611f7c0ca41949487a2b0018b237c3e":{"name":"speed-module"},"85233cd71b6e8c1fee204ce0b44ba5142ff40847b3a79b66be8104f0451cd846":{"name":"rail"},"862d7a27fcca4031c413f4e47abd721e50540dca4a9ebb69bb0c5e6a690447ab":{"name":"nuclear-reactor"},"864ce240b55c36c358d09d4136a6aa47e9aaf4798416bf3b8330300297602909":{"name":"electric-energy-interface"},"8aff960585d5604c887145043a1504cf58f35bf33c82b2198fad7e6d6add3b66":{"name":"iron-axe"},"91f750d3f19db41f47f2e5debf5dd06c05e010ec1bd6ec2794dde6901b706722":{"name":"concrete"},"96fe3e3d58cd5a674768425a8912afa5bec1bdfdec1e1e5f6cb4e224777b7c03":{"name":"personal-roboport-mk2-equipment"},"9765888e97c74da24c944394a06f3858a1477f1efc6cb04ade861abb8089deca":{"name":"high-tech-science-pack"},"982e23c6c51ce1821fc7bdde5933406f877c9ffec3aab588b49ac4a08ec6b373":{"name":"uranium-238"},"9a1149e68f6a4e3fdf8d10399e654c5e16bb3b67038ac432dac910134795a5b1":{"name":"burner-inserter"},"9c278d965513ef6458ae4ada7b838f65377f974bf95ff8c0652d04f7bf1b6505":{"name":"science-pack-3"},"9dabc3ce506bae3e95d12dc46d0ca904390c386e554c294b610bb966a6ead558":{"name":"processing-unit"},"9df7f031271f126a47d8cba942ff466392a903f6cd5d7a4885fc99e10a45713f":{"name":"pumpjack"},"9f8466b1cdfe137029c9fcabf8937a5f9321e08d85ac3d424a2d601dd4580ede":{"name":"locomotive"},"a0734cc37a07295833a8bc45fc6624c79e2520cb1aa5249b481a9cb7969500cd":{"name":"pistol"},"a5adc509a325bcf12961bea3585a12c30d07fadb03469909cbd719eaa683243c":{"name":"fast-underground-belt"},"a5b6f0e145136bbf51c1a5af0b3c1c2f232e49567245de6110d19b2112604a80":{"name":"low-density-structure"},"a62b831fa6c3da7ed5fe647ef3006747069bf5a3464c0d3b5cab456fbc51f18a":{"name":"heat-exchanger"},"a6fd75e04da596d3a4fff4d017d8b645cb86a74e32ff1a79fec8eb5ebad62e70":{"name":"lab"},"a720ee36086cbb3d2e442eccb24c83bb0be57c6816e5609c99a9716efd61edc2":{"name":"flying-robot-frame"},"a7caff3a88e498a556c516de0a2a4d11c79ebbb06070b453eb8c99a4a26541ed":{"name":"small-lamp"},"a8a8220002229e7e1486cae89b8a4f249c2d953f024308aebcebcad4e0e46f3b":{"name":"science-pack-1"},"a9b95327ff0d0873767f1f4b5f7405553c21b5689c5495e476d0ee66c50a60ad":{"name":"loader"},"aa3893643ed9c5fef66efeccb3f4fc0d99133ebf6385a3b2eff4f4682fd8982d":{"name":"steel-furnace"},"acfef260a53faaf5f75e5e46726d1f635ef7f02001889ddbfc8fb587e786f4df":{"name":"transport-belt"},"ad62588341b917344b897e86e5e5ba5e0f8f721f4e75381e20aec254651056cd":{"name":"big-electric-pole"},"ad7305402571795417d5ebe442fda6b2e5b7d7b585ddaa2d90c96c3089ba1885":{"name":"coal"},"aef6a0a9876735e97c22b691fa7fbc6096dc082e09cd2f784f6d015b26cbe695":{"name":"rocket-control-unit"},"b1bdb78880d342dc8ea00cd7b933b8763dd3e895dd346dad502d034421edbcdf":{"name":"radar"},"b5146cacba6834c6926dfc82795991a0329b09fa915163767c84a62e2ecc32c5":{"name":"roboport"},"b59f20209e40da3f94fd27a4a3d22a88e4098227efa6b137285e00c0ff901f7a":{"name":"repair-pack"},"b7d02318f908575fd37f2db8d820fc840b0ba09955410ae8dba8690ade092a33":{"name":"assembling-machine-1"},"ba00cfe629e0480d9a38b39ffa138b2dc9f5b030b6905bcf4f4e3a1a25b53163":{"name":"battery-mk2-equipment"},"ba7aace0f5481a8ac75ac6cd2afe58332fece9762e812d9d1fef562b2ec6b2bf":{"name":"modular-armor"},"bab1d24770399ea5703ce9545d9105490d678c3c66a1d646a863617b485147a1":{"name":"fast-transport-belt"},"bc706f8a7d6756f1a30b3320f1a5b6dbcaacec6e257c5f84c72e75408a05f8e1":{"name":"uranium-235"},"bd071170b73fb86b58354baafbfeab73b0d96a0d9b030d1e941329a9ba6e6e24":{"name":"shotgun-shell"},"bd3179d83f771638bc5964e2d57009a61940f4525d42e2f1581841ce15cd3644":{"name":"railgun"},"bdeebb89f9c59056d6bc4530a566515d444dd5b52178dcc8b58d10ff6cf7fe82":{"name":"copper-plate"},"be7905495ce059696851134dcb4dda546820b61fe6583cd8a809b7e5db9b2dbd":{"name":"electric-engine-unit"},"bf90926b292dcb015298a39f88fe26f6cebfa7cfddf0b9e66b9509d1dff2fb3e":{"name":"power-switch"},"c1e4a39bb726dfa0b5b34e8ce3e785e73d9560f1c861501756e202dc134467a0":{"name":"energy-shield-mk2-equipment"},"c43307e60bad4b9878e2e34041f0be420534cbcb04a599d7edb1d14829704c15":{"name":"rocket-part"},"ca150f06447cbd019dad2f9567292675fa7e0341a9400671075769c05f403555":{"name":"rail-chain-signal"},"cacdff73964092bc4f6b9ee3f445f73b4d2cbc44713c4417756f5f1d7adfbf0a":{"name":"raw-wood"},"cb21eb17db04b960999a4de6466194e27517e32660596f7ab53888428dd37f62":{"name":"personal-laser-defense-equipment"},"cce4ec5bcf14c0f7487659f45cb6a1082d1369648df8feac46ece6c0f1870dbf":{"name":"flamethrower-ammo"},"cd1842b8d9be429f8238ce8a11fb006c78deb1d0cf0202f820e6dd60b0011fa9":{"name":"stone-brick"},"cdcc9af59ca3d0e6f362a78bb2315dcb43ca354f9fa388c069171cca5e76e148":{"name":"solar-panel"},"ce6fc955615a66052ce6cf8d0daa7062d74074416f897709b46120ccfcd1adab":{"name":"long-handed-inserter"},"cf7f5d380b01e0ebbc5482e55a7aca49254431c6b8038763340deaee8b4f7ae4":{"name":"steel-chest"},"cf96723eb04d97d7f11bc892bd2b2bcb13a7d7ca341a7a4c01f3893d736c636e":{"name":"hazard-concrete"},"d0f6cb584907c75697f9595f4f8c46fb5264808e757108f4076df19d8f7f345f":{"name":"small-plane"},"d114a1ea4cb0a5aec5cfc253d4dbdfabfc953b1bc4ca86a74b7801c635e0ba6e":{"name":"storage-tank"},"d249ed1f8134aaa00caae2c828957fdd37c2aa74c02b6ccbabe954b380454687":{"name":"express-underground-belt"},"d43e24408fb4d43f10ae6b50d105a29f7b02c2a1ffe3e8dd65846c3b54da8b76":{"name":"splitter"},"d6817171a0b7f6823eccef126dcba1e824421734c1144c5c4a7c2c2708a70ce0":{"name":"explosives"},"d9ff7b9ebb3bff0a6707765c4905f3ed9f7e68a82ac3d465a2eb2582763e620e":{"name":"steam-turbine"},"db2381391d837dd5a8ff2b3366417cd9132fbff948085fa1be63a36a03638506":{"name":"cluster-grenade"},"dc941df0cfad9ac284a6ae8010034dc62087d9812d4ac7526cd72da00e3f07a0":{"name":"plastic-bar"},"dd85358500e4b0f9359568f758ed485656f8460c664b9a549c1ef7d205cd54e4":{"name":"underground-belt"},"de44c2a553fe0f9e3b44818f792834f29161e573ce4102d3399930652a08ded3":{"name":"constant-combinator"},"e04b89c5cac77a5cc45e58a27a0aa552ee1aae1342e01b4831601d0bd467cf4f":{"name":"atomic-bomb"},"e13389dee25b19dd8e6eeeaba3b74202c8162581829a191f997405ada1b78ced":{"name":"advanced-circuit"},"e25f08b1164e584f979db28f5d7fb4b9ddea514428c47862940beab49866dbd0":{"name":"steel-axe"},"e39f2d7fcd91d8404d1861b4ff0dbbf9550335d596de0c919a5695cccc936276":{"name":"filter-inserter"},"e40e6afff511f2752da7274a53e831b2b63c24484a2b8acff40211dabf9c856b":{"name":"productivity-module-2"},"e5cda2a3dfb4a2d34b62d72f0cab9345273755aea118408070ab9481e0ef8b9e":{"name":"iron-stick"},"e627081e2048fee5c1761cb90291d9e16ff0c12dcb0612b8ba2eb4a1f17235ef":{"name":"exoskeleton-equipment"},"e9e49fe488dca04f9a6629bddd46031fed112b35f457b20dfdadc6f4177049d3":{"name":"cargo-wagon"},"eb3011ecab2f539f7b650bbc1828bd5e5c9f4cbe900015504f7428c01e38b6cc":{"name":"energy-shield-equipment"},"ecdd7cd51c90e7cd683a6adc5786a726267694c0d8000fdc8a3878a3619d1389":{"name":"land-mine"},"ed9c3df62ee5ef92bcbc3269320d4614bac2e00979128869967613b4a6be29fb":{"name":"slowdown-capsule"},"eda5a2f20a066df0f5cd34c1234eeee900c753ba49d38d061795724c3e5f3d3d":{"name":"shotgun"},"ef2800ff9c7f7e65e275cda2703587c5221f5931c997c38d0d94ebafbf84bd76":{"name":"heat-pipe"},"ef82f6c5f1acd57f8a336ecbde928fd8f357a53ecf0a8e3d166404714a6a7ce5":{"name":"railgun-dart"},"f03dca98db78950ccbe9f55e7d1762192f8f36b4dc9421d204c0a4ba30485820":{"name":"stone-wall"},"f0d938dfedb4e95d59dca5ecc9d8ddef2ea4922a5a4c84280da06a9a2f47258c":{"name":"small-electric-pole"},"f0da3c11df9733bd6bd7608dd62545e2e2879e7e7ac0c9b003d15640c5fc2352":{"name":"stack-filter-inserter"},"f16ef6102207211d3530c19a46cca23cf11cfc16ddae76158f9c77acf21900bd":{"name":"power-armor-mk2"},"f45392b57a8c6b49e9e006e617376b78e8ec00ade785edf513f065591838ac92":{"name":"fast-splitter"},"f458d4cf4b2509f96281aaac9e4e41addd8b39a5698d3b7dbaeea473ff118834":{"name":"burner-mining-drill"},"f55d6a4b33ee47a3e87a22bd44ed3988b12b5abd52f2f54776d9ecc4313de66b":{"name":"solar-panel-equipment"},"f694dabecca6065c5018d38eb45f34b63cfe12a139f7a95d7fc9c66b70b0ecfd":{"name":"beacon"},"f75a3af4c4478fbf68ae27e06f70b5d4a39a43d1e99554edd59e5b0ec1b10beb":{"name":"express-transport-belt"},"f8128172cd27aa049f33ba43c5ee035d248325c79429dbd37300ddbb0da41830":{"name":"speed-module-3"},"f94eb32f82f0e01ef357cf7d7c9cc5b9aa9faee86e3cd7cf4f86e33a6372d4a9":{"name":"landfill"},"fb2a6f5a03cfe896ea4743052e11689fc330273edd7ed77839a3c2228da3e94f":{"name":"flamethrower-turret"},"fba1ba15a05e80d9afd823d24953ecad2b8e6b4d29d36e029d37b66250215bba":{"name":"piercing-rounds-magazine"},"fc4b5f0e4a0ed1d9fcbcf5e728205c569cdb324977a02c58a2fcee4f4ecdd076":{"name":"copper-ore"},"ff4e89145064886dbdef889019aa634efbd6b198db3521d9619b6f68036d5a27":{"name":"defender-capsule"},"ff7454e1dc9622f375b73a5c27bd107f1b7fb0dd37760a7c9abc95b401d729bf":{"name":"oil-refinery"}}}
+{
+    "items": {
+        "0054322fa061103ff341859f77814a62d6530d8f0ef0fe5dd6b39641c537bfab": {
+            "name": "steam-engine"
+        },
+        "0059bade5752cb42c85f9c05e28097ed71b8a8c14ef26cef369e5140b849ea00": {
+            "name": "personal-roboport-equipment"
+        },
+        "0506f21d1b9eded538a391a2c021045ec2c7288784040e2f190b69348437481f": {
+            "name": "decider-combinator"
+        },
+        "0643ad938778f1d412abb3eac48f71a7109ad902d852a8d775ec44a7c85a4f47": {
+            "name": "productivity-module"
+        },
+        "06af63a698404c05a844440bf1c555e53ba8196d43b9829cb86a3a5c1bb1cb5c": {
+            "name": "battery-equipment"
+        },
+        "09eb4eca74ba417d5e8ac1daa963ba84b67bf659cd7413740dde8943cfbca7a8": {
+            "name": "science-pack-2"
+        },
+        "0a12b0fe71eb58107f39f24bdef0055d4e6ca65364fe26946ccdf02f4063a62f": {
+            "name": "copper-cable"
+        },
+        "0b071ae054947fb0ac3b50cdab2d3ce83c39cca38f5e7b4713ccba22ddfa2eec": {
+            "name": "electronic-circuit"
+        },
+        "0c03c503aa74b15b94f8c2720299fca585fc6c01cfcc6a010def7ed50f752eed": {
+            "name": "construction-robot"
+        },
+        "0c23324eb0ea09270265e239977f1ebad97aa09f343f0dfda08d8d8e0a8291cc": {
+            "name": "productivity-module-3"
+        },
+        "0d0874f93767c7964c7256555c0853cdaa28afff826735c6eda94f0a19dd0dc4": {
+            "name": "distractor-capsule"
+        },
+        "0e83d472426f1de10a847fab6603ac5098ab97f935177008790c4bc78be4b500": {
+            "name": "uranium-fuel-cell"
+        },
+        "0fca1c0bdf8b45cf1b4d89b64498ecf9b27d326f987701eb6fc8e613b8f2ce3d": {
+            "name": "tank"
+        },
+        "0ffd586df3f6efc2e89b84ff7118a22c6cb870962e36bb7c97ea9c6c499b5771": {
+            "name": "substation"
+        },
+        "107e241f6bafc4c4e19e9220ca850dbb1fa64aa37ccd4db5b9d5731db082b1ee": {
+            "name": "stack-inserter"
+        },
+        "10a720dc04b8db5657fa5ba5b891877e0004c975e63328f553868b2a76dbcbbe": {
+            "name": "rocket-silo"
+        },
+        "14c1ba16c0e5356276b9b38d3c676fe5a782d4e52e5f0feb96907e1068c8329d": {
+            "name": "pipe"
+        },
+        "14ea20b8a74fe7dc238da375282e30a851f77ca511131ac81a19fa675349af21": {
+            "name": "cannon-shell"
+        },
+        "15b31dc5a3605cdf28bd3dc935ae5d33d396b584edd174b3a3d9c2cf5e717cb4": {
+            "name": "stone"
+        },
+        "15cc7e98cd656947b9310de539076961aec1c6dd17f6d68cc5a9bc2e65b1c9ba": {
+            "name": "assembling-machine-2"
+        },
+        "18389e35fe13cc4d77c36b8d0adcb47c038ab2886c33a1d93026070e434b187e": {
+            "name": "discharge-defense-remote"
+        },
+        "1c6150450af1262023a90cf344dc070f8a616aa7935d3ba88c54643b14541736": {
+            "name": "effectivity-module-2"
+        },
+        "1d372217938e6d4b2b7cb0164a2622c0dab621f78d1c21c376e586a4ef39e225": {
+            "name": "rocket-fuel"
+        },
+        "1dff6c150c848247ef8f49f4bb48ba4b647c9a9523fe3c66780b455056ada68d": {
+            "name": "effectivity-module-3"
+        },
+        "203a775cdaaeed444134d6999b1e06ea75e8e42ebc637b0b8fad138704b8e6fb": {
+            "name": "electric-mining-drill"
+        },
+        "21a57905f344c5a1c1776ebbb409ab85084d09f93cf8d302042f1b243cc07cb2": {
+            "name": "fast-inserter"
+        },
+        "249a990f16a2eb735d8560e61537b34e6591cb8ae8dad75d95dfa4379e24328f": {
+            "name": "centrifuge"
+        },
+        "25e1fe272fffeee2a64d8727919a0f4501816b63a70dd1717ad908100edad656": {
+            "name": "steel-plate"
+        },
+        "27d7e4250d02e6d3da79562b01c9e650b0a32bed99014bf85d8638dc430cb948": {
+            "name": "wood"
+        },
+        "2a49811d287e57a25825d4ae869999d5fbb7aa6d4b63ca1ea43609a67a2b452c": {
+            "name": "uranium-cannon-shell"
+        },
+        "2c235c97b7a8c1c6969151b0047e674d6036f2c095d8b89328c904e957d974f5": {
+            "name": "pipe-to-ground"
+        },
+        "2ca471a64913f190df954a441e2efcf282e7610b7c98e4613b450f13e3530d52": {
+            "name": "chemical-plant"
+        },
+        "2d09dcc8e61d93b11c473c232ff2757b98966cd5db8cf439fecc905ee95eba98": {
+            "name": "explosive-rocket"
+        },
+        "2f2f65c4496b271cb44ef631b7f190432db851c05cec63d31782de38472e145b": {
+            "name": "iron-plate"
+        },
+        "31c3fc3626c49dc29d0c0ec1d1e567782672f0b6f8e73bc3dd062108fba8a304": {
+            "name": "heavy-armor"
+        },
+        "31d34fc9d37abce06bae3fc167f89688f50294f710214abeb3ddb8c9782b5e86": {
+            "name": "rail-signal"
+        },
+        "338fc5e41536ec70b376e17d410ae7c5988ee5455367939387f137aad9f36e48": {
+            "name": "car"
+        },
+        "345ec8ffd3876ff25e4a4d59298f0d1629251f67f688da41a89cae5627898297": {
+            "name": "solid-fuel"
+        },
+        "36dcac2accf9114e297d9f46d4a365f24e901540ddd6efb495fbd77611ca735f": {
+            "name": "fast-loader"
+        },
+        "3905597eee47d974ed1a4c84d15289d97028bad010502221b52767a37209f8d7": {
+            "name": "programmable-speaker"
+        },
+        "3949e86ee908a6dba16309e973b30f99b1cf5079e730dc6e41e62c89bab0bc3b": {
+            "name": "arithmetic-combinator"
+        },
+        "396c4f9c96599a99b48988024aebac092b00511e68d020884f085c08ac8a98e3": {
+            "name": "logistic-robot"
+        },
+        "39e8016900e7a70d9c3011a9ebdb305f7cab8c6c5b5f54ac634779fce11fa502": {
+            "name": "light-armor"
+        },
+        "3b9136134d9589bc40a5b7beec6014673e973d52a104740b58b7edcc05d48984": {
+            "name": "electric-furnace"
+        },
+        "3c27df1a69502f42e790d9752c5466d3c6cac2b675689eb654adf611cd2dec72": {
+            "name": "stone-furnace"
+        },
+        "3d0d29a78c4db66b6ff18039e92771e06ef5f2ce0e739840a41b0553bbc70903": {
+            "name": "iron-chest"
+        },
+        "3e8ab255b1b58f5b513d22e6c064954c03e6fa5a8f08e9897e64164725cf3185": {
+            "name": "grenade"
+        },
+        "3f1fda95b07569ee8239ec4055b995d3f04dc924d3ba982e22366cdd74d68312": {
+            "name": "logistic-chest-requester"
+        },
+        "3f89c3691d6278c2c21c35256456816ba525fd9661862c6de3dcf5dba8aad1c2": {
+            "name": "fluid-wagon"
+        },
+        "4039dc859d308bf1b1e2e999a44cf197da4160a8cf3ad100c8273bde03e410dc": {
+            "name": "satellite"
+        },
+        "40cc8520f39d7703bc59738c4acb8717c00372b3369090f3f334ee24e5e31c91": {
+            "name": "uranium-rounds-magazine"
+        },
+        "41e90589a1b05f3eee66624699796464868f7f0b671c9f2d9e0315666be8fbae": {
+            "name": "gate"
+        },
+        "424f8b0595642b32bf11eaeeb5917b8a420afb53c524b8ad421428d51aa59429": {
+            "name": "laser-turret"
+        },
+        "429e2a6c2245ac062b6485501b978a1f0365c208876a445add50ad99d82c7c27": {
+            "name": "wooden-chest"
+        },
+        "4541426f29e1bd817f7df8e146e721016c20b73d68221f0cf259b93c97c98ac3": {
+            "name": "rocket-launcher"
+        },
+        "45723f6f0d4314b51a7733f5626d5b33bbcf56da462ba1fa5a74894d3de61bc4": {
+            "name": "offshore-pump"
+        },
+        "47d8a7e5ddebfa1a75b258565048d537276cff4befa1406dd9fc25f5f039e138": {
+            "name": "logistic-chest-storage"
+        },
+        "49c93fb3fd14320f3eb5b50d81706d8198d661f020d1f9ddc68e1d2cf9f49eb7": {
+            "name": "submachine-gun"
+        },
+        "4b0460afd962e908c15504367efab8d6f440260feeeca660140b1b434a069c50": {
+            "name": "express-splitter"
+        },
+        "4b4b9c8cecfaee9f4b4e818bcd81694a48406149bd5e90d5ca74c251fc46bb26": {
+            "name": "player-port"
+        },
+        "4e50a8c9786fe3f51cb77251cefaa1a6713e1b8943c5e3c02887ff9986596493": {
+            "name": "effectivity-module"
+        },
+        "4f3d73210617f246901b252cbf22c08c6c2f21c5a8b7b9fae25c7471f2c635fd": {
+            "name": "logistic-chest-active-provider"
+        },
+        "4f57de50f733f33ad282a9a34e1bb82d941acdd3e95b8838a04239ef82cf4840": {
+            "name": "night-vision-equipment"
+        },
+        "5137224d54e636c2c35e1c0adb0c9e2d1eba08728f3ff670b3a64ca6cdcc63f3": {
+            "name": "military-science-pack"
+        },
+        "5310dd75452c9f42253ad37e39f8b9cfcfa7c1e35fb5848186d3da4aea1747b1": {
+            "name": "power-armor"
+        },
+        "583044f25089b2649c26f1e212939326b14a4c249334906fafc18798a0129122": {
+            "name": "iron-ore"
+        },
+        "59292bb8afcd01d00604167094d95b8578bf1a819d1823a580ba8fda8da31c3d": {
+            "name": "speed-module-2"
+        },
+        "597ac76eb81d0d74431ffcd93108e37905168009aed624173b282648089e98ae": {
+            "name": "destroyer-capsule"
+        },
+        "5984ab37f91de459dad8e7b0ccf5f1bae257f3f1bcb667ce633fea59e3189a2b": {
+            "name": "pump"
+        },
+        "5b1611158b42329a01f97bd94d3a10bfbe4d811e11c23d5db2473a3334997dd6": {
+            "name": "explosive-uranium-cannon-shell"
+        },
+        "5c13ca2c4e5136b5fc02e3b335d17e4353044d01f9e0d781bf75410b137b6301": {
+            "name": "fusion-reactor-equipment"
+        },
+        "609d7b985373ef4e3440a45ac41587e7ef7412237e23181b6161168c6428a80f": {
+            "name": "assembling-machine-3"
+        },
+        "61a58debdb1b12cd10f6720846f9f96c1cd0a1b2362c4c13ed5d5f79d7412cd8": {
+            "name": "medium-electric-pole"
+        },
+        "61a7555a284bb687f3a154c5fb3a90104733de82f58a8a98ec0b7cf9cd0c37cc": {
+            "name": "gun-turret"
+        },
+        "659ef376aa054b7fdf6ccef0287554fd05b4f5b9b3554878b74382ed17db3089": {
+            "name": "explosive-cannon-shell"
+        },
+        "66a40fb609400d67f6a2083b5f2c11733325e207cde324ea8cf083f9d36d9ae8": {
+            "name": "accumulator"
+        },
+        "679eaf9f97a2a8cda2868b6094c3758464cfe81d5f4804e6ac9f79eba3449323": {
+            "name": "logistic-chest-passive-provider"
+        },
+        "693703823bf3c6b7cf1ce3d5047429b2ce85c19c76ef24053ff8c0a74ee74592": {
+            "name": "boiler"
+        },
+        "6b48506a487dde62acba0d8227d292298729e9be4072b44d5d20b56f0218e157": {
+            "name": "combat-shotgun"
+        },
+        "6f6b3e43cc9ea2554aa5f036fb4b06cc74afba0952e05a0bb3c61491421d427d": {
+            "name": "production-science-pack"
+        },
+        "70375b4c4a26be328db8e66101a6657aa85fe7a07ef0518fd2d53ac3ae9605dd": {
+            "name": "piercing-shotgun-shell"
+        },
+        "705ef822b12e2c8a7fb22ec3b6349f77a977342fb9655d4353fa9bb6f4cda2b5": {
+            "name": "green-wire"
+        },
+        "70970bd6d3eb649e58db58c1e0356bc2dddf06de04db69b6771ea87f2f38b1a6": {
+            "name": "rocket"
+        },
+        "72cbc3f0c9bc5ad5ef6182cd253dba2c084857a2757c434fc733d19e7b7ab5e6": {
+            "name": "battery"
+        },
+        "7612039ff50e9cb92884f95ef9f4f2147bcfe020c0fe216fdd3616547537f9fd": {
+            "name": "flamethrower"
+        },
+        "762de76c8c203dd2ac3d26472125eb213cf3b5b6aa62853404a7c362f03e28dc": {
+            "name": "poison-capsule"
+        },
+        "77aecffacc015c57d1174a9f29673afe320ef10eb8a306ebff6e2a3aa7d22669": {
+            "name": "inserter"
+        },
+        "7bb07d74bdf3a5006f52bb8d6b08851031a480fee465182e8acde68ab0f138f9": {
+            "name": "engine-unit"
+        },
+        "7c5160064ca916861da3d4d7cd06bdaeacb27726535a135bf44b19df14f44754": {
+            "name": "train-stop"
+        },
+        "7de8293ca00daf672cf29a8f621fcc9405113b0d4e40ccc099de3bede9adccc6": {
+            "name": "iron-gear-wheel"
+        },
+        "7e4ce5b22a74486aaf0483dc11261b0ad8920212ec1c90ed3f1b99d098dc427f": {
+            "name": "express-loader"
+        },
+        "7f56c1986a54780e3ba3c0c1a72511335af3decb39bc937f8d8f251d38a1c129": {
+            "name": "discharge-defense-equipment"
+        },
+        "7ff1e1dc7ecc989d9907a0dd09c6178efd6bf3db3fc5df376223116236ca2d24": {
+            "name": "firearm-magazine"
+        },
+        "81a6f850cff5cbf82f4687b0c1113602899afe0255a1556a6fd0794864d8fa78": {
+            "name": "red-wire"
+        },
+        "8495946abe8202c2cc36b087306b1e5d1611f7c0ca41949487a2b0018b237c3e": {
+            "name": "speed-module"
+        },
+        "85233cd71b6e8c1fee204ce0b44ba5142ff40847b3a79b66be8104f0451cd846": {
+            "name": "rail"
+        },
+        "862d7a27fcca4031c413f4e47abd721e50540dca4a9ebb69bb0c5e6a690447ab": {
+            "name": "nuclear-reactor"
+        },
+        "864ce240b55c36c358d09d4136a6aa47e9aaf4798416bf3b8330300297602909": {
+            "name": "electric-energy-interface"
+        },
+        "8aff960585d5604c887145043a1504cf58f35bf33c82b2198fad7e6d6add3b66": {
+            "name": "iron-axe"
+        },
+        "91f750d3f19db41f47f2e5debf5dd06c05e010ec1bd6ec2794dde6901b706722": {
+            "name": "concrete"
+        },
+        "96fe3e3d58cd5a674768425a8912afa5bec1bdfdec1e1e5f6cb4e224777b7c03": {
+            "name": "personal-roboport-mk2-equipment"
+        },
+        "9765888e97c74da24c944394a06f3858a1477f1efc6cb04ade861abb8089deca": {
+            "name": "high-tech-science-pack"
+        },
+        "982e23c6c51ce1821fc7bdde5933406f877c9ffec3aab588b49ac4a08ec6b373": {
+            "name": "uranium-238"
+        },
+        "9a1149e68f6a4e3fdf8d10399e654c5e16bb3b67038ac432dac910134795a5b1": {
+            "name": "burner-inserter"
+        },
+        "9c278d965513ef6458ae4ada7b838f65377f974bf95ff8c0652d04f7bf1b6505": {
+            "name": "science-pack-3"
+        },
+        "9dabc3ce506bae3e95d12dc46d0ca904390c386e554c294b610bb966a6ead558": {
+            "name": "processing-unit"
+        },
+        "9df7f031271f126a47d8cba942ff466392a903f6cd5d7a4885fc99e10a45713f": {
+            "name": "pumpjack"
+        },
+        "9f8466b1cdfe137029c9fcabf8937a5f9321e08d85ac3d424a2d601dd4580ede": {
+            "name": "locomotive"
+        },
+        "a0734cc37a07295833a8bc45fc6624c79e2520cb1aa5249b481a9cb7969500cd": {
+            "name": "pistol"
+        },
+        "a5adc509a325bcf12961bea3585a12c30d07fadb03469909cbd719eaa683243c": {
+            "name": "fast-underground-belt"
+        },
+        "a5b6f0e145136bbf51c1a5af0b3c1c2f232e49567245de6110d19b2112604a80": {
+            "name": "low-density-structure"
+        },
+        "a62b831fa6c3da7ed5fe647ef3006747069bf5a3464c0d3b5cab456fbc51f18a": {
+            "name": "heat-exchanger"
+        },
+        "a6fd75e04da596d3a4fff4d017d8b645cb86a74e32ff1a79fec8eb5ebad62e70": {
+            "name": "lab"
+        },
+        "a720ee36086cbb3d2e442eccb24c83bb0be57c6816e5609c99a9716efd61edc2": {
+            "name": "flying-robot-frame"
+        },
+        "a7caff3a88e498a556c516de0a2a4d11c79ebbb06070b453eb8c99a4a26541ed": {
+            "name": "small-lamp"
+        },
+        "a8a8220002229e7e1486cae89b8a4f249c2d953f024308aebcebcad4e0e46f3b": {
+            "name": "science-pack-1"
+        },
+        "a9b95327ff0d0873767f1f4b5f7405553c21b5689c5495e476d0ee66c50a60ad": {
+            "name": "loader"
+        },
+        "aa3893643ed9c5fef66efeccb3f4fc0d99133ebf6385a3b2eff4f4682fd8982d": {
+            "name": "steel-furnace"
+        },
+        "acfef260a53faaf5f75e5e46726d1f635ef7f02001889ddbfc8fb587e786f4df": {
+            "name": "transport-belt"
+        },
+        "ad62588341b917344b897e86e5e5ba5e0f8f721f4e75381e20aec254651056cd": {
+            "name": "big-electric-pole"
+        },
+        "ad7305402571795417d5ebe442fda6b2e5b7d7b585ddaa2d90c96c3089ba1885": {
+            "name": "coal"
+        },
+        "aef6a0a9876735e97c22b691fa7fbc6096dc082e09cd2f784f6d015b26cbe695": {
+            "name": "rocket-control-unit"
+        },
+        "b1bdb78880d342dc8ea00cd7b933b8763dd3e895dd346dad502d034421edbcdf": {
+            "name": "radar"
+        },
+        "b5146cacba6834c6926dfc82795991a0329b09fa915163767c84a62e2ecc32c5": {
+            "name": "roboport"
+        },
+        "b59f20209e40da3f94fd27a4a3d22a88e4098227efa6b137285e00c0ff901f7a": {
+            "name": "repair-pack"
+        },
+        "b7d02318f908575fd37f2db8d820fc840b0ba09955410ae8dba8690ade092a33": {
+            "name": "assembling-machine-1"
+        },
+        "ba00cfe629e0480d9a38b39ffa138b2dc9f5b030b6905bcf4f4e3a1a25b53163": {
+            "name": "battery-mk2-equipment"
+        },
+        "ba7aace0f5481a8ac75ac6cd2afe58332fece9762e812d9d1fef562b2ec6b2bf": {
+            "name": "modular-armor"
+        },
+        "bab1d24770399ea5703ce9545d9105490d678c3c66a1d646a863617b485147a1": {
+            "name": "fast-transport-belt"
+        },
+        "bc706f8a7d6756f1a30b3320f1a5b6dbcaacec6e257c5f84c72e75408a05f8e1": {
+            "name": "uranium-235"
+        },
+        "bd071170b73fb86b58354baafbfeab73b0d96a0d9b030d1e941329a9ba6e6e24": {
+            "name": "shotgun-shell"
+        },
+        "bd3179d83f771638bc5964e2d57009a61940f4525d42e2f1581841ce15cd3644": {
+            "name": "railgun"
+        },
+        "bdeebb89f9c59056d6bc4530a566515d444dd5b52178dcc8b58d10ff6cf7fe82": {
+            "name": "copper-plate"
+        },
+        "be7905495ce059696851134dcb4dda546820b61fe6583cd8a809b7e5db9b2dbd": {
+            "name": "electric-engine-unit"
+        },
+        "bf90926b292dcb015298a39f88fe26f6cebfa7cfddf0b9e66b9509d1dff2fb3e": {
+            "name": "power-switch"
+        },
+        "c1e4a39bb726dfa0b5b34e8ce3e785e73d9560f1c861501756e202dc134467a0": {
+            "name": "energy-shield-mk2-equipment"
+        },
+        "c43307e60bad4b9878e2e34041f0be420534cbcb04a599d7edb1d14829704c15": {
+            "name": "rocket-part"
+        },
+        "ca150f06447cbd019dad2f9567292675fa7e0341a9400671075769c05f403555": {
+            "name": "rail-chain-signal"
+        },
+        "cacdff73964092bc4f6b9ee3f445f73b4d2cbc44713c4417756f5f1d7adfbf0a": {
+            "name": "raw-wood"
+        },
+        "cb21eb17db04b960999a4de6466194e27517e32660596f7ab53888428dd37f62": {
+            "name": "personal-laser-defense-equipment"
+        },
+        "cce4ec5bcf14c0f7487659f45cb6a1082d1369648df8feac46ece6c0f1870dbf": {
+            "name": "flamethrower-ammo"
+        },
+        "cd1842b8d9be429f8238ce8a11fb006c78deb1d0cf0202f820e6dd60b0011fa9": {
+            "name": "stone-brick"
+        },
+        "cdcc9af59ca3d0e6f362a78bb2315dcb43ca354f9fa388c069171cca5e76e148": {
+            "name": "solar-panel"
+        },
+        "ce6fc955615a66052ce6cf8d0daa7062d74074416f897709b46120ccfcd1adab": {
+            "name": "long-handed-inserter"
+        },
+        "cf7f5d380b01e0ebbc5482e55a7aca49254431c6b8038763340deaee8b4f7ae4": {
+            "name": "steel-chest"
+        },
+        "cf96723eb04d97d7f11bc892bd2b2bcb13a7d7ca341a7a4c01f3893d736c636e": {
+            "name": "hazard-concrete"
+        },
+        "d0f6cb584907c75697f9595f4f8c46fb5264808e757108f4076df19d8f7f345f": {
+            "name": "small-plane"
+        },
+        "d114a1ea4cb0a5aec5cfc253d4dbdfabfc953b1bc4ca86a74b7801c635e0ba6e": {
+            "name": "storage-tank"
+        },
+        "d249ed1f8134aaa00caae2c828957fdd37c2aa74c02b6ccbabe954b380454687": {
+            "name": "express-underground-belt"
+        },
+        "d43e24408fb4d43f10ae6b50d105a29f7b02c2a1ffe3e8dd65846c3b54da8b76": {
+            "name": "splitter"
+        },
+        "d6817171a0b7f6823eccef126dcba1e824421734c1144c5c4a7c2c2708a70ce0": {
+            "name": "explosives"
+        },
+        "d9ff7b9ebb3bff0a6707765c4905f3ed9f7e68a82ac3d465a2eb2582763e620e": {
+            "name": "steam-turbine"
+        },
+        "db2381391d837dd5a8ff2b3366417cd9132fbff948085fa1be63a36a03638506": {
+            "name": "cluster-grenade"
+        },
+        "dc941df0cfad9ac284a6ae8010034dc62087d9812d4ac7526cd72da00e3f07a0": {
+            "name": "plastic-bar"
+        },
+        "dd85358500e4b0f9359568f758ed485656f8460c664b9a549c1ef7d205cd54e4": {
+            "name": "underground-belt"
+        },
+        "de44c2a553fe0f9e3b44818f792834f29161e573ce4102d3399930652a08ded3": {
+            "name": "constant-combinator"
+        },
+        "e04b89c5cac77a5cc45e58a27a0aa552ee1aae1342e01b4831601d0bd467cf4f": {
+            "name": "atomic-bomb"
+        },
+        "e13389dee25b19dd8e6eeeaba3b74202c8162581829a191f997405ada1b78ced": {
+            "name": "advanced-circuit"
+        },
+        "e25f08b1164e584f979db28f5d7fb4b9ddea514428c47862940beab49866dbd0": {
+            "name": "steel-axe"
+        },
+        "e39f2d7fcd91d8404d1861b4ff0dbbf9550335d596de0c919a5695cccc936276": {
+            "name": "filter-inserter"
+        },
+        "e40e6afff511f2752da7274a53e831b2b63c24484a2b8acff40211dabf9c856b": {
+            "name": "productivity-module-2"
+        },
+        "e5cda2a3dfb4a2d34b62d72f0cab9345273755aea118408070ab9481e0ef8b9e": {
+            "name": "iron-stick"
+        },
+        "e627081e2048fee5c1761cb90291d9e16ff0c12dcb0612b8ba2eb4a1f17235ef": {
+            "name": "exoskeleton-equipment"
+        },
+        "e9e49fe488dca04f9a6629bddd46031fed112b35f457b20dfdadc6f4177049d3": {
+            "name": "cargo-wagon"
+        },
+        "eb3011ecab2f539f7b650bbc1828bd5e5c9f4cbe900015504f7428c01e38b6cc": {
+            "name": "energy-shield-equipment"
+        },
+        "ecdd7cd51c90e7cd683a6adc5786a726267694c0d8000fdc8a3878a3619d1389": {
+            "name": "land-mine"
+        },
+        "ed9c3df62ee5ef92bcbc3269320d4614bac2e00979128869967613b4a6be29fb": {
+            "name": "slowdown-capsule"
+        },
+        "eda5a2f20a066df0f5cd34c1234eeee900c753ba49d38d061795724c3e5f3d3d": {
+            "name": "shotgun"
+        },
+        "ef2800ff9c7f7e65e275cda2703587c5221f5931c997c38d0d94ebafbf84bd76": {
+            "name": "heat-pipe"
+        },
+        "ef82f6c5f1acd57f8a336ecbde928fd8f357a53ecf0a8e3d166404714a6a7ce5": {
+            "name": "railgun-dart"
+        },
+        "f03dca98db78950ccbe9f55e7d1762192f8f36b4dc9421d204c0a4ba30485820": {
+            "name": "stone-wall"
+        },
+        "f0d938dfedb4e95d59dca5ecc9d8ddef2ea4922a5a4c84280da06a9a2f47258c": {
+            "name": "small-electric-pole"
+        },
+        "f0da3c11df9733bd6bd7608dd62545e2e2879e7e7ac0c9b003d15640c5fc2352": {
+            "name": "stack-filter-inserter"
+        },
+        "f16ef6102207211d3530c19a46cca23cf11cfc16ddae76158f9c77acf21900bd": {
+            "name": "power-armor-mk2"
+        },
+        "f45392b57a8c6b49e9e006e617376b78e8ec00ade785edf513f065591838ac92": {
+            "name": "fast-splitter"
+        },
+        "f458d4cf4b2509f96281aaac9e4e41addd8b39a5698d3b7dbaeea473ff118834": {
+            "name": "burner-mining-drill"
+        },
+        "f55d6a4b33ee47a3e87a22bd44ed3988b12b5abd52f2f54776d9ecc4313de66b": {
+            "name": "solar-panel-equipment"
+        },
+        "f694dabecca6065c5018d38eb45f34b63cfe12a139f7a95d7fc9c66b70b0ecfd": {
+            "name": "beacon"
+        },
+        "f75a3af4c4478fbf68ae27e06f70b5d4a39a43d1e99554edd59e5b0ec1b10beb": {
+            "name": "express-transport-belt"
+        },
+        "f8128172cd27aa049f33ba43c5ee035d248325c79429dbd37300ddbb0da41830": {
+            "name": "speed-module-3"
+        },
+        "f94eb32f82f0e01ef357cf7d7c9cc5b9aa9faee86e3cd7cf4f86e33a6372d4a9": {
+            "name": "landfill"
+        },
+        "fb2a6f5a03cfe896ea4743052e11689fc330273edd7ed77839a3c2228da3e94f": {
+            "name": "flamethrower-turret"
+        },
+        "fba1ba15a05e80d9afd823d24953ecad2b8e6b4d29d36e029d37b66250215bba": {
+            "name": "piercing-rounds-magazine"
+        },
+        "fc4b5f0e4a0ed1d9fcbcf5e728205c569cdb324977a02c58a2fcee4f4ecdd076": {
+            "name": "copper-ore"
+        },
+        "ff4e89145064886dbdef889019aa634efbd6b198db3521d9619b6f68036d5a27": {
+            "name": "defender-capsule"
+        },
+        "ff7454e1dc9622f375b73a5c27bd107f1b7fb0dd37760a7c9abc95b401d729bf": {
+            "name": "oil-refinery"
+        }
+    }
+}

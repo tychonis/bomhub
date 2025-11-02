@@ -2,73 +2,52 @@ import styles from "./tree.module.css";
 
 import { useEffect, useState } from "react";
 import bomhub from "api/ky";
-import {
-  ItemMeta,
-  ItemNode,
-  FormationTree,
-} from "components/formation-tree/formation-tree";
 import { ItemDetailsPanel } from "components/items-details-panel/item-details-panel";
-import { ContextPanel } from "components/context-panel/context-panel";
+// import { ContextPanel } from "components/context-panel/context-panel";
 import { API_ROOT } from "api/constants";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
+import { TreeIndex } from "components/tree-index/tree-index";
 
 interface BpcDocument {
   root: string; // root node ID
-  nodes: Record<string, ItemNode>; // ItemNode ID → node
-  items: Record<string, ItemMeta>; // Item ID → metadata
-  usage: Record<string, string[]>; // Item ID → [ItemNode ID]
-  version?: number; // optional versioning
+  nodes: any; // ItemNode ID → node
+  items: any; // Item ID → metadata
+  usage: any; // Item ID → [ItemNode ID]
 }
 
-interface GitInfo {
-  branch: string;
-  commit: string;
-  path: string;
-}
-
-interface Bpc {
-  document: BpcDocument;
-  gitInfo: GitInfo;
-}
-
-async function getRawBPC(digest: string): Promise<Bpc> {
+async function getRawBPC(digest: string): Promise<BpcDocument> {
   const [tree, catalog] = await Promise.all([
     bomhub.get(`${API_ROOT}/tree/${digest}`).json(),
     bomhub.get(`${API_ROOT}/catalog/${digest}`).json(),
   ]);
 
-  const document: BpcDocument = {
+  const doc: BpcDocument = {
     root: digest,
     nodes: tree.nodes,
     items: catalog.items,
-    usage: tree.usage,
+    usage: tree.reuse,
   };
 
-  const bpc: Bpc = {
-    document: document,
-    gitInfo: null,
-  };
-  return bpc;
+  return doc;
 }
 
 export const TreePage = () => {
-  const { digest } = useParams<{ digest: string }>();
+  // const { digest } = useParams<{ digest: string }>();
+  const digest =
+    "9fd2aa383af18a418375f7ae9b3cd3f6573190a4dadf4fb2321a686cd5b6e134";
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [bpc, setBpc] = useState<Bpc | null>(null);
+  const [bom, setBom] = useState<BpcDocument | null>(null);
 
   useEffect(() => {
-    setBpc(null);
+    setBom(null);
     setSelectedId(null);
-    getRawBPC(digest).then(setBpc).catch(console.error);
+    getRawBPC(digest).then(setBom).catch(console.error);
   }, [digest]);
 
-  if (!bpc) {
+  if (!bom) {
     return <></>;
   }
-
-  const bom = bpc.document;
-  const git = bpc.gitInfo;
 
   if (!selectedId) {
     setSelectedId(bom.root);
@@ -77,7 +56,7 @@ export const TreePage = () => {
 
   return (
     <div className={styles["tree-container"]}>
-      <FormationTree
+      <TreeIndex
         nodes={bom.nodes}
         items={bom.items}
         rootId={bom.root}
@@ -87,17 +66,8 @@ export const TreePage = () => {
       />
       <ItemDetailsPanel
         node={bom.nodes[selectedId!]}
-        item={bom.items[bom.nodes[selectedId!].item_id]}
-        reuseCount={bom.usage[bom.nodes[selectedId!].item_id].length}
-      />
-      <ContextPanel
-        variant=""
-        setVariant={() => {}}
-        gitInfo={{
-          branch: git.branch,
-          commit: git.commit,
-          sourcePath: git.path,
-        }}
+        item={bom.items[bom.nodes[selectedId!].item]}
+        reuseCount={bom.usage[bom.nodes[selectedId!].item].length}
       />
     </div>
   );

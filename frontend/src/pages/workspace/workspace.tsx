@@ -5,16 +5,15 @@ import { WorkspaceSummary } from "components/workspace-summary/workspace-summary
 import { TreeRootSelector } from "components/tree-root-selector/tree-root-selector";
 import { API_ROOT } from "api/constants";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 async function getWorkspaceDetails(digest: string): Promise<any> {
-  console.log(API_ROOT);
   const detail = await bomhub.get(`${API_ROOT}/workspace/${digest}`).json();
 
   return detail;
 }
 
 async function getBomTreeRoots(digest: string): Promise<any> {
-  console.log(API_ROOT);
   const roots = await bomhub
     .get(`${API_ROOT}/workspace/${digest}/roots`)
     .json();
@@ -29,27 +28,32 @@ const Title = ({ label }: { label: string }) => (
 );
 
 export const Workspace = () => {
-  const workspaceName = "chess";
+  const { digest } = useParams<{ digest: string }>();
 
+  const [wsName, setWsName] = useState<string>();
   const [roots, setRoots] = useState<string[]>([]);
   const [details, setDetails] = useState();
 
   useEffect(() => {
-    getBomTreeRoots("").then((data) => {
+    if (!digest) return;
+
+    getBomTreeRoots(digest).then((data) => {
       setRoots(data["roots"]);
     });
-  }, []);
+  }, [digest]);
 
   useEffect(() => {
-    getWorkspaceDetails("").then((data) => {
-      console.log(data);
+    if (!digest) return;
+
+    getWorkspaceDetails(digest).then((data) => {
+      setWsName(data["name"]);
       setDetails(data);
     });
-  }, []);
+  }, [digest]);
 
   return (
     <div className={styles["ws-container"]}>
-      <Title label={workspaceName}></Title>
+      <Title label={wsName}></Title>
       <WorkspaceSummary details={details}></WorkspaceSummary>
       <TreeRootSelector roots={roots}></TreeRootSelector>
     </div>
