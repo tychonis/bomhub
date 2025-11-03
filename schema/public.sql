@@ -38,4 +38,4 @@ CREATE TABLE IF NOT EXISTS index (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
-CREATE INDEX IF NOT EXISTS idx_bom_index ON index(bom_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_bom_index ON index(bom_id);
