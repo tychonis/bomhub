@@ -5,7 +5,7 @@ import bomhub from "api/ky";
 import { ItemDetailsPanel } from "components/items-details-panel/item-details-panel";
 // import { ContextPanel } from "components/context-panel/context-panel";
 import { API_ROOT } from "api/constants";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { TreeIndex } from "components/tree-index/tree-index";
 
 interface BpcDocument {
@@ -32,9 +32,7 @@ async function getRawBPC(digest: string): Promise<BpcDocument> {
 }
 
 export const TreePage = () => {
-  // const { digest } = useParams<{ digest: string }>();
-  const digest =
-    "9fd2aa383af18a418375f7ae9b3cd3f6573190a4dadf4fb2321a686cd5b6e134";
+  const { digest } = useParams<{ digest: string }>();
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [bom, setBom] = useState<BpcDocument | null>(null);

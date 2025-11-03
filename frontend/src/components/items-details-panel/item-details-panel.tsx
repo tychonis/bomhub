@@ -1,15 +1,7 @@
-import type { ItemNode, ItemMeta } from "../formation-tree/formation-tree";
 import ky from "api/ky";
 import styles from "./item-details-panel.module.css";
 import { useEffect, useState } from "react";
 import { API_ROOT } from "api/constants";
-
-interface ItemDetailsPanelProps {
-  node: ItemNode | null;
-  item: ItemMeta | null;
-  reuseCount: number;
-  onJumpToInstance?: (id: string) => void;
-}
 
 const DEFAULT_IMAGE =
   "https://media.printables.com/media/prints/32741/stls/320849_1e9f2158-27da-4374-a4b2-586850f4d47a/thumbs/cover/180x180/png/king-body-v2_preview.webp";
@@ -34,10 +26,10 @@ function DetailRow({
   );
 }
 
-function GenerateAttrList(node: ItemNode, item: ItemMeta) {
+function GenerateAttrList(node, item) {
   const rows: [string, React.ReactNode][] = [
     ["Part #:", item.part_number || "—"],
-    ["Item ID:", item.id],
+    ["Item ID:", node.item],
     ["Node ID:", node.id],
   ];
 
@@ -52,11 +44,7 @@ function GenerateAttrList(node: ItemNode, item: ItemMeta) {
   return rows;
 }
 
-export function ItemDetailsPanel({
-  node,
-  item,
-  reuseCount,
-}: ItemDetailsPanelProps) {
+export function ItemDetailsPanel({ node, item, reuseCount }) {
   const [attrs, setAttrs] = useState<[string, React.ReactNode][]>([]);
   const [image, setImage] = useState<string>(DEFAULT_IMAGE);
   if (!node || !item) {
