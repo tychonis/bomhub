@@ -79,9 +79,19 @@ func (s *Server) SaveObject(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 }
 
+func (s *Server) GetCatalog(ctx *gin.Context) {
+	core := hcl.NewCoreFromAPI("http://localhost:5001")
+	content, err := core.ExportCatalog()
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	ctx.JSON(http.StatusOK, json.RawMessage(content))
+}
+
 func (s *Server) GetBOMTree(ctx *gin.Context) {
 	digest := ctx.Param("digest")
-	core := hcl.NewCore("local")
+	core := hcl.NewCoreFromAPI("http://localhost:5001")
 	root, err := core.Catalog.Get(digest)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusNotFound)

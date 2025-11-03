@@ -32,7 +32,7 @@ RETURNING content;
 }
 
 func (c *Client) GetIndex(ctx context.Context, id int) (json.RawMessage, error) {
-	const q = `SELECT content FROM object WHERE bom_id = $1;`
+	const q = `SELECT content FROM index WHERE bom_id = $1;`
 	var raw json.RawMessage
 	err := c.pool.QueryRow(ctx, q, id).Scan(&raw)
 	return raw, err
