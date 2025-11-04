@@ -22,7 +22,7 @@ async function getRawBPC(digest: string): Promise<BpcDocument> {
   ]);
 
   const doc: BpcDocument = {
-    root: digest,
+    root: tree.root,
     nodes: tree.nodes,
     items: catalog.items,
     usage: tree.reuse,
@@ -40,15 +40,15 @@ export const TreePage = () => {
   useEffect(() => {
     setBom(null);
     setSelectedId(null);
-    getRawBPC(digest).then(setBom).catch(console.error);
+    getRawBPC(digest)
+      .then((bpc) => {
+        setBom(bpc);
+        setSelectedId(bpc.root);
+      })
+      .catch(console.error);
   }, [digest]);
 
   if (!bom) {
-    return <></>;
-  }
-
-  if (!selectedId) {
-    setSelectedId(bom.root);
     return <></>;
   }
 

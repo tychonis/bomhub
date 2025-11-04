@@ -19,7 +19,7 @@ export const MockAPI = {
       json: async () => {
         const mockDataPath = getMockDataPath(url);
         // ⚠️ Dynamic import below runs only in dev/Node; it won't be bundled by Vite/Webpack builds.
-        return (await import(`${mockDataPath}`)).default;
+        return (await import(/* @vite-ignore */ `${mockDataPath}`)).default;
       },
     };
   },
