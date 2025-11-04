@@ -39,3 +39,12 @@ CREATE TABLE IF NOT EXISTS index (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_bom_index ON index(bom_id);
+
+CREATE TABLE IF NOT EXISTS root (
+    root_id SERIAL PRIMARY KEY,
+    bom_id INT REFERENCES bom(bom_id),
+    root_digest BYTEA,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS root_index ON root(bom_id);
