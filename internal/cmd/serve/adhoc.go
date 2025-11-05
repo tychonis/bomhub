@@ -83,3 +83,17 @@ func (s *Server) GetRoots(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, resp)
 }
+
+func (s *Server) GetWorkspaceSummary(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	obj, err := s.DB.GetWorkspaceSummary(ctx, id)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+	ctx.Data(http.StatusOK, "application/json; charset=utf-8", obj)
+}

@@ -45,3 +45,10 @@ func (c *Client) GetRoots(ctx context.Context, id int) ([][]byte, error) {
 	rows, _ := c.pool.Query(ctx, q, id)
 	return pgx.CollectRows(rows, pgx.RowTo[[]byte])
 }
+
+func (c *Client) GetWorkspaceSummary(ctx context.Context, id int) (json.RawMessage, error) {
+	const q = `SELECT summary FROM bom WHERE bom_id = $1;`
+	var raw json.RawMessage
+	err := c.pool.QueryRow(ctx, q, id).Scan(&raw)
+	return raw, err
+}

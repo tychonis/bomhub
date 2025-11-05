@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS bom (
     name TEXT,
     repo TEXT,
     bpc TEXT,
+    summary JSONB,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
