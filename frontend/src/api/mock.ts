@@ -1,5 +1,8 @@
 const getMockDataPath = (route: string) => {
   if (route.includes("/roots")) {
+    return "./mock/data/boms.json";
+  }
+  if (route.includes("/roots")) {
     return "./mock/data/tree-root.json";
   }
   if (route.includes("/workspace")) {

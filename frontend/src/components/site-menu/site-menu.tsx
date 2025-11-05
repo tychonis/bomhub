@@ -1,19 +1,38 @@
 import styles from "./site-menu.module.css";
 
 import { Menu, MenuProps } from "antd";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Components, keyToIndex } from "router/components";
+import { Component, Components } from "router/components";
+import { API_ROOT } from "api/constants";
+import bomhub from "api/ky";
+import { ExperimentOutlined } from "@ant-design/icons";
+
+async function getBoms() {
+  const boms = await bomhub.get(`${API_ROOT}/boms`).json();
+  return boms;
+}
 
 export const SiteMenu = () => {
   const navigate = useNavigate();
+  const [items, setItems] = useState(Components);
 
   const onClick: MenuProps["onClick"] = (e) => {
-    const index = keyToIndex.get(e.key);
-    if (typeof index === "number") {
-      const component = Components[index];
-      navigate(component.path);
-    }
+    navigate(e.key);
   };
+
+  useEffect(() => {
+    getBoms().then((boms) => {
+      const dynComponents: Component[] = boms.map((bom) => ({
+        path: "/workspace/" + bom.id,
+        key: "/workspace/" + bom.id,
+        label: bom.name,
+        icon: <ExperimentOutlined />,
+      }));
+      const allItems = Components.concat(dynComponents);
+      setItems(allItems);
+    });
+  }, []);
 
   return (
     <div className={styles["site-menu-container"]}>
@@ -24,7 +43,7 @@ export const SiteMenu = () => {
           {
             type: "divider",
           },
-          ...Components,
+          ...items,
         ]}
       />
     </div>

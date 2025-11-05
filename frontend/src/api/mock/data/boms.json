@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "name": "chess",
+        "repo": "https://github.com/tychonis/cyanotype-chess",
+        "bpc": "chess.bpc"
+    },
+    {
+        "id": 3,
+        "name": "pnp",
+        "repo": "https://github.com/tychonis/cyanotype-pnp",
+        "bpc": "pnp.bpc"
+    },
+    {
+        "id": 2,
+        "name": "factorio",
+        "repo": "https://github.com/tychonis/cyanotype-factorio",
+        "bpc": "factorio.bpc"
+    }
+]

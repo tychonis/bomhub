@@ -20,4 +20,5 @@
 
 .site-menu :global(.ant-menu-item) {
   text-align: left;
+  text-transform: capitalize;
 }
