@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/tychonis/cyanotype/model"
 )
 
@@ -82,6 +83,26 @@ func (s *Server) GetRoots(ctx *gin.Context) {
 		resp.Roots = append(resp.Roots, &r)
 	}
 	ctx.JSON(http.StatusOK, resp)
+}
+
+func (s *Server) SaveWorkspaceSummary(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	defer ctx.Request.Body.Close()
+	data, err := io.ReadAll(ctx.Request.Body)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	_, err = s.DB.SaveWorkspaceSummary(ctx, id, json.RawMessage(data))
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	ctx.Status(http.StatusAccepted)
 }
 
 func (s *Server) GetWorkspaceSummary(ctx *gin.Context) {

@@ -10,7 +10,7 @@ const routes: RouteObject[] = [
     path: "/workspace/:digest",
     element: <Workspace />,
   },
-  { path: "/tree/:digest", element: <TreePage /> },
+  { path: "/tree/:id/:digest", element: <TreePage /> },
 
   { path: "/__dev/playground", element: <Playground /> },
 ];

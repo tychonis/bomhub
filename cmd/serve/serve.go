@@ -38,10 +38,11 @@ func run(cmd *cobra.Command, args []string) {
 	router.POST("/bom_index/:id", server.SaveIndex)
 	router.GET("/bom_index/:id", server.GetIndex)
 
-	router.GET("/catalog/:digest", server.GetCatalog)
-	router.GET("/tree/:digest", server.GetBOMTree)
+	router.GET("/catalog/:id", server.GetCatalog)
+	router.GET("/tree/:id/:digest", server.GetBOMTree)
 
 	router.GET("/workspace/:id", server.GetWorkspaceSummary)
+	router.POST("/workspace/:id", server.SaveWorkspaceSummary)
 	router.GET("/workspace/:id/roots", server.GetRoots)
 
 	setup.WaitOnOSSignals()

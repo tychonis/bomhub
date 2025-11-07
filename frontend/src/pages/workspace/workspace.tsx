@@ -7,16 +7,14 @@ import { API_ROOT } from "api/constants";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-async function getWorkspaceDetails(digest: string): Promise<any> {
-  const detail = await bomhub.get(`${API_ROOT}/workspace/${digest}`).json();
+async function getWorkspaceDetails(id: string): Promise<any> {
+  const detail = await bomhub.get(`${API_ROOT}/workspace/${id}`).json();
 
   return detail;
 }
 
-async function getBomTreeRoots(digest: string): Promise<any> {
-  const roots = await bomhub
-    .get(`${API_ROOT}/workspace/${digest}/roots`)
-    .json();
+async function getBomTreeRoots(id: string): Promise<any> {
+  const roots = await bomhub.get(`${API_ROOT}/workspace/${id}/roots`).json();
 
   return roots;
 }
@@ -55,7 +53,7 @@ export const Workspace = () => {
     <div className={styles["ws-container"]}>
       <Title label={wsName}></Title>
       <WorkspaceSummary details={details}></WorkspaceSummary>
-      <TreeRootSelector roots={roots}></TreeRootSelector>
+      <TreeRootSelector id={digest} roots={roots}></TreeRootSelector>
     </div>
   );
 };

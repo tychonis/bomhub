@@ -1,5 +1,5 @@
-import { TreePage } from "pages/tree/tree";
+import DebouncedSearch from "components/search/search";
 
 export const Playground = () => {
-  return <TreePage />;
+  return <DebouncedSearch />;
 };

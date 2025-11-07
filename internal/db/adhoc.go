@@ -52,3 +52,20 @@ func (c *Client) GetWorkspaceSummary(ctx context.Context, id int) (json.RawMessa
 	err := c.pool.QueryRow(ctx, q, id).Scan(&raw)
 	return raw, err
 }
+
+func (c *Client) SaveWorkspaceSummary(ctx context.Context, id int, content any) (json.RawMessage, error) {
+	body, err := json.Marshal(content)
+	if err != nil {
+		return nil, err
+	}
+
+	const q = `UPDATE bom SET summary=$2::jsonb WHERE bom_id=$1;`
+
+	var ret json.RawMessage
+	_, err = c.pool.Exec(ctx, q, id, body)
+	if err != nil {
+		return nil, err
+	}
+
+	return ret, nil
+}

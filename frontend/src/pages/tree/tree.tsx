@@ -15,10 +15,10 @@ interface BpcDocument {
   usage: any; // Item ID → [ItemNode ID]
 }
 
-async function getRawBPC(digest: string): Promise<BpcDocument> {
+async function getRawBPC(id: string, digest: string): Promise<BpcDocument> {
   const [tree, catalog] = await Promise.all([
-    bomhub.get(`${API_ROOT}/tree/${digest}`).json(),
-    bomhub.get(`${API_ROOT}/catalog/${digest}`).json(),
+    bomhub.get(`${API_ROOT}/tree/${id}/${digest}`).json(),
+    bomhub.get(`${API_ROOT}/catalog/${id}`).json(),
   ]);
 
   const doc: BpcDocument = {
@@ -32,7 +32,7 @@ async function getRawBPC(digest: string): Promise<BpcDocument> {
 }
 
 export const TreePage = () => {
-  const { digest } = useParams<{ digest: string }>();
+  const { id, digest } = useParams<{ id: string; digest: string }>();
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [bom, setBom] = useState<BpcDocument | null>(null);
@@ -40,7 +40,7 @@ export const TreePage = () => {
   useEffect(() => {
     setBom(null);
     setSelectedId(null);
-    getRawBPC(digest)
+    getRawBPC(id, digest)
       .then((bpc) => {
         setBom(bpc);
         setSelectedId(bpc.root);
