@@ -1,0 +1,33 @@
+.panel {
+  padding: 16px;
+  width: 20%;
+  border-left: 1px solid #eee;
+  font-size: 1rem;
+  text-align: left;
+}
+
+.panel label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.panel select {
+  width: 100%;
+  padding: 4px;
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-weight: 1000;
+  margin-bottom: 2rem;
+}
+
+.git-source {
+  font-size: 12px;
+  color: #555;
+  margin-top: 4px;
+}
