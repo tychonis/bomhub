@@ -7,6 +7,7 @@ import { ItemDetailsPanel } from "components/items-details-panel/item-details-pa
 import { API_ROOT } from "api/constants";
 import { useParams } from "react-router-dom";
 import { TreeIndex } from "components/tree-index/tree-index";
+import { Attachment } from "components/attachement/attachment";
 
 interface BpcDocument {
   root: string; // root node ID
@@ -67,6 +68,7 @@ export const TreePage = () => {
         item={bom.items[bom.nodes[selectedId!].item]}
         reuseCount={bom.usage[bom.nodes[selectedId!].item].length}
       />
+      <Attachment attachments={[]} />
     </div>
   );
 };
