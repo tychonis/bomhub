@@ -32,11 +32,16 @@ async function getRawBPC(id: string, digest: string): Promise<BpcDocument> {
   return doc;
 }
 
+async function getAttachments(id: string) {
+  return bomhub.get(`${API_ROOT}/attachements/${id}`).json();
+}
+
 export const TreePage = () => {
   const { id, digest } = useParams<{ id: string; digest: string }>();
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [bom, setBom] = useState<BpcDocument | null>(null);
+  const [attachements, setAttachements] = useState([]);
 
   useEffect(() => {
     setBom(null);
@@ -48,6 +53,12 @@ export const TreePage = () => {
       })
       .catch(console.error);
   }, [digest]);
+
+  useEffect(() => {
+    getAttachments(selectedId).then((attc) => {
+      setAttachements(attc);
+    });
+  }, [selectedId]);
 
   if (!bom) {
     return <></>;
@@ -68,7 +79,7 @@ export const TreePage = () => {
         item={bom.items[bom.nodes[selectedId!].item]}
         reuseCount={bom.usage[bom.nodes[selectedId!].item].length}
       />
-      <Attachment attachments={[]} />
+      <Attachment attachments={attachements} />
     </div>
   );
 };
