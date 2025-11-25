@@ -181,7 +181,7 @@ export function TreeIndex(props) {
   return (
     <div className={styles["tree-index"]}>
       <List
-        height={window.innerHeight}
+        height={window.innerHeight * 0.9}
         width={"100%"}
         itemCount={rows.length}
         itemSize={rowHeight}
