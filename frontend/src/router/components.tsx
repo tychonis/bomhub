@@ -8,6 +8,7 @@ export interface Component {
   label: string;
   icon: JSX.Element;
   element: JSX.Element;
+  children: Component[];
 }
 
 export const Components: Component[] = [
@@ -17,5 +18,6 @@ export const Components: Component[] = [
     label: "Home",
     icon: <HomeOutlined />,
     element: <Landing />,
+    children: [],
   },
 ];
