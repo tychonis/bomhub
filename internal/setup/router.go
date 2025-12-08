@@ -1,7 +1,7 @@
 package setup
 
 import (
-	"fmt"
+	"log/slog"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -14,7 +14,7 @@ func CreateDefaultRouter() *gin.Engine {
 		auth.RegisterTo(router)
 	}
 	viper.SetDefault("router.address", ":8080")
-	fmt.Printf("addr: %+v", viper.GetString("router.address"))
+	slog.Info("server running", "address", viper.GetString("router.address"))
 	go router.Run(viper.GetString("router.address"))
 	return router
 }
