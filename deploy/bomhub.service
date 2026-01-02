@@ -1,0 +1,15 @@
+[Unit]
+Description=Bom Hub Backend
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/bomhub serve
+WorkingDirectory=/var/lib/bomhub
+User=ubuntu
+Group=ubuntu
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
