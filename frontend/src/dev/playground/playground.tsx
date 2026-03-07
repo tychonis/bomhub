@@ -1,9 +1,6 @@
-import { Attachment } from "components/attachement/attachment";
+import { MagicCube } from "dev/threejs/magiccube";
+// import { MeshViewer } from "dev/threejs/meshview";
 
 export const Playground = () => {
-  const attachments = [
-    { type: "CAD", name: "xxxx.cad" },
-    { type: "quality spec", name: "yyyy.pdf" },
-  ];
-  return <Attachment attachments={attachments} />;
+  return <MagicCube />;
 };

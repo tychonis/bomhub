@@ -16,6 +16,8 @@ require (
 	golang.org/x/oauth2 v0.35.0
 )
 
+replace github.com/tychonis/cyanotype => ../cyanotype
+
 require (
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
