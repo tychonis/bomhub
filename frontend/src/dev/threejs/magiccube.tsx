@@ -1,6 +1,18 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
+function setHighlight(mesh: THREE.Mesh, on: boolean) {
+  const materials = Array.isArray(mesh.material)
+    ? mesh.material
+    : [mesh.material];
+
+  for (const material of materials) {
+    if (material instanceof THREE.MeshStandardMaterial) {
+      material.emissive.setHex(on ? 0x555555 : 0x000000);
+    }
+  }
+}
+
 export function MagicCube() {
   const mountRef = useRef<HTMLDivElement | null>(null);
 
@@ -15,7 +27,7 @@ export function MagicCube() {
     scene.background = new THREE.Color(0xffffff);
 
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
-    camera.position.set(3, 3, 6);
+    camera.position.set(3, -3, 5);
     camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -34,17 +46,21 @@ export function MagicCube() {
     const gap = 0.08;
     const offset = cubieSize + gap;
 
+    const makeMaterial = (color: number) => () =>
+      new THREE.MeshStandardMaterial({ color });
+
     const stickerMaterials = {
-      right: new THREE.MeshStandardMaterial({ color: 0xff6b00 }),
-      left: new THREE.MeshStandardMaterial({ color: 0xff0000 }),
-      top: new THREE.MeshStandardMaterial({ color: 0xffffff }),
-      bottom: new THREE.MeshStandardMaterial({ color: 0xffff00 }),
-      front: new THREE.MeshStandardMaterial({ color: 0x00aa00 }),
-      back: new THREE.MeshStandardMaterial({ color: 0x0000ff }),
-      inner: new THREE.MeshStandardMaterial({ color: 0x000000 }),
+      right: makeMaterial(0xff6b00),
+      left: makeMaterial(0xff0000),
+      top: makeMaterial(0xffffff),
+      bottom: makeMaterial(0xffff00),
+      front: makeMaterial(0x00aa00),
+      back: makeMaterial(0x0000ff),
+      inner: makeMaterial(0x000000),
     };
 
     const cubeGroup = new THREE.Group();
+    const cubies: THREE.Mesh[] = [];
     scene.add(cubeGroup);
 
     for (let x = -1; x <= 1; x++) {
@@ -56,22 +72,59 @@ export function MagicCube() {
             cubieSize
           );
           const materials = [
-            x === 1 ? stickerMaterials.right : stickerMaterials.inner,
-            x === -1 ? stickerMaterials.left : stickerMaterials.inner,
-            y === 1 ? stickerMaterials.top : stickerMaterials.inner,
-            y === -1 ? stickerMaterials.bottom : stickerMaterials.inner,
-            z === 1 ? stickerMaterials.front : stickerMaterials.inner,
-            z === -1 ? stickerMaterials.back : stickerMaterials.inner,
+            x === 1 ? stickerMaterials.right() : stickerMaterials.inner(),
+            x === -1 ? stickerMaterials.left() : stickerMaterials.inner(),
+            y === 1 ? stickerMaterials.top() : stickerMaterials.inner(),
+            y === -1 ? stickerMaterials.bottom() : stickerMaterials.inner(),
+            z === 1 ? stickerMaterials.front() : stickerMaterials.inner(),
+            z === -1 ? stickerMaterials.back() : stickerMaterials.inner(),
           ];
 
           const cubie = new THREE.Mesh(geometry, materials);
           cubie.position.set(x * offset, y * offset, z * offset);
           cubeGroup.add(cubie);
+          cubies.push(cubie);
         }
       }
     }
 
-    renderer.render(scene, camera);
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    let hovered: THREE.Mesh | null = null;
+
+    function render() {
+      renderer.render(scene, camera);
+    }
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const rect = renderer.domElement.getBoundingClientRect();
+
+      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(pointer, camera);
+      const hits = raycaster.intersectObjects(cubies, false);
+
+      const nextHovered =
+        hits.length > 0 ? (hits[0].object as THREE.Mesh) : null;
+
+      if (hovered !== nextHovered) {
+        if (hovered) setHighlight(hovered, false);
+        hovered = nextHovered;
+        if (hovered) setHighlight(hovered, true);
+        render();
+      }
+    };
+
+    const handlePointerLeave = () => {
+      if (hovered) {
+        setHighlight(hovered, false);
+        hovered = null;
+        render();
+      }
+    };
+
+    render();
 
     // let animationFrameId = 0;
 
@@ -99,12 +152,19 @@ export function MagicCube() {
       renderer.setSize(newWidth, newHeight);
     };
 
+    renderer.domElement.addEventListener("pointermove", handlePointerMove);
+    renderer.domElement.addEventListener("pointerleave", handlePointerLeave);
     window.addEventListener("resize", handleResize);
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(mount);
 
     return () => {
       //   window.cancelAnimationFrame(animationFrameId);
+      renderer.domElement.removeEventListener("pointermove", handlePointerMove);
+      renderer.domElement.removeEventListener(
+        "pointerleave",
+        handlePointerLeave
+      );
       window.removeEventListener("resize", handleResize);
       resizeObserver.disconnect();
 
