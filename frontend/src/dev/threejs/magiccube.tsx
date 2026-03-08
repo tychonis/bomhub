@@ -1,3 +1,5 @@
+import styles from "./threejs.module.css";
+
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
@@ -15,13 +17,19 @@ function setHighlight(mesh: THREE.Mesh, on: boolean) {
 
 export function MagicCube() {
   const mountRef = useRef<HTMLDivElement | null>(null);
+  const azimuthRef = useRef<HTMLInputElement | null>(null);
+  const elevationRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     const mount = mountRef.current;
-    if (!mount) return;
+    const azimuthInput = azimuthRef.current;
+    const elevationInput = elevationRef.current;
+    if (!mount || !azimuthInput || !elevationInput) return;
 
     const width = mount.clientWidth || 600;
     const height = mount.clientHeight || 420;
+
+    const cameraRadius = 6;
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff);
@@ -96,6 +104,19 @@ export function MagicCube() {
       renderer.render(scene, camera);
     }
 
+    function updateCamera() {
+      const azimuth = THREE.MathUtils.degToRad(Number(azimuthInput.value));
+      const elevation = THREE.MathUtils.degToRad(Number(elevationInput.value));
+
+      const horizontalRadius = cameraRadius * Math.cos(elevation);
+      camera.position.x = horizontalRadius * Math.sin(azimuth);
+      camera.position.y = cameraRadius * Math.sin(elevation);
+      camera.position.z = horizontalRadius * Math.cos(azimuth);
+      camera.lookAt(0, 0, 0);
+
+      renderer.render(scene, camera);
+    }
+
     const handlePointerMove = (event: PointerEvent) => {
       const rect = renderer.domElement.getBoundingClientRect();
 
@@ -122,6 +143,10 @@ export function MagicCube() {
         hovered = null;
         render();
       }
+    };
+
+    const handleSliderInput = () => {
+      updateCamera();
     };
 
     render();
@@ -154,6 +179,8 @@ export function MagicCube() {
 
     renderer.domElement.addEventListener("pointermove", handlePointerMove);
     renderer.domElement.addEventListener("pointerleave", handlePointerLeave);
+    azimuthInput.addEventListener("input", handleSliderInput);
+    elevationInput.addEventListener("input", handleSliderInput);
     window.addEventListener("resize", handleResize);
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(mount);
@@ -200,38 +227,54 @@ export function MagicCube() {
         boxSizing: "border-box",
       }}
     >
-      <h2
-        style={{
-          margin: "0 0 8px 0",
-          fontSize: "20px",
-          fontWeight: 600,
-        }}
-      >
-        Three.js magic cube
-      </h2>
+      <div className={styles["viewer-grid"]}>
+        <div
+          ref={mountRef}
+          style={{
+            width: "100%",
+            height: "420px",
+            border: "1px solid #ddd",
+            borderRadius: "12px",
+            overflow: "hidden",
+            background: "#f3f3f3",
+            boxSizing: "border-box",
+          }}
+        />
+        <label
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 8,
+            width: 48,
+          }}
+        >
+          <input
+            className={styles["scroll"]}
+            ref={elevationRef}
+            type="range"
+            min="-80"
+            max="80"
+            defaultValue="25"
+            style={{
+              width: "26rem",
+              transform: "rotate(-90deg)",
+            }}
+          />
+        </label>
 
-      <p
-        style={{
-          margin: "0 0 16px 0",
-          fontSize: "14px",
-          color: "#666",
-        }}
-      >
-        A minimal React + Three.js example without Tailwind.
-      </p>
-
-      <div
-        ref={mountRef}
-        style={{
-          width: "100%",
-          height: "420px",
-          border: "1px solid #ddd",
-          borderRadius: "12px",
-          overflow: "hidden",
-          background: "#f3f3f3",
-          boxSizing: "border-box",
-        }}
-      />
+        <label style={{ display: "grid", gap: 4, marginTop: "0.5 rem" }}>
+          <input
+            className={styles["scroll"]}
+            ref={azimuthRef}
+            type="range"
+            min="-180"
+            max="180"
+            defaultValue="35"
+          />
+        </label>
+      </div>
     </div>
   );
 }

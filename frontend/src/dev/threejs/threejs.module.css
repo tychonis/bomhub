@@ -1,0 +1,28 @@
+.viewer-grid {
+  width: 37.5rem; /* 600px */
+  font-family: sans-serif;
+  display: grid;
+  grid-template-columns: 1fr 3.5rem; /* 56px */
+  grid-template-rows: 26.25rem auto; /* 420px */
+  gap: 0.75rem; /* 12px */
+  align-items: stretch;
+}
+
+.scroll {
+  accent-color: #888888;
+}
+
+.scroll::-webkit-slider-thumb {
+  margin-top: -0.25rem;
+}
+
+.scroll::-moz-range-progress {
+  height: 0.5rem;
+  background: transparent;
+}
+
+.scroll::-webkit-slider-runnable-track {
+  height: 0.5rem;
+  background: #e5e5e5;
+  border-radius: 999px;
+}
