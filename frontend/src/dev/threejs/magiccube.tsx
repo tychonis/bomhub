@@ -151,24 +151,6 @@ export function MagicCube() {
 
     render();
 
-    // let animationFrameId = 0;
-
-    // let lastTime = 0;
-
-    // const animate = (time: number) => {
-    //   requestAnimationFrame(animate);
-
-    //   const delta = (time - lastTime) / 1000;
-    //   lastTime = time;
-
-    //   cubeGroup.rotation.x += delta * 0.5;
-    //   cubeGroup.rotation.y += delta * 0.7;
-
-    //   renderer.render(scene, camera);
-    // };
-
-    // requestAnimationFrame(animate);
-
     const handleResize = () => {
       const newWidth = mount.clientWidth || 600;
       const newHeight = mount.clientHeight || 420;
@@ -186,7 +168,6 @@ export function MagicCube() {
     resizeObserver.observe(mount);
 
     return () => {
-      //   window.cancelAnimationFrame(animationFrameId);
       renderer.domElement.removeEventListener("pointermove", handlePointerMove);
       renderer.domElement.removeEventListener(
         "pointerleave",
@@ -228,26 +209,15 @@ export function MagicCube() {
       }}
     >
       <div className={styles["viewer-grid"]}>
-        <div
-          ref={mountRef}
-          style={{
-            width: "100%",
-            height: "420px",
-            border: "1px solid #ddd",
-            borderRadius: "12px",
-            overflow: "hidden",
-            background: "#f3f3f3",
-            boxSizing: "border-box",
-          }}
-        />
+        <div ref={mountRef} className={styles["viewer"]} />
         <label
           style={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: 8,
-            width: 48,
+            gap: "0.25rem",
+            width: "1.5rem",
           }}
         >
           <input
@@ -256,22 +226,22 @@ export function MagicCube() {
             type="range"
             min="-80"
             max="80"
-            defaultValue="25"
+            defaultValue="0"
             style={{
-              width: "26rem",
+              width: "28rem",
               transform: "rotate(-90deg)",
             }}
           />
         </label>
 
-        <label style={{ display: "grid", gap: 4, marginTop: "0.5 rem" }}>
+        <label style={{ display: "grid", gap: 4, marginTop: "0.25rem" }}>
           <input
             className={styles["scroll"]}
             ref={azimuthRef}
             type="range"
             min="-180"
             max="180"
-            defaultValue="35"
+            defaultValue="0"
           />
         </label>
       </div>
