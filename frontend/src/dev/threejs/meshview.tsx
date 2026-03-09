@@ -33,7 +33,7 @@ export function MeshViewer() {
     const loader = new GLTFLoader();
 
     loader.load(
-      "/dev/test.gltf", // place model.glb in your public folder
+      "/dev/nut.glb", // place model.glb in your public folder
       (gltf) => {
         const mesh = gltf.scene;
         scene.add(mesh);
