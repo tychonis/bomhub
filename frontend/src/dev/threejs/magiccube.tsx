@@ -149,6 +149,7 @@ export function MagicCube() {
       updateCamera();
     };
 
+    updateCamera();
     render();
 
     const handleResize = () => {
@@ -226,7 +227,7 @@ export function MagicCube() {
             type="range"
             min="-80"
             max="80"
-            defaultValue="0"
+            defaultValue="30"
             style={{
               width: "28rem",
               transform: "rotate(-90deg)",
@@ -241,7 +242,7 @@ export function MagicCube() {
             type="range"
             min="-180"
             max="180"
-            defaultValue="0"
+            defaultValue="40"
           />
         </label>
       </div>
