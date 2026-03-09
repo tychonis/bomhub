@@ -51,7 +51,7 @@ export function NutView() {
     directionalLight.position.set(5, 5, 6);
     scene.add(directionalLight);
 
-    const meshes: THREE.Mesh[] = [];
+    const meshes: THREE.Object3D[] = [];
 
     const loader = new GLTFLoader();
 
@@ -65,9 +65,7 @@ export function NutView() {
         const box = new THREE.Box3().setFromObject(mesh);
         const center = box.getCenter(new THREE.Vector3());
         mesh.position.sub(center);
-        console.log(mesh.position);
         mesh.position.add(new THREE.Vector3(0.01, 0, 0));
-        console.log(mesh.position);
         meshes.push(mesh);
         renderer.render(scene, camera);
       },
@@ -86,9 +84,7 @@ export function NutView() {
         const box = new THREE.Box3().setFromObject(mesh);
         const center = box.getCenter(new THREE.Vector3());
         mesh.position.sub(center);
-        console.log(mesh.position);
         mesh.position.add(new THREE.Vector3(-0.01, 0, 0));
-        console.log(mesh.position);
         meshes.push(mesh);
         renderer.render(scene, camera);
       },
@@ -126,7 +122,7 @@ export function NutView() {
       pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
       raycaster.setFromCamera(pointer, camera);
-      const hits = raycaster.intersectObjects(meshes, false);
+      const hits = raycaster.intersectObjects(meshes, true);
 
       const nextHovered =
         hits.length > 0 ? (hits[0].object as THREE.Mesh) : null;
