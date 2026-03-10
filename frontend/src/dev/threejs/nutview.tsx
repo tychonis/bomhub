@@ -3,6 +3,7 @@ import styles from "./threejs.module.css";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 
 function setHighlight(mesh: THREE.Mesh, on: boolean) {
   const materials = Array.isArray(mesh.material)
@@ -51,48 +52,53 @@ export function NutView() {
     directionalLight.position.set(5, 5, 6);
     scene.add(directionalLight);
 
-    const meshes: THREE.Object3D[] = [];
+    const objects: THREE.Object3D[] = [];
 
     const loader = new GLTFLoader();
-
-    loader.load(
-      "/dev/nut.glb", // place model.glb in your public folder
-      (gltf) => {
-        const mesh = gltf.scene;
-        scene.add(mesh);
-
-        // center the model
-        const box = new THREE.Box3().setFromObject(mesh);
-        const center = box.getCenter(new THREE.Vector3());
-        mesh.position.sub(center);
-        mesh.position.add(new THREE.Vector3(0.01, 0, 0));
-        meshes.push(mesh);
-        renderer.render(scene, camera);
-      },
-      undefined,
-      (error) => {
-        console.error("Error loading model:", error);
-      }
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath(
+      "https://cdn.jsdelivr.net/npm/three@0.164.0/examples/jsm/libs/draco/"
     );
-    loader.load(
-      "/dev/nut.glb", // place model.glb in your public folder
-      (gltf) => {
-        const mesh = gltf.scene;
-        scene.add(mesh);
+    loader.setDRACOLoader(dracoLoader);
 
-        // center the model
-        const box = new THREE.Box3().setFromObject(mesh);
-        const center = box.getCenter(new THREE.Vector3());
-        mesh.position.sub(center);
-        mesh.position.add(new THREE.Vector3(-0.01, 0, 0));
-        meshes.push(mesh);
-        renderer.render(scene, camera);
-      },
-      undefined,
-      (error) => {
-        console.error("Error loading model:", error);
+    function findObjectId(obj: THREE.Object3D | null): string | undefined {
+      while (obj) {
+        if (obj.userData?.id) return obj.userData.id;
+        obj = obj.parent;
       }
+      return undefined;
+    }
+
+    function loadModel(id: string, filename: string, position: THREE.Vector3) {
+      loader.load(
+        filename,
+        (gltf) => {
+          const object = gltf.scene;
+          object.userData.id = id;
+
+          scene.add(object);
+
+          const box = new THREE.Box3().setFromObject(object);
+          const center = box.getCenter(new THREE.Vector3());
+          object.position.sub(center);
+          object.position.add(position);
+
+          objects.push(object);
+          renderer.render(scene, camera);
+        },
+        undefined,
+        (error) => {
+          console.error("Error loading model:", error);
+        }
+      );
+    }
+
+    loadModel(
+      "right",
+      "/dev/nut.quant.draco.glb",
+      new THREE.Vector3(0.01, 0, 0)
     );
+    loadModel("left", "/dev/nut.glb", new THREE.Vector3(-0.01, 0, 0));
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
@@ -122,7 +128,7 @@ export function NutView() {
       pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
       raycaster.setFromCamera(pointer, camera);
-      const hits = raycaster.intersectObjects(meshes, true);
+      const hits = raycaster.intersectObjects(objects, true);
 
       const nextHovered =
         hits.length > 0 ? (hits[0].object as THREE.Mesh) : null;
@@ -130,7 +136,10 @@ export function NutView() {
       if (hovered !== nextHovered) {
         if (hovered) setHighlight(hovered, false);
         hovered = nextHovered;
-        if (hovered) setHighlight(hovered, true);
+        if (hovered) {
+          setHighlight(hovered, true);
+          console.log(findObjectId(hovered));
+        }
         render();
       }
     };
