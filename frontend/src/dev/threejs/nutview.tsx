@@ -98,7 +98,11 @@ export function NutView() {
       "/dev/nut.quant.draco.glb",
       new THREE.Vector3(0.01, 0, 0)
     );
-    loadModel("left", "/dev/nut.glb", new THREE.Vector3(-0.01, 0, 0));
+    loadModel(
+      "left",
+      "/dev/leftgantry.quant.draco.glb",
+      new THREE.Vector3(-0.1, 0, 0)
+    );
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
@@ -205,17 +209,7 @@ export function NutView() {
   }, []);
 
   return (
-    <div
-      style={{
-        width: "100%",
-        maxWidth: "800px",
-        border: "1px solid #ddd",
-        borderRadius: "16px",
-        background: "#fff",
-        padding: "16px",
-        boxSizing: "border-box",
-      }}
-    >
+    <div className={styles["viewer-container"]}>
       <div className={styles["viewer-grid"]}>
         <div ref={mountRef} className={styles["viewer"]} />
         <label
@@ -236,7 +230,7 @@ export function NutView() {
             max="80"
             defaultValue="0"
             style={{
-              width: "28rem",
+              width: "45rem",
               transform: "rotate(-90deg)",
             }}
           />
