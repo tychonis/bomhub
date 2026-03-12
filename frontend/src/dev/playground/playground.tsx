@@ -1,7 +1,7 @@
 // import { MagicCube } from "dev/threejs/magiccube";
 // import { MeshViewer } from "dev/threejs/meshview";
-import { NutView } from "dev/threejs/nutview";
+import { MeshView } from "dev/threejs/meshview";
 
 export const Playground = () => {
-  return <NutView />;
+  return <MeshView />;
 };
