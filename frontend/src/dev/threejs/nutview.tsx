@@ -21,24 +21,33 @@ export function NutView() {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const azimuthRef = useRef<HTMLInputElement | null>(null);
   const elevationRef = useRef<HTMLInputElement | null>(null);
+  const zoomInRef = useRef<HTMLButtonElement | null>(null);
+  const zoomOutRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     const mount = mountRef.current;
     const azimuthInput = azimuthRef.current;
     const elevationInput = elevationRef.current;
-    if (!mount || !azimuthInput || !elevationInput) return;
+    const zoomInButton = zoomInRef.current;
+    const zoomOutButton = zoomOutRef.current;
+
+    if (
+      !mount ||
+      !azimuthInput ||
+      !elevationInput ||
+      !zoomInButton ||
+      !zoomOutButton
+    )
+      return;
 
     const width = mount.clientWidth || 600;
     const height = mount.clientHeight || 420;
-
-    const cameraRadius = 0.1;
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff);
 
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 100);
-    camera.position.set(0, 0, 0.1);
-    camera.lookAt(0, 0, 0);
+    let cameraRadius = 0.5;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
@@ -93,11 +102,7 @@ export function NutView() {
       );
     }
 
-    loadModel(
-      "right",
-      "/dev/nut.quant.draco.glb",
-      new THREE.Vector3(0.01, 0, 0)
-    );
+    loadModel("right", "/dev/leftgantry.glb", new THREE.Vector3(0.1, 0, 0));
     loadModel(
       "left",
       "/dev/leftgantry.quant.draco.glb",
@@ -123,6 +128,16 @@ export function NutView() {
       camera.lookAt(0, 0, 0);
 
       renderer.render(scene, camera);
+    }
+
+    function zoomIn() {
+      cameraRadius = cameraRadius / 2;
+      updateCamera();
+    }
+
+    function zoomOut() {
+      cameraRadius = cameraRadius * 2;
+      updateCamera();
     }
 
     const handlePointerMove = (event: PointerEvent) => {
@@ -175,6 +190,9 @@ export function NutView() {
     renderer.domElement.addEventListener("pointerleave", handlePointerLeave);
     azimuthInput.addEventListener("input", handleSliderInput);
     elevationInput.addEventListener("input", handleSliderInput);
+    zoomInButton.addEventListener("click", zoomIn);
+    zoomOutButton.addEventListener("click", zoomOut);
+
     window.addEventListener("resize", handleResize);
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(mount);
@@ -211,32 +229,29 @@ export function NutView() {
   return (
     <div className={styles["viewer-container"]}>
       <div className={styles["viewer-grid"]}>
-        <div ref={mountRef} className={styles["viewer"]} />
+        <div ref={mountRef} className={styles["viewer"]}>
+          <div className={styles["zoom-control"]}>
+            <button ref={zoomOutRef}>-</button>
+            <button ref={zoomInRef}>+</button>
+          </div>
+        </div>
         <label
           style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
             justifyContent: "center",
-            gap: "0.25rem",
             width: "1.5rem",
           }}
         >
           <input
-            className={styles["scroll"]}
+            className={`${styles["scroll"]} ${styles["vertical"]}`}
             ref={elevationRef}
             type="range"
             min="-80"
             max="80"
             defaultValue="0"
-            style={{
-              width: "45rem",
-              transform: "rotate(-90deg)",
-            }}
           />
         </label>
 
-        <label style={{ display: "grid", gap: 4, marginTop: "0.25rem" }}>
+        <label>
           <input
             className={styles["scroll"]}
             ref={azimuthRef}

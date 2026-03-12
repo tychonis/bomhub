@@ -17,6 +17,10 @@
   align-items: stretch;
 }
 
+.viewer-grid label {
+  display: grid;
+}
+
 .viewer {
   width: 100%;
   height: 45rem;
@@ -25,10 +29,38 @@
   overflow: hidden;
   background: #f3f3f3;
   box-sizing: border-box;
+  position: relative;
+}
+
+.zoom-control {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  display: flex;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  border-radius: 8;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.viewer button {
+  width: 3rem;
+  height: 3rem;
+  font-size: 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
 }
 
 .scroll {
   accent-color: #888888;
+}
+
+.vertical {
+  width: 45rem;
+  transform: rotate(-90deg);
 }
 
 .scroll::-webkit-slider-thumb {
