@@ -79,6 +79,9 @@ export function MeshView() {
     }
 
     function loadModel(id: string, filename: string, position: THREE.Vector3) {
+      if (!position) {
+        position = new THREE.Vector3(0, 0, 0);
+      }
       loader.load(
         filename,
         (gltf) => {
@@ -87,9 +90,9 @@ export function MeshView() {
 
           scene.add(object);
 
-          const box = new THREE.Box3().setFromObject(object);
-          const center = box.getCenter(new THREE.Vector3());
-          object.position.sub(center);
+          // const box = new THREE.Box3().setFromObjects(object);
+          // const center = box.getCenter(new THREE.Vector3());
+          // object.position.sub(center);
           object.position.add(position);
 
           objects.push(object);
@@ -102,13 +105,9 @@ export function MeshView() {
       );
     }
 
-    loadModel("right", "/dev/right.opt.glb", new THREE.Vector3(0.35, 0, 0));
-    loadModel(
-      "left",
-      "/dev/leftgantry.quant.draco.glb",
-      new THREE.Vector3(-0.35, 0, 0)
-    );
-    loadModel("x", "/dev/xgantry.opt.glb", new THREE.Vector3(0, 0.1, 0));
+    loadModel("right", "/dev/right.opt.glb", null);
+    loadModel("left", "/dev/leftgantry.quant.draco.glb", null);
+    loadModel("x", "/dev/xgantry.opt.glb", null);
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
