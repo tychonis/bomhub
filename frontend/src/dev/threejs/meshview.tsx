@@ -105,9 +105,18 @@ export function MeshView() {
       );
     }
 
-    loadModel("right", "/dev/right.opt.glb", null);
-    loadModel("left", "/dev/leftgantry.quant.draco.glb", null);
-    loadModel("x", "/dev/xgantry.opt.glb", null);
+    const shift = new THREE.Vector3(-0.2, 0, 0);
+    loadModel("right", "/dev/y-gantry-right.opt.glb", shift);
+    loadModel("left", "/dev/y-gantry-left.opt.glb", shift);
+    loadModel("x", "/dev/x-gantry.opt.glb", shift);
+    loadModel("front", "/dev/front-feeder-rail.opt.glb", shift);
+    loadModel("rear", "/dev/rear-feeder-rail.opt.glb", shift);
+    loadModel("build", "/dev/build-plate.opt.glb", shift);
+    loadModel("staging", "/dev/staging-plate.opt.glb", shift);
+    loadModel("control", "/dev/control-box.opt.glb", shift);
+    loadModel("x-chain", "/dev/x-drag-chain.opt.glb", shift);
+    loadModel("y-chain", "/dev/y-drag-chain.opt.glb", shift);
+    loadModel("y-limit", "/dev/y-limit-striker.opt.glb", shift);
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
