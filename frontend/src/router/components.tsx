@@ -18,6 +18,6 @@ export const Components: Component[] = [
     label: "Home",
     icon: <HomeOutlined />,
     element: <Landing />,
-    children: [],
+    children: undefined,
   },
 ];
