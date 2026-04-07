@@ -1,10 +1,9 @@
 import styles from "./threejs.module.css";
 
 import { useEffect, useRef } from "react";
-import * as THREE from "three";
 import * as MESH from "./mesh";
 
-export function MeshView() {
+export function MeshView(props: { models: MESH.ModelDef[] }) {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const cameraControlRefs = useRef({
     azimuth: null as HTMLInputElement | null,
@@ -26,21 +25,7 @@ export function MeshView() {
 
     mount.appendChild(mesh.renderer.domElement);
 
-    const shift = new THREE.Vector3(-0.2, 0, 0);
-    const models: MESH.ModelDef[] = [
-      { id: "right", path: "/dev/y-gantry-right.opt.glb", shift: shift },
-      { id: "left", path: "/dev/y-gantry-left.opt.glb", shift: shift },
-      { id: "x", path: "/dev/x-gantry.opt.glb", shift: shift },
-      { id: "front", path: "/dev/front-feeder-rail.opt.glb", shift: shift },
-      { id: "rear", path: "/dev/rear-feeder-rail.opt.glb", shift: shift },
-      { id: "build", path: "/dev/build-plate.opt.glb", shift: shift },
-      { id: "staging", path: "/dev/staging-plate.opt.glb", shift: shift },
-      { id: "control", path: "/dev/control-box.opt.glb", shift: shift },
-      { id: "x-chain", path: "/dev/x-drag-chain.opt.glb", shift: shift },
-      { id: "y-chain", path: "/dev/y-drag-chain.opt.glb", shift: shift },
-      { id: "y-limit", path: "/dev/y-limit-striker.opt.glb", shift: shift },
-    ];
-    for (const m of models) {
+    for (const m of props.models) {
       MESH.loadModel(mesh, m.id, m.path, m.shift);
     }
 
