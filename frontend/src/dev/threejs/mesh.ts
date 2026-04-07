@@ -137,7 +137,10 @@ export type HoverController = {
   detach: () => void;
 };
 
-export const createHoverController = (mesh: Mesh) => {
+export const createHoverController = (
+  mesh: Mesh,
+  setSelectedID: React.Dispatch<React.SetStateAction<string>>
+) => {
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
 
@@ -173,6 +176,7 @@ export const createHoverController = (mesh: Mesh) => {
   const handleClick = (event: PointerEvent) => {
     const clicked = pointerEventObject(event);
     console.log(findObjectId(clicked));
+    setSelectedID(findObjectId(clicked));
   };
 
   const handlePointerLeave = () => {

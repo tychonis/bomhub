@@ -5,8 +5,6 @@ import bomhub from "api/ky";
 // import { ContextPanel } from "components/context-panel/context-panel";
 import { API_ROOT } from "api/constants";
 import { TreeIndex } from "components/tree-index/tree-index";
-import * as THREE from "three";
-import * as MESH from "dev/threejs/mesh";
 import { MeshView } from "dev/threejs/meshview";
 
 interface BpcDocument {
@@ -32,25 +30,6 @@ async function getRawBPC(id: string, digest: string): Promise<BpcDocument> {
   return doc;
 }
 
-async function getModels(): Promise<MESH.ModelDef[]> {
-  const shift = new THREE.Vector3(-0.2, 0, 0);
-  const mesh: MESH.ModelDef[] = [
-    { id: "right", path: "/dev/y-gantry-right.opt.glb", shift: shift },
-    { id: "left", path: "/dev/y-gantry-left.opt.glb", shift: shift },
-    { id: "x", path: "/dev/x-gantry.opt.glb", shift: shift },
-    { id: "front", path: "/dev/front-feeder-rail.opt.glb", shift: shift },
-    { id: "rear", path: "/dev/rear-feeder-rail.opt.glb", shift: shift },
-    { id: "build", path: "/dev/build-plate.opt.glb", shift: shift },
-    { id: "staging", path: "/dev/staging-plate.opt.glb", shift: shift },
-    { id: "control", path: "/dev/control-box.opt.glb", shift: shift },
-    { id: "x-chain", path: "/dev/x-drag-chain.opt.glb", shift: shift },
-    { id: "y-chain", path: "/dev/y-drag-chain.opt.glb", shift: shift },
-    { id: "y-limit", path: "/dev/y-limit-striker.opt.glb", shift: shift },
-  ];
-
-  return mesh;
-}
-
 export const MeshPage = () => {
   // const { id, digest } = useParams<{ id: string; digest: string }>();
   const id = "2";
@@ -59,7 +38,6 @@ export const MeshPage = () => {
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [bom, setBom] = useState<BpcDocument | null>(null);
-  const [models, setModels] = useState<MESH.ModelDef[] | null>(null);
 
   useEffect(() => {
     setBom(null);
@@ -70,9 +48,6 @@ export const MeshPage = () => {
         setSelectedId(bpc.root);
       })
       .catch(console.error);
-    getModels().then((models) => {
-      setModels(models);
-    });
   }, [digest]);
 
   if (!bom) {
@@ -89,7 +64,7 @@ export const MeshPage = () => {
         selectedId={selectedId}
         onSelect={setSelectedId}
       />
-      <MeshView models={models} />
+      <MeshView selectedID={selectedId} setSelectedID={setSelectedId} />
     </div>
   );
 };
