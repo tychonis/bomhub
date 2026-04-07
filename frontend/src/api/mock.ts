@@ -14,6 +14,9 @@ const getMockDataPath = (route: string) => {
   if (route.includes("/catalog")) {
     return "./mock/data/catalog.json";
   }
+  if (route.includes("/models")) {
+    return "./mock/data/models.json";
+  }
 };
 
 export const MockAPI = {

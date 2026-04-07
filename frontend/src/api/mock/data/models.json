@@ -1,0 +1,101 @@
+[
+    {
+        "id": "right",
+        "path": "/dev/y-gantry-right.opt.glb",
+        "placement": [
+            -0.2,
+            0,
+            0
+        ]
+    },
+    {
+        "id": "left",
+        "path": "/dev/y-gantry-left.opt.glb",
+        "placement": [
+            -0.2,
+            0,
+            0
+        ]
+    },
+    {
+        "id": "x",
+        "path": "/dev/x-gantry.opt.glb",
+        "placement": [
+            -0.2,
+            0,
+            0
+        ]
+    },
+    {
+        "id": "front",
+        "path": "/dev/front-feeder-rail.opt.glb",
+        "placement": [
+            -0.2,
+            0,
+            0
+        ]
+    },
+    {
+        "id": "rear",
+        "path": "/dev/rear-feeder-rail.opt.glb",
+        "placement": [
+            -0.2,
+            0,
+            0
+        ]
+    },
+    {
+        "id": "build",
+        "path": "/dev/build-plate.opt.glb",
+        "placement": [
+            -0.2,
+            0,
+            0
+        ]
+    },
+    {
+        "id": "staging",
+        "path": "/dev/staging-plate.opt.glb",
+        "placement": [
+            -0.2,
+            0,
+            0
+        ]
+    },
+    {
+        "id": "control",
+        "path": "/dev/control-box.opt.glb",
+        "placement": [
+            -0.2,
+            0,
+            0
+        ]
+    },
+    {
+        "id": "x-chain",
+        "path": "/dev/x-drag-chain.opt.glb",
+        "placement": [
+            -0.2,
+            0,
+            0
+        ]
+    },
+    {
+        "id": "y-chain",
+        "path": "/dev/y-drag-chain.opt.glb",
+        "placement": [
+            -0.2,
+            0,
+            0
+        ]
+    },
+    {
+        "id": "y-limit",
+        "path": "/dev/y-limit-striker.opt.glb",
+        "placement": [
+            -0.2,
+            0,
+            0
+        ]
+    }
+]
