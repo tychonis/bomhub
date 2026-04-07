@@ -3,17 +3,7 @@ import styles from "./threejs.module.css";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-function setHighlight(mesh: THREE.Mesh, on: boolean) {
-  const materials = Array.isArray(mesh.material)
-    ? mesh.material
-    : [mesh.material];
-
-  for (const material of materials) {
-    if (material instanceof THREE.MeshStandardMaterial) {
-      material.emissive.setHex(on ? 0x555555 : 0x000000);
-    }
-  }
-}
+import { setHighlight } from "./mesh";
 
 export function MagicCube() {
   const mountRef = useRef<HTMLDivElement | null>(null);

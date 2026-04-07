@@ -2,68 +2,7 @@ import styles from "./threejs.module.css";
 
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
-
-type ModelDef = {
-  id: string;
-  path: string;
-  shift?: THREE.Vector3;
-};
-
-type Mesh = {
-  scene: THREE.Scene;
-  camera: THREE.PerspectiveCamera;
-  renderer: THREE.WebGLRenderer;
-};
-
-function setHighlight(mesh: THREE.Mesh, on: boolean) {
-  const materials = Array.isArray(mesh.material)
-    ? mesh.material
-    : [mesh.material];
-
-  for (const material of materials) {
-    if (material instanceof THREE.MeshStandardMaterial) {
-      material.emissive.setHex(on ? 0x555555 : 0x000000);
-    }
-  }
-}
-
-const createDefaultMesh = (width: number, height: number): Mesh => {
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xffffff);
-  const camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 100);
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(width, height);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
-  scene.add(ambientLight);
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8);
-  directionalLight.position.set(5, 5, 6);
-  scene.add(directionalLight);
-
-  return { scene, camera, renderer };
-};
-
-const render = (m: Mesh) => {
-  m.renderer.render(m.scene, m.camera);
-};
-
-const updateCamera = (
-  m: Mesh,
-  cameraRadius: number,
-  azimuth: number,
-  elevation: number
-) => {
-  const horizontalRadius = cameraRadius * Math.cos(elevation);
-  m.camera.position.x = horizontalRadius * Math.sin(azimuth);
-  m.camera.position.y = cameraRadius * Math.sin(elevation);
-  m.camera.position.z = horizontalRadius * Math.cos(azimuth);
-  m.camera.lookAt(0, 0, 0);
-
-  render(m);
-};
+import * as MESH from "./mesh";
 
 export function MeshView() {
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -91,58 +30,13 @@ export function MeshView() {
     const width = mount.clientWidth || 600;
     const height = mount.clientHeight || 420;
 
-    const mesh = createDefaultMesh(width, height);
-
+    const mesh = MESH.createDefaultMesh(width, height);
     let cameraRadius = 0.5;
 
     mount.appendChild(mesh.renderer.domElement);
 
-    const objects: THREE.Object3D[] = [];
-
-    const loader = new GLTFLoader();
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath(
-      "https://cdn.jsdelivr.net/npm/three@0.164.0/examples/jsm/libs/draco/"
-    );
-    loader.setDRACOLoader(dracoLoader);
-
-    function findObjectId(obj: THREE.Object3D | null): string | undefined {
-      while (obj) {
-        if (obj.userData?.id) return obj.userData.id;
-        obj = obj.parent;
-      }
-      return undefined;
-    }
-
-    function loadModel(id: string, filename: string, position: THREE.Vector3) {
-      if (!position) {
-        position = new THREE.Vector3(0, 0, 0);
-      }
-      loader.load(
-        filename,
-        (gltf) => {
-          const object = gltf.scene;
-          object.userData.id = id;
-
-          mesh.scene.add(object);
-
-          // const box = new THREE.Box3().setFromObjects(object);
-          // const center = box.getCenter(new THREE.Vector3());
-          // object.position.sub(center);
-          object.position.add(position);
-
-          objects.push(object);
-          render(mesh);
-        },
-        undefined,
-        (error) => {
-          console.error("Error loading model:", error);
-        }
-      );
-    }
-
     const shift = new THREE.Vector3(-0.2, 0, 0);
-    const models: ModelDef[] = [
+    const models: MESH.ModelDef[] = [
       { id: "right", path: "/dev/y-gantry-right.opt.glb", shift: shift },
       { id: "left", path: "/dev/y-gantry-left.opt.glb", shift: shift },
       { id: "x", path: "/dev/x-gantry.opt.glb", shift: shift },
@@ -156,7 +50,7 @@ export function MeshView() {
       { id: "y-limit", path: "/dev/y-limit-striker.opt.glb", shift: shift },
     ];
     for (const m of models) {
-      loadModel(m.id, m.path, m.shift);
+      MESH.loadModel(mesh, m.id, m.path, m.shift);
     }
 
     const raycaster = new THREE.Raycaster();
@@ -167,7 +61,7 @@ export function MeshView() {
       const azimuth = THREE.MathUtils.degToRad(Number(azimuthInput.value));
       const elevation = THREE.MathUtils.degToRad(Number(elevationInput.value));
 
-      updateCamera(mesh, cameraRadius, azimuth, elevation);
+      MESH.updateCamera(mesh, cameraRadius, azimuth, elevation);
     };
 
     const zoomIn = () => {
@@ -187,27 +81,27 @@ export function MeshView() {
       pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
       raycaster.setFromCamera(pointer, mesh.camera);
-      const hits = raycaster.intersectObjects(objects, true);
+      const hits = raycaster.intersectObjects(mesh.objects, true);
 
       const nextHovered =
         hits.length > 0 ? (hits[0].object as THREE.Mesh) : null;
 
       if (hovered !== nextHovered) {
-        if (hovered) setHighlight(hovered, false);
+        if (hovered) MESH.setHighlight(hovered, false);
         hovered = nextHovered;
         if (hovered) {
-          setHighlight(hovered, true);
-          console.log(findObjectId(hovered));
+          MESH.setHighlight(hovered, true);
+          console.log(MESH.findObjectId(hovered));
         }
-        render(mesh);
+        MESH.render(mesh);
       }
     };
 
     const handlePointerLeave = () => {
       if (hovered) {
-        setHighlight(hovered, false);
+        MESH.setHighlight(hovered, false);
         hovered = null;
-        render(mesh);
+        MESH.render(mesh);
       }
     };
 
@@ -224,7 +118,7 @@ export function MeshView() {
     };
 
     updateMesh();
-    render(mesh);
+    MESH.render(mesh);
 
     mesh.renderer.domElement.addEventListener("pointermove", handlePointerMove);
     mesh.renderer.domElement.addEventListener(
