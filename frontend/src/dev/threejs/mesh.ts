@@ -175,8 +175,8 @@ export const createHoverController = (
 
   const handleClick = (event: PointerEvent) => {
     const clicked = pointerEventObject(event);
-    console.log(findObjectId(clicked));
-    setSelectedID(findObjectId(clicked));
+    const clickedID = findObjectId(clicked);
+    if (clickedID) setSelectedID(clickedID);
   };
 
   const handlePointerLeave = () => {
