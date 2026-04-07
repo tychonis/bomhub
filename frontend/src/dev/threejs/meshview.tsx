@@ -6,32 +6,23 @@ import * as MESH from "./mesh";
 
 export function MeshView() {
   const mountRef = useRef<HTMLDivElement | null>(null);
-  const azimuthRef = useRef<HTMLInputElement | null>(null);
-  const elevationRef = useRef<HTMLInputElement | null>(null);
-  const zoomInRef = useRef<HTMLButtonElement | null>(null);
-  const zoomOutRef = useRef<HTMLButtonElement | null>(null);
+  const cameraControlRefs = useRef({
+    azimuth: null as HTMLInputElement | null,
+    elevation: null as HTMLInputElement | null,
+    zoomIn: null as HTMLButtonElement | null,
+    zoomOut: null as HTMLButtonElement | null,
+  });
 
   useEffect(() => {
     const mount = mountRef.current;
-    const azimuthInput = azimuthRef.current;
-    const elevationInput = elevationRef.current;
-    const zoomInButton = zoomInRef.current;
-    const zoomOutButton = zoomOutRef.current;
+    const cameraCtrl = cameraControlRefs.current;
 
-    if (
-      !mount ||
-      !azimuthInput ||
-      !elevationInput ||
-      !zoomInButton ||
-      !zoomOutButton
-    )
-      return;
+    if (!mount || !cameraCtrl) return;
 
     const width = mount.clientWidth || 600;
     const height = mount.clientHeight || 420;
 
     const mesh = MESH.createDefaultMesh(width, height);
-    let cameraRadius = 0.5;
 
     mount.appendChild(mesh.renderer.domElement);
 
@@ -53,28 +44,14 @@ export function MeshView() {
       MESH.loadModel(mesh, m.id, m.path, m.shift);
     }
 
-    const updateMesh = () => {
-      const azimuth = THREE.MathUtils.degToRad(Number(azimuthInput.value));
-      const elevation = THREE.MathUtils.degToRad(Number(elevationInput.value));
+    const hoverControl = MESH.createHoverController(mesh);
+    const cameraControl = MESH.createCameraControls(
+      mesh,
+      cameraControlRefs.current
+    );
 
-      MESH.updateCamera(mesh, cameraRadius, azimuth, elevation);
-    };
-
-    const zoomIn = () => {
-      cameraRadius = cameraRadius / 2;
-      updateMesh();
-    };
-
-    const zoomOut = () => {
-      cameraRadius = cameraRadius * 2;
-      updateMesh();
-    };
-
-    const controller = MESH.createHoverController(mesh);
-
-    const handleSliderInput = () => {
-      updateMesh();
-    };
+    hoverControl.attach();
+    cameraControl.attach();
 
     const handleResize = () => {
       const newWidth = mount.clientWidth || 600;
@@ -84,51 +61,36 @@ export function MeshView() {
       mesh.renderer.setSize(newWidth, newHeight);
     };
 
-    updateMesh();
-    MESH.render(mesh);
-
-    controller.attach();
-    azimuthInput.addEventListener("input", handleSliderInput);
-    elevationInput.addEventListener("input", handleSliderInput);
-    zoomInButton.addEventListener("click", zoomIn);
-    zoomOutButton.addEventListener("click", zoomOut);
-
     window.addEventListener("resize", handleResize);
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(mount);
 
     return () => {
-      controller.detach();
+      hoverControl.detach();
+      cameraControl.detach();
       window.removeEventListener("resize", handleResize);
       resizeObserver.disconnect();
 
       if (mesh.renderer.domElement.parentNode === mount) {
         mount.removeChild(mesh.renderer.domElement);
       }
-
-      mesh.renderer.dispose();
-
-      mesh.scene.traverse((object) => {
-        if (object instanceof THREE.Mesh) {
-          object.geometry.dispose();
-          const material = object.material;
-          if (Array.isArray(material)) {
-            material.forEach((m) => m.dispose());
-          } else {
-            material.dispose();
-          }
-        }
-      });
+      MESH.dispose(mesh);
     };
   }, []);
+
+  const setRef =
+    <K extends keyof MESH.CameraControlsRefs>(key: K) =>
+    (el: MESH.CameraControlsRefs[K]) => {
+      cameraControlRefs.current[key] = el;
+    };
 
   return (
     <div className={styles["viewer-container"]}>
       <div className={styles["viewer-grid"]}>
         <div ref={mountRef} className={styles["viewer"]}>
           <div className={styles["zoom-control"]}>
-            <button ref={zoomOutRef}>-</button>
-            <button ref={zoomInRef}>+</button>
+            <button ref={setRef("zoomOut")}>-</button>
+            <button ref={setRef("zoomIn")}>+</button>
           </div>
         </div>
         <label
@@ -139,7 +101,7 @@ export function MeshView() {
         >
           <input
             className={`${styles["scroll"]} ${styles["vertical"]}`}
-            ref={elevationRef}
+            ref={setRef("elevation")}
             type="range"
             min="-80"
             max="80"
@@ -150,7 +112,7 @@ export function MeshView() {
         <label>
           <input
             className={styles["scroll"]}
-            ref={azimuthRef}
+            ref={setRef("azimuth")}
             type="range"
             min="-180"
             max="180"

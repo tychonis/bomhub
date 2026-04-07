@@ -67,6 +67,22 @@ export const render = (m: Mesh) => {
   m.renderer.render(m.scene, m.camera);
 };
 
+export const dispose = (m: Mesh) => {
+  m.renderer.dispose();
+
+  m.scene.traverse((object) => {
+    if (object instanceof THREE.Mesh) {
+      object.geometry.dispose();
+      const material = object.material;
+      if (Array.isArray(material)) {
+        material.forEach((m) => m.dispose());
+      } else {
+        material.dispose();
+      }
+    }
+  });
+};
+
 export const updateCamera = (
   m: Mesh,
   cameraRadius: number,
@@ -178,4 +194,53 @@ export const createHoverController = (mesh: Mesh) => {
       el.removeEventListener("click", handleClick);
     },
   };
+};
+
+export type CameraControlsRefs = {
+  azimuth: HTMLInputElement | null;
+  elevation: HTMLInputElement | null;
+  zoomIn: HTMLButtonElement | null;
+  zoomOut: HTMLButtonElement | null;
+};
+
+export const createCameraControls = (mesh: Mesh, refs: CameraControlsRefs) => {
+  let cameraRadius = 0.5;
+
+  const updateMesh = () => {
+    const azimuth = THREE.MathUtils.degToRad(Number(refs.azimuth.value));
+    const elevation = THREE.MathUtils.degToRad(Number(refs.elevation.value));
+
+    updateCamera(mesh, cameraRadius, azimuth, elevation);
+  };
+
+  const zoomIn = () => {
+    cameraRadius = cameraRadius / 2;
+    updateMesh();
+  };
+
+  const zoomOut = () => {
+    cameraRadius = cameraRadius * 2;
+    updateMesh();
+  };
+  const handleSliderInput = () => {
+    updateMesh();
+  };
+
+  const attach = () => {
+    refs.azimuth?.addEventListener("input", handleSliderInput);
+    refs.elevation?.addEventListener("input", handleSliderInput);
+    refs.zoomIn?.addEventListener("click", zoomIn);
+    refs.zoomOut?.addEventListener("click", zoomOut);
+    updateMesh();
+  };
+
+  const detach = () => {
+    refs.azimuth?.removeEventListener("input", handleSliderInput);
+    refs.elevation?.removeEventListener("input", handleSliderInput);
+
+    refs.zoomIn?.removeEventListener("click", zoomIn);
+    refs.zoomOut?.removeEventListener("click", zoomOut);
+  };
+
+  return { refs, attach, detach };
 };
