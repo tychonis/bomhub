@@ -53,10 +53,6 @@ export function MeshView() {
       MESH.loadModel(mesh, m.id, m.path, m.shift);
     }
 
-    const raycaster = new THREE.Raycaster();
-    const pointer = new THREE.Vector2();
-    let hovered: THREE.Mesh | null = null;
-
     const updateMesh = () => {
       const azimuth = THREE.MathUtils.degToRad(Number(azimuthInput.value));
       const elevation = THREE.MathUtils.degToRad(Number(elevationInput.value));
@@ -74,36 +70,7 @@ export function MeshView() {
       updateMesh();
     };
 
-    const handlePointerMove = (event: PointerEvent) => {
-      const rect = mesh.renderer.domElement.getBoundingClientRect();
-
-      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(pointer, mesh.camera);
-      const hits = raycaster.intersectObjects(mesh.objects, true);
-
-      const nextHovered =
-        hits.length > 0 ? (hits[0].object as THREE.Mesh) : null;
-
-      if (hovered !== nextHovered) {
-        if (hovered) MESH.setHighlight(hovered, false);
-        hovered = nextHovered;
-        if (hovered) {
-          MESH.setHighlight(hovered, true);
-          console.log(MESH.findObjectId(hovered));
-        }
-        MESH.render(mesh);
-      }
-    };
-
-    const handlePointerLeave = () => {
-      if (hovered) {
-        MESH.setHighlight(hovered, false);
-        hovered = null;
-        MESH.render(mesh);
-      }
-    };
+    const controller = MESH.createHoverController(mesh);
 
     const handleSliderInput = () => {
       updateMesh();
@@ -120,11 +87,7 @@ export function MeshView() {
     updateMesh();
     MESH.render(mesh);
 
-    mesh.renderer.domElement.addEventListener("pointermove", handlePointerMove);
-    mesh.renderer.domElement.addEventListener(
-      "pointerleave",
-      handlePointerLeave
-    );
+    controller.attach();
     azimuthInput.addEventListener("input", handleSliderInput);
     elevationInput.addEventListener("input", handleSliderInput);
     zoomInButton.addEventListener("click", zoomIn);
@@ -135,14 +98,7 @@ export function MeshView() {
     resizeObserver.observe(mount);
 
     return () => {
-      mesh.renderer.domElement.removeEventListener(
-        "pointermove",
-        handlePointerMove
-      );
-      mesh.renderer.domElement.removeEventListener(
-        "pointerleave",
-        handlePointerLeave
-      );
+      controller.detach();
       window.removeEventListener("resize", handleResize);
       resizeObserver.disconnect();
 

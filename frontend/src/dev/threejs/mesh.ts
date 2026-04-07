@@ -113,11 +113,69 @@ export const loadModel = (
 
 export type InteractionState = {
   hovered: THREE.Mesh | null;
-  selected: THREE.Mesh | null;
+  // selected: THREE.Mesh | null;
 };
 
 export type HoverController = {
   attach: () => void;
   detach: () => void;
-  dispose: () => void;
+};
+
+export const createHoverController = (mesh: Mesh) => {
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+
+  let hovered: THREE.Mesh | null = null;
+  // let selected: THREE.Mesh | null = null;
+
+  const updateHover = (nextHovered: THREE.Mesh | null) => {
+    if (hovered === nextHovered) return;
+
+    if (hovered) setHighlight(hovered, false);
+    hovered = nextHovered;
+    if (hovered) setHighlight(hovered, true);
+
+    render(mesh);
+  };
+
+  const pointerEventObject = (event: PointerEvent) => {
+    const rect = mesh.renderer.domElement.getBoundingClientRect();
+
+    pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycaster.setFromCamera(pointer, mesh.camera);
+    const hits = raycaster.intersectObjects(mesh.objects, true);
+    return hits.length > 0 ? (hits[0].object as THREE.Mesh) : null;
+  };
+
+  const handlePointerMove = (event: PointerEvent) => {
+    const nextHovered = pointerEventObject(event);
+    updateHover(nextHovered);
+  };
+
+  const handleClick = (event: PointerEvent) => {
+    const clicked = pointerEventObject(event);
+    console.log(findObjectId(clicked));
+  };
+
+  const handlePointerLeave = () => {
+    updateHover(null);
+  };
+
+  const el = mesh.renderer.domElement;
+
+  return {
+    attach() {
+      el.addEventListener("pointermove", handlePointerMove);
+      el.addEventListener("pointerleave", handlePointerLeave);
+      el.addEventListener("click", handleClick);
+    },
+
+    detach() {
+      el.removeEventListener("pointermove", handlePointerMove);
+      el.removeEventListener("pointerleave", handlePointerLeave);
+      el.removeEventListener("click", handleClick);
+    },
+  };
 };
