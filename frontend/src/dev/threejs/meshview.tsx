@@ -5,6 +5,18 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 
+type ModelDef = {
+  id: string;
+  path: string;
+  shift?: THREE.Vector3;
+};
+
+type Mesh = {
+  scene: THREE.Scene;
+  camera: THREE.PerspectiveCamera;
+  renderer: THREE.WebGLRenderer;
+};
+
 function setHighlight(mesh: THREE.Mesh, on: boolean) {
   const materials = Array.isArray(mesh.material)
     ? mesh.material
@@ -16,6 +28,42 @@ function setHighlight(mesh: THREE.Mesh, on: boolean) {
     }
   }
 }
+
+const createDefaultMesh = (width: number, height: number): Mesh => {
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xffffff);
+  const camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 100);
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+  scene.add(ambientLight);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8);
+  directionalLight.position.set(5, 5, 6);
+  scene.add(directionalLight);
+
+  return { scene, camera, renderer };
+};
+
+const render = (m: Mesh) => {
+  m.renderer.render(m.scene, m.camera);
+};
+
+const updateCamera = (
+  m: Mesh,
+  cameraRadius: number,
+  azimuth: number,
+  elevation: number
+) => {
+  const horizontalRadius = cameraRadius * Math.cos(elevation);
+  m.camera.position.x = horizontalRadius * Math.sin(azimuth);
+  m.camera.position.y = cameraRadius * Math.sin(elevation);
+  m.camera.position.z = horizontalRadius * Math.cos(azimuth);
+  m.camera.lookAt(0, 0, 0);
+
+  render(m);
+};
 
 export function MeshView() {
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -43,23 +91,11 @@ export function MeshView() {
     const width = mount.clientWidth || 600;
     const height = mount.clientHeight || 420;
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xffffff);
+    const mesh = createDefaultMesh(width, height);
 
-    const camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 100);
     let cameraRadius = 0.5;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    mount.appendChild(renderer.domElement);
-
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
-    scene.add(ambientLight);
-
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8);
-    directionalLight.position.set(5, 5, 6);
-    scene.add(directionalLight);
+    mount.appendChild(mesh.renderer.domElement);
 
     const objects: THREE.Object3D[] = [];
 
@@ -88,7 +124,7 @@ export function MeshView() {
           const object = gltf.scene;
           object.userData.id = id;
 
-          scene.add(object);
+          mesh.scene.add(object);
 
           // const box = new THREE.Box3().setFromObjects(object);
           // const center = box.getCenter(new THREE.Vector3());
@@ -96,7 +132,7 @@ export function MeshView() {
           object.position.add(position);
 
           objects.push(object);
-          renderer.render(scene, camera);
+          render(mesh);
         },
         undefined,
         (error) => {
@@ -106,56 +142,51 @@ export function MeshView() {
     }
 
     const shift = new THREE.Vector3(-0.2, 0, 0);
-    loadModel("right", "/dev/y-gantry-right.opt.glb", shift);
-    loadModel("left", "/dev/y-gantry-left.opt.glb", shift);
-    loadModel("x", "/dev/x-gantry.opt.glb", shift);
-    loadModel("front", "/dev/front-feeder-rail.opt.glb", shift);
-    loadModel("rear", "/dev/rear-feeder-rail.opt.glb", shift);
-    loadModel("build", "/dev/build-plate.opt.glb", shift);
-    loadModel("staging", "/dev/staging-plate.opt.glb", shift);
-    loadModel("control", "/dev/control-box.opt.glb", shift);
-    loadModel("x-chain", "/dev/x-drag-chain.opt.glb", shift);
-    loadModel("y-chain", "/dev/y-drag-chain.opt.glb", shift);
-    loadModel("y-limit", "/dev/y-limit-striker.opt.glb", shift);
+    const models: ModelDef[] = [
+      { id: "right", path: "/dev/y-gantry-right.opt.glb", shift: shift },
+      { id: "left", path: "/dev/y-gantry-left.opt.glb", shift: shift },
+      { id: "x", path: "/dev/x-gantry.opt.glb", shift: shift },
+      { id: "front", path: "/dev/front-feeder-rail.opt.glb", shift: shift },
+      { id: "rear", path: "/dev/rear-feeder-rail.opt.glb", shift: shift },
+      { id: "build", path: "/dev/build-plate.opt.glb", shift: shift },
+      { id: "staging", path: "/dev/staging-plate.opt.glb", shift: shift },
+      { id: "control", path: "/dev/control-box.opt.glb", shift: shift },
+      { id: "x-chain", path: "/dev/x-drag-chain.opt.glb", shift: shift },
+      { id: "y-chain", path: "/dev/y-drag-chain.opt.glb", shift: shift },
+      { id: "y-limit", path: "/dev/y-limit-striker.opt.glb", shift: shift },
+    ];
+    for (const m of models) {
+      loadModel(m.id, m.path, m.shift);
+    }
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     let hovered: THREE.Mesh | null = null;
 
-    function render() {
-      renderer.render(scene, camera);
-    }
-
-    function updateCamera() {
+    const updateMesh = () => {
       const azimuth = THREE.MathUtils.degToRad(Number(azimuthInput.value));
       const elevation = THREE.MathUtils.degToRad(Number(elevationInput.value));
 
-      const horizontalRadius = cameraRadius * Math.cos(elevation);
-      camera.position.x = horizontalRadius * Math.sin(azimuth);
-      camera.position.y = cameraRadius * Math.sin(elevation);
-      camera.position.z = horizontalRadius * Math.cos(azimuth);
-      camera.lookAt(0, 0, 0);
+      updateCamera(mesh, cameraRadius, azimuth, elevation);
+    };
 
-      renderer.render(scene, camera);
-    }
-
-    function zoomIn() {
+    const zoomIn = () => {
       cameraRadius = cameraRadius / 2;
-      updateCamera();
-    }
+      updateMesh();
+    };
 
-    function zoomOut() {
+    const zoomOut = () => {
       cameraRadius = cameraRadius * 2;
-      updateCamera();
-    }
+      updateMesh();
+    };
 
     const handlePointerMove = (event: PointerEvent) => {
-      const rect = renderer.domElement.getBoundingClientRect();
+      const rect = mesh.renderer.domElement.getBoundingClientRect();
 
       pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-      raycaster.setFromCamera(pointer, camera);
+      raycaster.setFromCamera(pointer, mesh.camera);
       const hits = raycaster.intersectObjects(objects, true);
 
       const nextHovered =
@@ -168,7 +199,7 @@ export function MeshView() {
           setHighlight(hovered, true);
           console.log(findObjectId(hovered));
         }
-        render();
+        render(mesh);
       }
     };
 
@@ -176,27 +207,30 @@ export function MeshView() {
       if (hovered) {
         setHighlight(hovered, false);
         hovered = null;
-        render();
+        render(mesh);
       }
     };
 
     const handleSliderInput = () => {
-      updateCamera();
+      updateMesh();
     };
-
-    updateCamera();
-    render();
 
     const handleResize = () => {
       const newWidth = mount.clientWidth || 600;
       const newHeight = mount.clientHeight || 420;
-      camera.aspect = newWidth / newHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(newWidth, newHeight);
+      mesh.camera.aspect = newWidth / newHeight;
+      mesh.camera.updateProjectionMatrix();
+      mesh.renderer.setSize(newWidth, newHeight);
     };
 
-    renderer.domElement.addEventListener("pointermove", handlePointerMove);
-    renderer.domElement.addEventListener("pointerleave", handlePointerLeave);
+    updateMesh();
+    render(mesh);
+
+    mesh.renderer.domElement.addEventListener("pointermove", handlePointerMove);
+    mesh.renderer.domElement.addEventListener(
+      "pointerleave",
+      handlePointerLeave
+    );
     azimuthInput.addEventListener("input", handleSliderInput);
     elevationInput.addEventListener("input", handleSliderInput);
     zoomInButton.addEventListener("click", zoomIn);
@@ -207,21 +241,24 @@ export function MeshView() {
     resizeObserver.observe(mount);
 
     return () => {
-      renderer.domElement.removeEventListener("pointermove", handlePointerMove);
-      renderer.domElement.removeEventListener(
+      mesh.renderer.domElement.removeEventListener(
+        "pointermove",
+        handlePointerMove
+      );
+      mesh.renderer.domElement.removeEventListener(
         "pointerleave",
         handlePointerLeave
       );
       window.removeEventListener("resize", handleResize);
       resizeObserver.disconnect();
 
-      if (renderer.domElement.parentNode === mount) {
-        mount.removeChild(renderer.domElement);
+      if (mesh.renderer.domElement.parentNode === mount) {
+        mount.removeChild(mesh.renderer.domElement);
       }
 
-      renderer.dispose();
+      mesh.renderer.dispose();
 
-      scene.traverse((object) => {
+      mesh.scene.traverse((object) => {
         if (object instanceof THREE.Mesh) {
           object.geometry.dispose();
           const material = object.material;
