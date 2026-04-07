@@ -4,6 +4,7 @@ import App from "App";
 import { Playground } from "dev/playground/playground";
 import { TreePage } from "pages/tree/tree";
 import { Workspace } from "pages/workspace/workspace";
+import { MeshPage } from "pages/mesh/mesh";
 
 const routes: RouteObject[] = [
   {
@@ -11,6 +12,7 @@ const routes: RouteObject[] = [
     element: <Workspace />,
   },
   { path: "/tree/:id/:digest", element: <TreePage /> },
+  { path: "/mesh/:id/:digest", element: <MeshPage /> },
 
   { path: "/__dev/playground", element: <Playground /> },
 ];

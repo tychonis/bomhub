@@ -2,10 +2,10 @@ import styles from "./mesh.module.css";
 
 import { useEffect, useState } from "react";
 import bomhub from "api/ky";
-// import { ContextPanel } from "components/context-panel/context-panel";
 import { API_ROOT } from "api/constants";
 import { TreeIndex } from "components/tree-index/tree-index";
-import { MeshView } from "dev/threejs/meshview";
+import { MeshView } from "components/threejs/meshview";
+import { useParams } from "react-router-dom";
 
 interface BpcDocument {
   root: string; // root node ID
@@ -31,10 +31,7 @@ async function getRawBPC(id: string, digest: string): Promise<BpcDocument> {
 }
 
 export const MeshPage = () => {
-  // const { id, digest } = useParams<{ id: string; digest: string }>();
-  const id = "2";
-  const digest =
-    "bab1d24770399ea5703ce9545d9105490d678c3c66a1d646a863617b485147a1";
+  const { id, digest } = useParams<{ id: string; digest: string }>();
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [bom, setBom] = useState<BpcDocument | null>(null);
