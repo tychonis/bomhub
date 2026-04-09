@@ -40,6 +40,7 @@ func run(cmd *cobra.Command, args []string) {
 
 	router.GET("/catalog/:id", server.GetCatalog)
 	router.GET("/tree/:id/:digest", server.GetBOMTree)
+	router.GET("/models/:id/:digest", server.GetMeshList)
 
 	router.GET("/workspace/:id", server.GetWorkspaceSummary)
 	router.POST("/workspace/:id", server.SaveWorkspaceSummary)

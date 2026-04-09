@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/tychonis/cyanotype/core/parser/hcl"
 	"github.com/tychonis/cyanotype/model"
 )
 
@@ -117,4 +118,41 @@ func (s *Server) GetWorkspaceSummary(ctx *gin.Context) {
 		return
 	}
 	ctx.Data(http.StatusOK, "application/json; charset=utf-8", obj)
+}
+
+type Mesh struct {
+	Name      string     `json:"id"`
+	Path      string     `json:"path"`
+	Placement [3]float64 `json:"placement"`
+}
+
+func (s *Server) GetMeshList(ctx *gin.Context) {
+	tag := ctx.Param("id")
+	digest := ctx.Param("digest")
+	core := hcl.NewCoreFromAPI("http://localhost:5001", tag)
+	root, err := core.Catalog.Get(digest)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+	rootItem, ok := root.(*model.Item)
+	if !ok {
+		ctx.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+	rootNode, err := core.BuildTree("tmp", rootItem)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	ret := make([]*Mesh, 0, len(rootNode.Children))
+	children := rootNode.Children
+	for _, child := range children {
+		ret = append(ret, &Mesh{
+			Name:      child.Name,
+			Path:      "/dev/" + tag + "/" + child.Name + ".glb",
+			Placement: [3]float64{0, 0, 0},
+		})
+	}
+	ctx.JSON(http.StatusOK, ret)
 }

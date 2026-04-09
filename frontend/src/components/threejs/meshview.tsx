@@ -5,9 +5,12 @@ import { API_ROOT } from "api/constants";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import * as MESH from "./mesh";
+import { useParams } from "react-router-dom";
 
-async function getModels(id: string): Promise<MESH.ModelDef[]> {
-  const rawModelDef = await bomhub.get(`${API_ROOT}/models/${id}`).json();
+async function getModels(id: string, digest: string): Promise<MESH.ModelDef[]> {
+  const rawModelDef = await bomhub
+    .get(`${API_ROOT}/models/${id}/${digest}`)
+    .json();
   const ret: MESH.ModelDef[] = [];
 
   for (const def of rawModelDef) {
@@ -21,9 +24,11 @@ async function getModels(id: string): Promise<MESH.ModelDef[]> {
 }
 
 export function MeshView(props: {
-  selectedID: string;
-  setSelectedID: React.Dispatch<React.SetStateAction<string>>;
+  selectedDigest: string;
+  setSelectedDigest: React.Dispatch<React.SetStateAction<string>>;
 }) {
+  const { id } = useParams<{ id: string }>();
+
   const mountRef = useRef<HTMLDivElement | null>(null);
   const cameraControlRefs = useRef({
     azimuth: null as HTMLInputElement | null,
@@ -45,13 +50,16 @@ export function MeshView(props: {
 
     mount.appendChild(mesh.renderer.domElement);
 
-    getModels(props.selectedID).then((models) => {
+    getModels(id, props.selectedDigest).then((models) => {
       for (const m of models) {
         MESH.loadModel(mesh, m.id, m.path, m.shift);
       }
     });
 
-    const hoverControl = MESH.createHoverController(mesh, props.setSelectedID);
+    const hoverControl = MESH.createHoverController(
+      mesh,
+      props.setSelectedDigest
+    );
     const cameraControl = MESH.createCameraControls(
       mesh,
       cameraControlRefs.current
@@ -83,7 +91,7 @@ export function MeshView(props: {
       }
       MESH.dispose(mesh);
     };
-  }, [props.selectedID, props.setSelectedID]);
+  }, [props.selectedDigest, props.setSelectedDigest]);
 
   const setRef =
     <K extends keyof MESH.CameraControlsRefs>(key: K) =>

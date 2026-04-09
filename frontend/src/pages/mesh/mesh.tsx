@@ -33,16 +33,16 @@ async function getRawBPC(id: string, digest: string): Promise<BpcDocument> {
 export const MeshPage = () => {
   const { id, digest } = useParams<{ id: string; digest: string }>();
 
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedDigest, setSelectedDigest] = useState<string | null>(null);
   const [bom, setBom] = useState<BpcDocument | null>(null);
 
   useEffect(() => {
     setBom(null);
-    setSelectedId(null);
+    setSelectedDigest(null);
     getRawBPC(id, digest)
       .then((bpc) => {
         setBom(bpc);
-        setSelectedId(bpc.root);
+        setSelectedDigest(bpc.root);
       })
       .catch(console.error);
   }, [digest]);
@@ -56,12 +56,15 @@ export const MeshPage = () => {
       <TreeIndex
         nodes={bom.nodes}
         items={bom.items}
-        rootId={bom.root}
+        rootDigest={bom.root}
         reuseIndex={bom.usage}
-        selectedId={selectedId}
-        onSelect={setSelectedId}
+        selectedDigest={selectedDigest}
+        onSelect={setSelectedDigest}
       />
-      <MeshView selectedID={selectedId} setSelectedID={setSelectedId} />
+      <MeshView
+        selectedDigest={selectedDigest}
+        setSelectedDigest={setSelectedDigest}
+      />
     </div>
   );
 };

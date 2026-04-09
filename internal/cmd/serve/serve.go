@@ -104,7 +104,7 @@ func (s *Server) GetBOMTree(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusNotFound)
 		return
 	}
-	rootNode, err := core.BuildTree(rootItem)
+	rootNode, err := core.BuildTree("root", rootItem)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return

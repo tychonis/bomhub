@@ -66,9 +66,9 @@ export function TreeIndex(props) {
   const {
     nodes,
     items,
-    rootId,
+    rootDigest,
     reuseIndex,
-    selectedId,
+    selectedDigest,
     onSelect,
     rowHeight = 28,
   } = props;
@@ -76,7 +76,7 @@ export function TreeIndex(props) {
   console.log(props);
 
   const [expanded, setExpanded] = useState<Set<string>>(
-    () => new Set([rootId])
+    () => new Set([rootDigest])
   );
 
   const [current, setCurrent] = useState<string>("");
@@ -90,8 +90,8 @@ export function TreeIndex(props) {
   }, []);
 
   const rows = useMemo(
-    () => buildVisibleRows(nodes, rootId, expanded),
-    [nodes, rootId, expanded]
+    () => buildVisibleRows(nodes, rootDigest, expanded),
+    [nodes, rootDigest, expanded]
   );
 
   const visible = new Set<string>();
@@ -112,16 +112,16 @@ export function TreeIndex(props) {
     index: number;
     style: React.CSSProperties;
   }) => {
-    const { id, depth } = rows[index];
-    const node = nodes[id];
+    const { id: digest, depth } = rows[index];
+    const node = nodes[digest];
     const item = items[node.item];
-    const isExpanded = expanded.has(id);
+    const isExpanded = expanded.has(digest);
     const hasChildren = node.children.length > 0;
     const isReused = (reuseIndex[node.item]?.length || 0) > 1;
     const rowClass = [
       styles.row,
-      selectedId === id ? styles["selected"] : "",
-      reusedRowSet.has(id) ? styles["reused"] : "",
+      selectedDigest === digest ? styles["selected"] : "",
+      reusedRowSet.has(digest) ? styles["reused"] : "",
     ]
       .filter(Boolean)
       .join(" ");
@@ -133,9 +133,9 @@ export function TreeIndex(props) {
           ...style,
           paddingLeft: 8 + depth * 16,
         }}
-        onClick={() => onSelect(id)}
+        onClick={() => onSelect(digest)}
         onMouseEnter={() => {
-          setCurrent(id);
+          setCurrent(digest);
         }}
         onMouseLeave={() => {
           setCurrent("");
@@ -147,7 +147,7 @@ export function TreeIndex(props) {
             className={styles["toggle"]}
             onClick={(e) => {
               e.stopPropagation();
-              toggle(id);
+              toggle(digest);
             }}
           >
             {isExpanded ? (
