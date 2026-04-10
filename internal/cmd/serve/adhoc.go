@@ -146,6 +146,19 @@ func (s *Server) GetMeshList(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
+	if len(rootNode.Children) <= 0 {
+		ret := []*Mesh{
+			{
+				ID:        rootItem.Digest,
+				Name:      rootItem.Content.Name,
+				Path:      "/dev/" + tag + "/" + rootItem.Content.Name + ".glb",
+				Placement: [3]float64{-0.2, 0, 0},
+			},
+		}
+		ctx.JSON(http.StatusOK, ret)
+		return
+	}
+
 	ret := make([]*Mesh, 0, len(rootNode.Children))
 	children := rootNode.Children
 	for _, child := range children {
