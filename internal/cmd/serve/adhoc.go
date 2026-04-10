@@ -151,7 +151,7 @@ func (s *Server) GetMeshList(ctx *gin.Context) {
 		ret = append(ret, &Mesh{
 			Name:      child.Item.Content.Name,
 			Path:      "/dev/" + tag + "/" + child.Item.Content.Name + ".glb",
-			Placement: [3]float64{0, 0, 0},
+			Placement: [3]float64{-0.2, 0, 0},
 		})
 	}
 	ctx.JSON(http.StatusOK, ret)
