@@ -121,7 +121,8 @@ func (s *Server) GetWorkspaceSummary(ctx *gin.Context) {
 }
 
 type Mesh struct {
-	Name      string     `json:"id"`
+	ID        string     `json:"id"`
+	Name      string     `json:"name"`
 	Path      string     `json:"path"`
 	Placement [3]float64 `json:"placement"`
 }
@@ -149,6 +150,7 @@ func (s *Server) GetMeshList(ctx *gin.Context) {
 	children := rootNode.Children
 	for _, child := range children {
 		ret = append(ret, &Mesh{
+			ID:        child.Item.Digest,
 			Name:      child.Item.Content.Name,
 			Path:      "/dev/" + tag + "/" + child.Item.Content.Name + ".glb",
 			Placement: [3]float64{-0.2, 0, 0},

@@ -53,9 +53,20 @@ export function MeshView(props: {
 
     const node = props.nodes[props.selectedDigest];
 
+    // TODO: fix this hack.
+    const findNodeByItem = (parent, item) => {
+      for (const child of parent.children) {
+        const childNode = props.nodes[child];
+        if (childNode.item == item) {
+          return child;
+        }
+      }
+    };
+
     getModels(id, node.item).then((models) => {
       for (const m of models) {
-        MESH.loadModel(mesh, m.id, m.path, m.shift);
+        const nodeID = findNodeByItem(node, m.id);
+        MESH.loadModel(mesh, nodeID, m.path, m.shift);
       }
     });
 

@@ -73,8 +73,6 @@ export function TreeIndex(props) {
     rowHeight = 28,
   } = props;
 
-  console.log(props);
-
   const [expanded, setExpanded] = useState<Set<string>>(
     () => new Set([rootDigest])
   );
@@ -162,7 +160,7 @@ export function TreeIndex(props) {
 
         {/* part label */}
         <span className={styles["part-label"]}>
-          {item?.name || node.item}
+          {item?.content.name || node.item}
           {node.qty !== undefined && (
             <span className={styles["part-qty"]}> ×{node.qty}</span>
           )}
