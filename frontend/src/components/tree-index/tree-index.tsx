@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { FixedSizeList as List } from "react-window";
 import { RightOutlined, DownOutlined } from "@ant-design/icons";
 import styles from "./tree-index.module.css";
@@ -86,6 +86,24 @@ export function TreeIndex(props) {
       return next;
     });
   }, []);
+
+  useEffect(() => {
+    if (!selectedDigest || !nodes[selectedDigest]) {
+      return;
+    }
+
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      let id: string | undefined = selectedDigest;
+
+      while (id && nodes[id]) {
+        next.add(id);
+        id = nodes[id].parent;
+      }
+
+      return next;
+    });
+  }, [selectedDigest, nodes]);
 
   const rows = useMemo(
     () => buildVisibleRows(nodes, rootDigest, expanded),
