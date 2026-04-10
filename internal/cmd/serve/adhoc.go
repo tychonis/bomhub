@@ -149,8 +149,8 @@ func (s *Server) GetMeshList(ctx *gin.Context) {
 	children := rootNode.Children
 	for _, child := range children {
 		ret = append(ret, &Mesh{
-			Name:      child.Name,
-			Path:      "/dev/" + tag + "/" + child.Name + ".glb",
+			Name:      child.Item.Content.Name,
+			Path:      "/dev/" + tag + "/" + child.Item.Content.Name + ".glb",
 			Placement: [3]float64{0, 0, 0},
 		})
 	}

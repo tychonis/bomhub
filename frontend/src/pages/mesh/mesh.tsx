@@ -23,7 +23,7 @@ async function getRawBPC(id: string, digest: string): Promise<BpcDocument> {
   const doc: BpcDocument = {
     root: tree.root,
     nodes: tree.nodes,
-    items: catalog.items,
+    items: catalog.symbols,
     usage: tree.reuse,
   };
 
@@ -62,6 +62,7 @@ export const MeshPage = () => {
         onSelect={setSelectedDigest}
       />
       <MeshView
+        nodes={bom.nodes}
         selectedDigest={selectedDigest}
         setSelectedDigest={setSelectedDigest}
       />

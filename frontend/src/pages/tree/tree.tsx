@@ -25,7 +25,7 @@ async function getRawBPC(id: string, digest: string): Promise<BpcDocument> {
   const doc: BpcDocument = {
     root: tree.root,
     nodes: tree.nodes,
-    items: catalog.items,
+    items: catalog.symbols,
     usage: tree.reuse,
   };
 
@@ -39,26 +39,27 @@ async function getAttachments(id: string) {
 export const TreePage = () => {
   const { id, digest } = useParams<{ id: string; digest: string }>();
 
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedDigest, setSelectedDigest] = useState<string | null>(null);
   const [bom, setBom] = useState<BpcDocument | null>(null);
   const [attachements, setAttachements] = useState([]);
 
   useEffect(() => {
     setBom(null);
-    setSelectedId(null);
+    setSelectedDigest(null);
     getRawBPC(id, digest)
       .then((bpc) => {
+        console.log("root is " + bpc.root);
         setBom(bpc);
-        setSelectedId(bpc.root);
+        setSelectedDigest(bpc.root);
       })
       .catch(console.error);
   }, [digest]);
 
   useEffect(() => {
-    getAttachments(selectedId).then((attc) => {
+    getAttachments(selectedDigest).then((attc) => {
       setAttachements(attc);
     });
-  }, [selectedId]);
+  }, [selectedDigest]);
 
   if (!bom) {
     return <></>;
@@ -69,15 +70,15 @@ export const TreePage = () => {
       <TreeIndex
         nodes={bom.nodes}
         items={bom.items}
-        rootId={bom.root}
+        rootDigest={bom.root}
         reuseIndex={bom.usage}
-        selectedId={selectedId}
-        onSelect={setSelectedId}
+        selectedDigest={selectedDigest}
+        onSelect={setSelectedDigest}
       />
       <ItemDetailsPanel
-        node={bom.nodes[selectedId!]}
-        item={bom.items[bom.nodes[selectedId!].item]}
-        reuseCount={bom.usage[bom.nodes[selectedId!].item].length}
+        node={bom.nodes[selectedDigest!]}
+        item={bom.items[bom.nodes[selectedDigest!].item]}
+        reuseCount={bom.usage[bom.nodes[selectedDigest!].item].length}
       />
       <Attachment attachments={attachements} />
     </div>

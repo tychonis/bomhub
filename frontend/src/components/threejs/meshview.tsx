@@ -24,6 +24,7 @@ async function getModels(id: string, digest: string): Promise<MESH.ModelDef[]> {
 }
 
 export function MeshView(props: {
+  nodes: any;
   selectedDigest: string;
   setSelectedDigest: React.Dispatch<React.SetStateAction<string>>;
 }) {
@@ -50,7 +51,9 @@ export function MeshView(props: {
 
     mount.appendChild(mesh.renderer.domElement);
 
-    getModels(id, props.selectedDigest).then((models) => {
+    const node = props.nodes[props.selectedDigest];
+
+    getModels(id, node.item).then((models) => {
       for (const m of models) {
         MESH.loadModel(mesh, m.id, m.path, m.shift);
       }
@@ -91,7 +94,7 @@ export function MeshView(props: {
       }
       MESH.dispose(mesh);
     };
-  }, [props.selectedDigest, props.setSelectedDigest]);
+  }, [props.nodes, props.selectedDigest, props.setSelectedDigest]);
 
   const setRef =
     <K extends keyof MESH.CameraControlsRefs>(key: K) =>
