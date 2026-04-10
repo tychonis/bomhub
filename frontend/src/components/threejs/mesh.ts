@@ -45,11 +45,23 @@ export const createDefaultMesh = (width: number, height: number): Mesh => {
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambientLight);
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8);
-  directionalLight.position.set(5, 5, 6);
-  scene.add(directionalLight);
+
+  // 1. Key light (main, strongest)
+  const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+  keyLight.position.set(5, 5, 5);
+  scene.add(keyLight);
+
+  // 2. Fill light (opposite side, softer)
+  const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+  fillLight.position.set(-5, 2, 5);
+  scene.add(fillLight);
+
+  // 3. Back light (rim light from behind)
+  const backLight = new THREE.DirectionalLight(0xffffff, 1.0);
+  backLight.position.set(0, 5, -5);
+  scene.add(backLight);
 
   const loader = new GLTFLoader();
   const dracoLoader = new DRACOLoader();
