@@ -124,6 +124,7 @@ type Mesh struct {
 	ID        string     `json:"id"`
 	Name      string     `json:"name"`
 	Path      string     `json:"path"`
+	Rotation  [4]float64 `json:"rotation"`
 	Placement [3]float64 `json:"placement"`
 }
 
@@ -152,6 +153,7 @@ func (s *Server) GetMeshList(ctx *gin.Context) {
 				ID:        rootItem.Digest,
 				Name:      rootItem.Content.Name,
 				Path:      "/dev/" + tag + "/" + rootItem.Content.Name + ".glb",
+				Rotation:  [4]float64{0, 0, 0, 1},
 				Placement: [3]float64{-0.2, 0, 0},
 			},
 		}
@@ -166,6 +168,7 @@ func (s *Server) GetMeshList(ctx *gin.Context) {
 			ID:        child.Item.Digest,
 			Name:      child.Item.Content.Name,
 			Path:      "/dev/" + tag + "/" + child.Item.Content.Name + ".glb",
+			Rotation:  [4]float64{0, 0, 0, 1},
 			Placement: [3]float64{-0.2, 0, 0},
 		})
 	}

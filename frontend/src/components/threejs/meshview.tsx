@@ -17,6 +17,7 @@ async function getModels(id: string, digest: string): Promise<MESH.ModelDef[]> {
     ret.push({
       id: def.id,
       path: def.path,
+      rotation: new THREE.Quaternion().fromArray(def.rotation),
       shift: new THREE.Vector3().fromArray(def.placement),
     });
   }
@@ -66,7 +67,7 @@ export function MeshView(props: {
     getModels(id, node.item).then((models) => {
       for (const m of models) {
         const nodeID = findNodeByItem(node, m.id);
-        MESH.loadModel(mesh, nodeID, m.path, m.shift);
+        MESH.loadModel(mesh, nodeID, m.path, m.rotation, m.shift);
       }
     });
 

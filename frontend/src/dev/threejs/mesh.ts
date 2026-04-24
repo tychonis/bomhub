@@ -6,6 +6,7 @@ import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 export type ModelDef = {
   id: string;
   path: string;
+  rotation?: THREE.Quaternion;
   shift?: THREE.Vector3;
 };
 
@@ -102,6 +103,7 @@ export const loadModel = (
   mesh: Mesh,
   id: string,
   filename: string,
+  rotation: THREE.Quaternion = new THREE.Quaternion(0, 0, 0, 1),
   position: THREE.Vector3 = new THREE.Vector3(0, 0, 0)
 ) => {
   mesh.loader.load(
@@ -115,6 +117,7 @@ export const loadModel = (
       // const box = new THREE.Box3().setFromObjects(object);
       // const center = box.getCenter(new THREE.Vector3());
       // object.position.sub(center);
+      object.quaternion.multiply(rotation);
       object.position.add(position);
 
       mesh.objects.push(object);
