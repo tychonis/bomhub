@@ -10,6 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/tychonis/cyanotype/core/parser/hcl"
+	"github.com/tychonis/cyanotype/core/process"
+	"github.com/tychonis/cyanotype/core/ranker"
 	"github.com/tychonis/cyanotype/model"
 )
 
@@ -132,6 +134,7 @@ func (s *Server) GetMeshList(ctx *gin.Context) {
 	tag := ctx.Param("id")
 	digest := ctx.Param("digest")
 	core := hcl.NewCoreFromAPI("http://localhost:5001", tag)
+	core.Ranker = &ranker.TypeRanker{PreferedType: process.DRAWING}
 	root, err := core.Catalog.Get(digest)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusNotFound)
@@ -162,15 +165,34 @@ func (s *Server) GetMeshList(ctx *gin.Context) {
 	}
 
 	ret := make([]*Mesh, 0, len(rootNode.Children))
+	placement := make(map[string]*Mesh)
+	p := rootNode.Process
+	if p.Content.GetType() == process.DRAWING {
+		content, ok := p.Content.(*process.Drawing)
+		if !ok {
+			ctx.AbortWithStatus(http.StatusInternalServerError)
+			return
+		}
+		for _, comp := range content.Components {
+			placement[comp.Name] = &Mesh{
+				Rotation:  comp.Rotation,
+				Placement: comp.Translation,
+			}
+		}
+	}
 	children := rootNode.Children
 	for _, child := range children {
-		ret = append(ret, &Mesh{
-			ID:        child.Item.Digest,
-			Name:      child.Item.Content.Name,
-			Path:      "/dev/" + tag + "/" + child.Item.Content.Name + ".glb",
-			Rotation:  [4]float64{0, 0, 0, 1},
-			Placement: [3]float64{-0.2, 0, 0},
-		})
+		mesh, ok := placement[child.Name]
+		if !ok {
+			mesh = &Mesh{
+				Rotation:  [4]float64{0, 0, 0, 1},
+				Placement: [3]float64{-0.2, 0, 0},
+			}
+		}
+		mesh.ID = child.Item.Digest
+		mesh.Name = child.Item.Content.Name
+		mesh.Path = "/dev/" + tag + "/" + child.Item.Content.Name + ".glb"
+		ret = append(ret, mesh)
 	}
 	ctx.JSON(http.StatusOK, ret)
 }

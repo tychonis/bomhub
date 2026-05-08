@@ -106,12 +106,12 @@ func (s *Server) GetBOMTree(ctx *gin.Context) {
 	}
 	rootNode, err := core.BuildTree("root", rootItem)
 	if err != nil {
-		ctx.AbortWithStatus(http.StatusInternalServerError)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 	content, err := rootNode.Export()
 	if err != nil {
-		ctx.AbortWithStatus(http.StatusInternalServerError)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 	ctx.JSON(http.StatusOK, json.RawMessage(content))

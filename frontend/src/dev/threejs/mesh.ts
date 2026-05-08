@@ -104,7 +104,7 @@ export const loadModel = (
   id: string,
   filename: string,
   rotation: THREE.Quaternion = new THREE.Quaternion(0, 0, 0, 1),
-  position: THREE.Vector3 = new THREE.Vector3(0, 0, 0)
+  translation: THREE.Vector3 = new THREE.Vector3(0, 0, 0)
 ) => {
   mesh.loader.load(
     filename,
@@ -118,7 +118,7 @@ export const loadModel = (
       // const center = box.getCenter(new THREE.Vector3());
       // object.position.sub(center);
       object.quaternion.multiply(rotation);
-      object.position.add(position);
+      object.position.add(translation);
 
       mesh.objects.push(object);
       render(mesh);
