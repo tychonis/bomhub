@@ -4,7 +4,7 @@ import bomhub from "api/ky";
 import { API_ROOT } from "api/constants";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import * as MESH from "./mesh";
+import * as MESH from "components/threejs/mesh";
 
 async function getModels(id: string): Promise<MESH.ModelDef[]> {
   const rawModelDef = await bomhub.get(`${API_ROOT}/models/${id}`).json();

@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import * as conv from "./conversion";
 
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
@@ -126,12 +127,12 @@ export const loadModel = (
 
       mesh.scene.add(object);
 
-      object.quaternion.multiply(rotation);
+      object.quaternion.multiply(conv.CADToThreeRotation(rotation));
 
       // const box = new THREE.Box3().setFromObjects(object);
       // const center = box.getCenter(new THREE.Vector3());
       // object.position.sub(center);
-      object.position.add(position);
+      object.position.add(conv.CADToThreePosition(position));
 
       mesh.objects.push(object);
       render(mesh);
