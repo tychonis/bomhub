@@ -4,6 +4,10 @@ import * as conv from "./conversion";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 
+const NEAR_PLANE = 0.01;
+const FAR_PLANE = 10000;
+const INITIAL_CAMERA_RADIUS = 1000;
+
 export type ModelDef = {
   id: string;
   path: string;
@@ -42,7 +46,12 @@ export function setHighlight(mesh: THREE.Mesh, on: boolean) {
 export const createDefaultMesh = (width: number, height: number): Mesh => {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xffffff);
-  const camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 100);
+  const camera = new THREE.PerspectiveCamera(
+    60,
+    width / height,
+    NEAR_PLANE,
+    FAR_PLANE
+  );
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -226,7 +235,7 @@ export type CameraControlsRefs = {
 };
 
 export const createCameraControls = (mesh: Mesh, refs: CameraControlsRefs) => {
-  let cameraRadius = 0.5;
+  let cameraRadius = INITIAL_CAMERA_RADIUS;
 
   const updateMesh = () => {
     const azimuth = THREE.MathUtils.degToRad(Number(refs.azimuth.value));

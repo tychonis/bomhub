@@ -73,7 +73,7 @@ export function ItemDetailsPanel({ node, item, reuseCount }) {
 
   return (
     <div className={styles["panel"]}>
-      <h2 className={styles["title"]}>{item.name}</h2>
+      <h2 className={styles["title"]}>{item.qualifier}</h2>
       <div className={styles["panel-content"]}>
         <img src={image} className={styles["item-image"]} />
         <table className={styles["item-attrs"]}>
