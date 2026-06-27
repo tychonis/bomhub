@@ -42,7 +42,7 @@ export function fitCameraToObjects(
   world: any,
   objects: THREE.Object3D[],
   padding = 1.5,
-  transition = true
+  transition = false
 ) {
   if (objects.length === 0) return;
 
@@ -150,19 +150,18 @@ export const loadModel = (
   );
 };
 
-export const dispose = (_m: Mesh) => {
-  // _m.world.renderer.dispose();
-  // _m.world.scene.three.traverse((object) => {
-  //   if (object instanceof THREE.Mesh) {
-  //     object.geometry.dispose();
-  //     const material = object.material;
-  //     if (Array.isArray(material)) {
-  //       material.forEach((m) => m.dispose());
-  //     } else {
-  //       material.dispose();
-  //     }
-  //   }
-  // });
+export const dispose = (m: Mesh) => {
+  m.world.scene.three.traverse((object) => {
+    if (object instanceof THREE.Mesh) {
+      object.geometry.dispose();
+      const material = object.material;
+      if (Array.isArray(material)) {
+        material.forEach((m) => m.dispose());
+      } else {
+        material.dispose();
+      }
+    }
+  });
 };
 
 export type InteractionState = {
