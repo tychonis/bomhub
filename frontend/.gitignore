@@ -5,3 +5,4 @@ public/api
 stats.html
 
 public/dev
+*.tsbuildinfo

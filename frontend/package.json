@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
+    "@thatopen/components": "^3.4.6",
+    "@thatopen/components-front": "^3.4.3",
     "antd": "^5.20.2",
     "ky": "^1.8.1",
     "react": "^18.3.1",
