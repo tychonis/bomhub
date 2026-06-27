@@ -69,25 +69,10 @@ export function MeshView(props: {
       props.setSelectedDigest
     );
 
-    return;
-
     hoverControl.attach();
-
-    const handleResize = () => {
-      mesh.world.renderer.resize({
-        width: mount.clientWidth,
-        height: mount.clientHeight,
-      });
-    };
-
-    window.addEventListener("resize", handleResize);
-    const resizeObserver = new ResizeObserver(handleResize);
-    resizeObserver.observe(mount);
 
     return () => {
       hoverControl.detach();
-      window.removeEventListener("resize", handleResize);
-      resizeObserver.disconnect();
 
       if (mesh.world.renderer.three.domElement.parentNode === mount) {
         mount.removeChild(mesh.world.renderer.three.domElement);

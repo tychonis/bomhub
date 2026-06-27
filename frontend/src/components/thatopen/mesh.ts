@@ -186,13 +186,11 @@ export const createHoverController = (
   // let selected: THREE.Mesh | null = null;
 
   const updateHover = (nextHovered: THREE.Mesh | null) => {
-    return;
     if (hovered === nextHovered) return;
 
     if (hovered) setHighlight(hovered, false);
     hovered = nextHovered;
     if (hovered) setHighlight(hovered, true);
-    mesh.world.renderer.three.render();
   };
 
   const pointerEventObject = (event: PointerEvent) => {
