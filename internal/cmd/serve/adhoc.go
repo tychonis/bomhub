@@ -123,14 +123,15 @@ func (s *Server) GetWorkspaceSummary(ctx *gin.Context) {
 }
 
 type Mesh struct {
-	ID        string     `json:"id"`
-	Name      string     `json:"name"`
-	Path      string     `json:"path"`
-	Rotation  [4]float64 `json:"rotation"`
-	Placement [3]float64 `json:"placement"`
+	Item      string            `json:"item"`
+	Name      string            `json:"name"`
+	ItemName  string            `json:"item_name"`
+	Path      string            `json:"path"`
+	Rotation  *model.Quaternion `json:"rotation,omitempty"`
+	Placement *model.Vec3       `json:"placement,omitempty"`
 }
 
-func (s *Server) GetMeshList(ctx *gin.Context) {
+func (s *Server) GetToRenderMeshes(ctx *gin.Context) {
 	tag := ctx.Param("id")
 	digest := ctx.Param("digest")
 	core := hcl.NewCoreFromAPI("http://localhost:5001", tag)
@@ -140,33 +141,34 @@ func (s *Server) GetMeshList(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusNotFound)
 		return
 	}
-	rootItem, ok := root.(*model.Item)
+	parent, ok := root.(*model.Item)
 	if !ok {
 		ctx.AbortWithStatus(http.StatusNotFound)
 		return
 	}
-	rootNode, err := core.BuildTree("tmp", rootItem)
+	parentNode, err := core.BuildTree("tmp", parent)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
-	if len(rootNode.Children) <= 0 {
+	if len(parentNode.Children) <= 0 {
 		ret := []*Mesh{
 			{
-				ID:        rootItem.Digest,
-				Name:      rootItem.Content.Name,
-				Path:      "/dev/" + tag + "/" + rootItem.Content.Name + ".glb",
-				Rotation:  [4]float64{0, 0, 0, 1},
-				Placement: [3]float64{-0.2, 0, 0},
+				Item:      parent.Digest,
+				Name:      "root",
+				ItemName:  parent.Content.Name,
+				Path:      "/dev/" + tag + "/" + parent.Content.Name + ".glb",
+				Rotation:  nil,
+				Placement: nil,
 			},
 		}
 		ctx.JSON(http.StatusOK, ret)
 		return
 	}
 
-	ret := make([]*Mesh, 0, len(rootNode.Children))
+	ret := make([]*Mesh, 0, len(parentNode.Children))
 	placement := make(map[string]*Mesh)
-	p := rootNode.Process
+	p := parentNode.Process
 	if p.Content.GetType() == process.DRAWING {
 		content, ok := p.Content.(*process.Drawing)
 		if !ok {
@@ -180,17 +182,18 @@ func (s *Server) GetMeshList(ctx *gin.Context) {
 			}
 		}
 	}
-	children := rootNode.Children
+	children := parentNode.Children
 	for _, child := range children {
 		mesh, ok := placement[child.Name]
 		if !ok {
 			mesh = &Mesh{
-				Rotation:  [4]float64{0, 0, 0, 1},
-				Placement: [3]float64{-0.2, 0, 0},
+				Rotation:  &model.IdentityQuaternion,
+				Placement: &model.IdentityVec3,
 			}
 		}
-		mesh.ID = child.Item.Digest
-		mesh.Name = child.Item.Content.Name
+		mesh.Item = child.Item.Digest
+		mesh.Name = child.Name
+		mesh.ItemName = child.Item.Content.Name
 		mesh.Path = "/dev/" + tag + "/" + child.Item.Content.Name + ".glb"
 		ret = append(ret, mesh)
 	}

@@ -12,7 +12,7 @@ require (
 	github.com/lestrrat-go/jwx/v3 v3.1.1
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
-	github.com/tychonis/cyanotype v0.0.0-20260518031545-8dfbdad39fdc
+	github.com/tychonis/cyanotype v0.0.0-20260624091438-350f3465f49f
 	golang.org/x/oauth2 v0.36.0
 )
 
@@ -76,6 +76,6 @@ require (
 	golang.org/x/sync v0.21.0 // indirect
 	golang.org/x/sys v0.46.0 // indirect
 	golang.org/x/text v0.38.0 // indirect
-	golang.org/x/tools v0.46.0 // indirect
+	golang.org/x/tools v0.47.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 )
