@@ -45,13 +45,13 @@ func (s *Server) GetItem(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, details)
 }
 
-func (s *Server) GetObject(ctx *gin.Context) {
+func (s *Server) GetDefinition(ctx *gin.Context) {
 	digest, err := hex.DecodeString(ctx.Param("digest"))
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	obj, err := s.DB.GetObject(ctx, digest)
+	obj, err := s.DB.GetDefinition(ctx, digest)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusNotFound)
 		return
@@ -59,7 +59,7 @@ func (s *Server) GetObject(ctx *gin.Context) {
 	ctx.Data(http.StatusOK, "application/json; charset=utf-8", obj)
 }
 
-func (s *Server) SaveObject(ctx *gin.Context) {
+func (s *Server) SaveDefinition(ctx *gin.Context) {
 	digest, err := hex.DecodeString(ctx.Param("digest"))
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
@@ -71,7 +71,7 @@ func (s *Server) SaveObject(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	_, err = s.DB.SaveObject(ctx, digest, json.RawMessage(data))
+	_, err = s.DB.SaveDefinition(ctx, digest, json.RawMessage(data))
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return

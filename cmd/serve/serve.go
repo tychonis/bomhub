@@ -7,6 +7,7 @@ import (
 	"github.com/tychonis/bomhub/internal/cmd/serve"
 	"github.com/tychonis/bomhub/internal/db"
 	"github.com/tychonis/bomhub/internal/setup"
+	"github.com/tychonis/bomhub/internal/storage"
 )
 
 var Cmd = &cobra.Command{
@@ -32,8 +33,8 @@ func run(cmd *cobra.Command, args []string) {
 	router.GET("/boms", server.GetBOMs)
 	router.GET("/item/:id", server.GetItem)
 
-	router.POST("/obj/:digest", server.SaveObject)
-	router.GET("/obj/:digest", server.GetObject)
+	router.POST("/definition/:digest", server.SaveDefinition)
+	router.GET("/definition/:digest", server.GetDefinition)
 
 	router.POST("/bom_index/:id", server.SaveIndex)
 	router.GET("/bom_index/:id", server.GetIndex)
@@ -45,6 +46,10 @@ func run(cmd *cobra.Command, args []string) {
 	router.GET("/workspace/:id", server.GetWorkspaceSummary)
 	router.POST("/workspace/:id", server.SaveWorkspaceSummary)
 	router.GET("/workspace/:id/roots", server.GetRoots)
+
+	s := setup.CreateDefaultStorage()
+	router.GET("/object/*key", storage.ServeObjectHandler(s))
+	router.POST("/object/*key", storage.UploadObjectHandler(s))
 
 	setup.WaitOnOSSignals()
 }

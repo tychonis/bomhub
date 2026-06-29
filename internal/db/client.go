@@ -50,7 +50,7 @@ func (c *Client) LogActivity(ctx context.Context, email string, path string) err
 	return err
 }
 
-func (c *Client) SaveObject(ctx context.Context, digest []byte, content any) (json.RawMessage, error) {
+func (c *Client) SaveDefinition(ctx context.Context, digest []byte, content any) (json.RawMessage, error) {
 	body, err := json.Marshal(content)
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ RETURNING content;
 	return ret, nil
 }
 
-func (c *Client) GetObject(ctx context.Context, digest []byte) (json.RawMessage, error) {
+func (c *Client) GetDefinition(ctx context.Context, digest []byte) (json.RawMessage, error) {
 	const q = `SELECT content FROM object WHERE object_digest = $1;`
 	var raw json.RawMessage
 	err := c.pool.QueryRow(ctx, q, digest).Scan(&raw)

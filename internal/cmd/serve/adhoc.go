@@ -72,13 +72,13 @@ func (s *Server) GetRoots(ctx *gin.Context) {
 	}
 	for _, root := range roots {
 		digest := hex.EncodeToString(root)
-		obj, err := s.DB.GetObject(ctx, root)
+		def, err := s.DB.GetDefinition(ctx, root)
 		if err != nil {
 			ctx.AbortWithStatus(http.StatusInternalServerError)
 			return
 		}
 		var item model.Item
-		json.Unmarshal(obj, &item)
+		json.Unmarshal(def, &item)
 		r := rootResp{
 			Digest: digest,
 			Name:   item.Content.Name,
