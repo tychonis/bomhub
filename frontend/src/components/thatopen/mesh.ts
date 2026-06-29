@@ -6,7 +6,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 
 export type ModelDef = {
-  id: string;
+  item: string;
   path: string;
   rotation?: THREE.Quaternion;
   shift?: THREE.Vector3;

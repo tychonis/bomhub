@@ -14,8 +14,14 @@ async function getModels(id: string, digest: string): Promise<MESH.ModelDef[]> {
   const ret: MESH.ModelDef[] = [];
 
   for (const def of rawModelDef) {
+    if (!def.rotation) {
+      def.rotation = [0, 0, 0, 1];
+    }
+    if (!def.placement) {
+      def.placement = [0, 0, 0];
+    }
     ret.push({
-      id: def.id,
+      item: def.item,
       path: def.path,
       rotation: new THREE.Quaternion().fromArray(def.rotation),
       shift: new THREE.Vector3().fromArray(def.placement),
@@ -55,7 +61,7 @@ export function MeshView(props: {
       .then((models) => {
         console.log(`Loading ${models.length} models for digest ${node.item}`);
         for (const m of models) {
-          const nodeID = findNodeByItem(node, m.id);
+          const nodeID = findNodeByItem(node, m.item);
           console.log(`Loading model: ${m.path}`);
           MESH.loadModel(mesh, nodeID, m.path, m.rotation, m.shift);
         }
