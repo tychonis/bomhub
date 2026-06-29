@@ -6,6 +6,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 
 export type ModelDef = {
+  name: string;
   item: string;
   path: string;
   rotation?: THREE.Quaternion;
@@ -125,12 +126,12 @@ export const createDefaultMesh = (mount: HTMLElement): Mesh => {
 export const loadModel = (
   mesh: Mesh,
   id: string,
-  filename: string,
+  url: string,
   rotation: THREE.Quaternion = new THREE.Quaternion(0, 0, 0, 1),
   position: THREE.Vector3 = new THREE.Vector3(0, 0, 0)
 ) => {
   mesh.loader.load(
-    filename,
+    url,
     async (gltf) => {
       const object = gltf.scene;
       object.userData.id = id;

@@ -21,6 +21,7 @@ async function getModels(id: string, digest: string): Promise<MESH.ModelDef[]> {
       def.placement = [0, 0, 0];
     }
     ret.push({
+      name: def.name,
       item: def.item,
       path: def.path,
       rotation: new THREE.Quaternion().fromArray(def.rotation),
@@ -48,10 +49,13 @@ export function MeshView(props: {
     const node = props.nodes[props.selectedDigest];
 
     // TODO: fix this hack.
-    const findNodeByItem = (parent, item) => {
+    // right now, node is generated from the tree,
+    // but getModels api returns models constructed from the parent instead of the root node.
+    // therefore the nodeID won't match and we need to use the name to match the model to the node.
+    const findNode = (parent, name) => {
       for (const child of parent.children) {
         const childNode = props.nodes[child];
-        if (childNode.item == item) {
+        if (childNode.name == name) {
           return child;
         }
       }
@@ -61,8 +65,8 @@ export function MeshView(props: {
       .then((models) => {
         console.log(`Loading ${models.length} models for digest ${node.item}`);
         for (const m of models) {
-          const nodeID = findNodeByItem(node, m.item);
-          console.log(`Loading model: ${m.path}`);
+          const nodeID = findNode(node, m.name);
+          console.log(`Loading model at node ${nodeID}: ${m.path}`);
           MESH.loadModel(mesh, nodeID, m.path, m.rotation, m.shift);
         }
       })
