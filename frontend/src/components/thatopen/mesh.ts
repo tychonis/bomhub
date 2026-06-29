@@ -208,6 +208,19 @@ export const createHoverController = (
     updateHover(nextHovered);
   };
 
+  let clickStartTime = 0;
+
+  const handlePointerDown = (event: PointerEvent) => {
+    clickStartTime = event.timeStamp;
+  };
+
+  const handlePointerUp = (event: PointerEvent) => {
+    const clickDuration = event.timeStamp - clickStartTime;
+    if (clickDuration < 200) {
+      handleClick(event);
+    }
+  };
+
   const handleClick = (event: PointerEvent) => {
     const clicked = pointerEventObject(event);
     const clickedID = findObjectId(clicked);
@@ -225,13 +238,15 @@ export const createHoverController = (
     attach() {
       el.addEventListener("pointermove", handlePointerMove);
       el.addEventListener("pointerleave", handlePointerLeave);
-      el.addEventListener("click", handleClick);
+      el.addEventListener("pointerdown", handlePointerDown);
+      el.addEventListener("pointerup", handlePointerUp);
     },
 
     detach() {
       el.removeEventListener("pointermove", handlePointerMove);
       el.removeEventListener("pointerleave", handlePointerLeave);
-      el.removeEventListener("click", handleClick);
+      el.removeEventListener("pointerdown", handlePointerDown);
+      el.removeEventListener("pointerup", handlePointerUp);
     },
   };
 };
