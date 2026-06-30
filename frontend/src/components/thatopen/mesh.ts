@@ -154,8 +154,9 @@ export const loadModel = (
 export const dispose = (m: Mesh) => {
   m.world.scene.three.traverse((object) => {
     if (object instanceof THREE.Mesh) {
-      object.geometry.dispose();
-      const material = object.material;
+      const mesh = object as THREE.Mesh;
+      mesh.geometry.dispose();
+      const material = mesh.material;
       if (Array.isArray(material)) {
         material.forEach((m) => m.dispose());
       } else {
