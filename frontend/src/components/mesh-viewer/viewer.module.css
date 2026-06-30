@@ -1,10 +1,53 @@
-.viewer {
+.viewer-container {
+  position: relative;
   width: 100%;
-  height: 80vh;
+  height: 85vh;
   border: 1px solid #ddd;
   border-radius: 0.75rem;
   overflow: hidden;
   background: #f3f3f3;
   box-sizing: border-box;
   margin: 1rem;
+}
+
+.viewer {
+  width: 100%;
+  height: 100%;
+}
+
+.viewer-reset {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+
+  width: 3rem;
+  height: 3rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #d9d9d9;
+  border-radius: 50%;
+  background: #fff;
+
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.viewer-reset:hover {
+  background: #f5f5f5;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 20%);
+}
+
+.viewer-reset:active {
+  background: #e6f4ff;
+}
+
+.viewer-reset .anticon {
+  font-size: 18px;
 }

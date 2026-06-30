@@ -50,15 +50,14 @@ export function setHighlight(mesh: THREE.Mesh, on: boolean) {
 
 export function fitCameraToObjects(
   mesh: Mesh,
-  objects: THREE.Object3D[],
   padding = 1.5,
   transition = false
 ) {
-  if (objects.length === 0) return;
+  if (mesh.objects.length === 0) return;
 
   const box = new THREE.Box3();
 
-  for (const object of objects) {
+  for (const object of mesh.objects) {
     object.updateMatrixWorld(true);
 
     const objectBox = new THREE.Box3().setFromObject(object);
@@ -235,7 +234,7 @@ export const loadModel = (
       mesh.scene.add(object);
       mesh.objects.push(object);
 
-      fitCameraToObjects(mesh, mesh.objects);
+      fitCameraToObjects(mesh);
     },
     undefined,
     (error) => {

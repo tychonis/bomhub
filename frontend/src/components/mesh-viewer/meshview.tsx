@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import * as MESH from "./mesh";
 import { useParams } from "react-router-dom";
+import { AimOutlined } from "@ant-design/icons";
 
 async function getModels(id: string, digest: string): Promise<MESH.ModelDef[]> {
   const rawModelDef = await bomhub
@@ -39,10 +40,12 @@ export function MeshView(props: {
   const { id } = useParams<{ id: string }>();
 
   const mountRef = useRef<HTMLDivElement | null>(null);
+  const resetRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     const mount = mountRef.current;
-    if (!mount) return;
+    const resetButton = resetRef.current;
+    if (!mount || !resetButton) return;
 
     const mesh = MESH.createDefaultMesh(mount);
 
@@ -80,6 +83,9 @@ export function MeshView(props: {
     );
 
     hoverControl.attach();
+    resetButton.addEventListener("click", () => {
+      MESH.fitCameraToObjects(mesh);
+    });
 
     return () => {
       hoverControl.detach();
@@ -87,5 +93,17 @@ export function MeshView(props: {
     };
   }, [props.nodes, props.selectedDigest, props.setSelectedDigest]);
 
-  return <div ref={mountRef} className={styles["viewer"]}></div>;
+  return (
+    <div className={styles["viewer-container"]}>
+      <div ref={mountRef} className={styles["viewer"]} />
+      <button
+        className={styles["viewer-reset"]}
+        aria-label="Reset camera"
+        title="Reset camera"
+        ref={resetRef}
+      >
+        <AimOutlined />
+      </button>
+    </div>
+  );
 }
