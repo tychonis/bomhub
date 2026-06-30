@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -104,7 +105,7 @@ func safeObjectPath(root, key string) (string, error) {
 
 func UploadObjectHandler(store ObjectStore) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		key := c.Param("key")
+		key := strings.TrimPrefix(c.Param("key"), "/")
 
 		file, header, err := c.Request.FormFile("file")
 		if err != nil {
@@ -132,7 +133,7 @@ func UploadObjectHandler(store ObjectStore) gin.HandlerFunc {
 
 func ServeObjectHandler(store ObjectStore) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		key := c.Param("key")
+		key := strings.TrimPrefix(c.Param("key"), "/")
 
 		r, info, err := store.LoadObject(key)
 		if err != nil {
