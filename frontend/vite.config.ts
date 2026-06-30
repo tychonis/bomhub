@@ -31,6 +31,9 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks(id) {
+          if (id.includes("three")) {
+            return "three";
+          }
           if (id.includes("node_modules")) {
             return "vendor";
           }

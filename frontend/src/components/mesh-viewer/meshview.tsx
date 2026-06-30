@@ -1,4 +1,4 @@
-import styles from "./thatopen.module.css";
+import styles from "./viewer.module.css";
 
 import bomhub from "api/ky";
 import { API_ROOT } from "api/constants";
@@ -83,10 +83,6 @@ export function MeshView(props: {
 
     return () => {
       hoverControl.detach();
-
-      if (mesh.world.renderer.three.domElement.parentNode === mount) {
-        mount.removeChild(mesh.world.renderer.three.domElement);
-      }
       MESH.dispose(mesh);
     };
   }, [props.nodes, props.selectedDigest, props.setSelectedDigest]);

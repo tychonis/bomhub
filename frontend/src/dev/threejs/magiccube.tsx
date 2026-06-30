@@ -3,7 +3,7 @@ import styles from "./threejs.module.css";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-import { setHighlight } from "components/threejs/mesh";
+import { setHighlight } from "components/mesh-viewer/mesh";
 
 export function MagicCube() {
   const mountRef = useRef<HTMLDivElement | null>(null);

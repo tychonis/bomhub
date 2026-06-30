@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import bomhub from "api/ky";
 import { API_ROOT } from "api/constants";
 import { TreeIndex } from "components/tree-index/tree-index";
-import { MeshView } from "components/thatopen/meshview";
+import { MeshView } from "components/mesh-viewer/meshview";
 import { useParams } from "react-router-dom";
 
 interface BpcDocument {
