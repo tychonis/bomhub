@@ -4,7 +4,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     tsconfigPaths(),
@@ -24,7 +24,9 @@ export default defineConfig({
       },
     },
   },
+  publicDir: mode === "development" ? "public_dev" : "public",
   build: {
+    outDir: "dist/" + mode,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
@@ -36,4 +38,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

@@ -4,5 +4,5 @@ src/data
 public/api
 stats.html
 
-public/dev
+public_dev
 *.tsbuildinfo
