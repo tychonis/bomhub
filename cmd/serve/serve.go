@@ -23,6 +23,7 @@ func run(cmd *cobra.Command, args []string) {
 	server := serve.Server{DB: dbc}
 
 	router := setup.CreateDefaultRouter()
+	router.Use(CORSMiddleware())
 	router.Use(func(ctx *gin.Context) {
 		user, ok := ctx.Get("user")
 		if !ok {
@@ -30,6 +31,7 @@ func run(cmd *cobra.Command, args []string) {
 		}
 		dbc.LogActivity(ctx, user.(string), ctx.FullPath())
 	})
+
 	router.GET("/boms", server.GetBOMs)
 	router.GET("/item/:id", server.GetItem)
 

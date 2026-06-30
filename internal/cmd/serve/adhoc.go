@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 
 	"github.com/tychonis/cyanotype/core/parser/hcl"
 	"github.com/tychonis/cyanotype/core/process"
@@ -134,7 +135,7 @@ type Mesh struct {
 func (s *Server) GetToRenderMeshes(ctx *gin.Context) {
 	tag := ctx.Param("id")
 	digest := ctx.Param("digest")
-	core := hcl.NewCoreFromAPI("http://localhost:5001", tag)
+	core := hcl.NewCoreFromAPI(viper.GetString("cyanotype.core"), tag)
 	core.Ranker = &ranker.TypeRanker{PreferedType: process.DRAWING}
 	root, err := core.Catalog.Get(digest)
 	if err != nil {
