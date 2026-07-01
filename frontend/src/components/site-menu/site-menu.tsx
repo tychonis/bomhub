@@ -18,7 +18,12 @@ export const SiteMenu = () => {
   const [items, setItems] = useState(Components);
 
   const onClick: MenuProps["onClick"] = (e) => {
-    navigate(e.key);
+    for (const item of items) {
+      if (item.key === e.key) {
+        navigate(item.path);
+        return;
+      }
+    }
   };
 
   useEffect(() => {
