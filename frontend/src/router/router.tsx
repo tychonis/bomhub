@@ -1,10 +1,10 @@
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 import { Components } from "./components";
-import App from "App";
 import { Playground } from "dev/playground/playground";
 import { TreePage } from "pages/tree/tree";
 import { Workspace } from "pages/workspace/workspace";
 import { MeshPage } from "pages/mesh/mesh";
+import { MainLayout, SimpleLayout } from "layout/layout";
 
 const routes: RouteObject[] = [
   {
@@ -12,7 +12,6 @@ const routes: RouteObject[] = [
     element: <Workspace />,
   },
   { path: "/tree/:id/:digest", element: <TreePage /> },
-  { path: "/mesh/:id/:digest", element: <MeshPage /> },
   { path: "/forbidden", element: <div>403 Forbidden</div> },
 
   { path: "/__dev/playground", element: <Playground /> },
@@ -21,8 +20,17 @@ const routes: RouteObject[] = [
 const root = [
   {
     path: "/",
-    element: <App />,
+    element: <MainLayout />,
     children: routes.concat(Components),
+  },
+  {
+    element: <SimpleLayout />,
+    children: [
+      {
+        path: "/mesh/:id/:digest",
+        element: <MeshPage />,
+      },
+    ],
   },
 ];
 

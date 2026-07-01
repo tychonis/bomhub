@@ -1,6 +1,7 @@
 import ky from "ky";
 import { API_ROOT } from "./constants";
 import { MockAPI } from "./mock";
+import { useNavigate } from "react-router-dom";
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
 
@@ -20,7 +21,8 @@ if (USE_MOCK) {
             window.location.href = `${API_ROOT}/login?redirect=${current}`;
           }
           if (response.status === 403) {
-            window.location.href = "/forbidden";
+            const navigate = useNavigate();
+            navigate("/forbidden");
           }
         },
       ],
