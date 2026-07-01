@@ -32,14 +32,14 @@ type OIDCConfig struct {
 
 func (c *OIDCConfig) RegisterTo(router *gin.Engine) {
 	router.Use(c.Authorize)
-	GrantPublicAccess(LOGIN_PATH)
+	GrantPublicAccess(ResourceFromPath("GET", LOGIN_PATH))
 	router.GET(LOGIN_PATH, c.Login)
-	GrantPublicAccess(CALLBACK_PATH)
+	GrantPublicAccess(ResourceFromPath("GET", CALLBACK_PATH))
 	router.GET(CALLBACK_PATH, c.Callback)
 }
 
 func (c *OIDCConfig) Authorize(ctx *gin.Context) {
-	if PublicResources.Contains(ctx.FullPath()) {
+	if PublicResources.Contains(resFromCtx(ctx)) {
 		ctx.Next()
 		return
 	}
@@ -60,10 +60,14 @@ func (c *OIDCConfig) Authorize(ctx *gin.Context) {
 	var user string
 	err = parsed.Get("email", &user)
 	if err != nil {
-		ctx.AbortWithStatus(http.StatusInternalServerError)
+		ctx.AbortWithStatus(http.StatusForbidden)
 		return
 	}
 	ctx.Set("user", user)
+	if !AllowAccess(ctx, user) {
+		ctx.AbortWithStatus(http.StatusForbidden)
+		return
+	}
 	ctx.Next()
 }
 

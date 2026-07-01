@@ -9,6 +9,7 @@ import (
 
 func CreateDefaultRouter() *gin.Engine {
 	router := gin.Default()
+	router.Use(CORSMiddleware())
 	if viper.GetString("env") != "local" {
 		auth := CreateDefaultAuthConfig()
 		auth.RegisterTo(router)
