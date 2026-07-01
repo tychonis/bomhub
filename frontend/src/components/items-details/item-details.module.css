@@ -1,0 +1,61 @@
+.empty {
+  padding: 1rem;
+  width: 60%;
+  font-style: italic;
+  color: #888;
+}
+
+.panel {
+  padding: 1rem;
+  width: 30%;
+  overflow: scroll;
+}
+
+.panel table {
+  width: 100%;
+  font-size: 1rem;
+  border-collapse: collapse;
+}
+
+.panel td {
+  vertical-align: center;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.key {
+  width: 20%;
+  font-weight: 700;
+}
+
+.value {
+  font-family: "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
+}
+
+.title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.jump-button {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  margin-top: 0.25rem;
+}
+
+.cell {
+  padding-top: 0.25rem;
+}
+
+.item-attrs {
+  width: 70%;
+  margin: 1rem;
+}
+
+.panel-content {
+  display: flex;
+  align-items: flex-start;
+}

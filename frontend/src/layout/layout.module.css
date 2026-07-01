@@ -7,7 +7,6 @@
 
 .simple-outlet-container {
   display: flex;
-  margin-left: 1rem;
-  width: calc(100vw - 10rem);
+  width: 100vw;
   justify-content: center;
 }

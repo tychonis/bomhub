@@ -6,6 +6,7 @@ import { API_ROOT } from "api/constants";
 import { TreeIndex } from "components/tree-index/tree-index";
 import { MeshView } from "components/mesh-viewer/meshview";
 import { useParams } from "react-router-dom";
+import { ItemDetails } from "components/items-details/item-details";
 
 interface BpcDocument {
   root: string; // root node ID
@@ -65,6 +66,11 @@ export const MeshPage = () => {
         nodes={bom.nodes}
         selectedDigest={selectedDigest}
         setSelectedDigest={setSelectedDigest}
+      />
+      <ItemDetails
+        node={bom.nodes[selectedDigest]}
+        item={bom.items[bom.nodes[selectedDigest].item]}
+        reuseCount={1}
       />
     </div>
   );

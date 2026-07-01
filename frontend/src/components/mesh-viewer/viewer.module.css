@@ -1,7 +1,8 @@
 .viewer-container {
   position: relative;
   width: 100%;
-  height: 85vh;
+  /* 4rem for header + 2.5rem for padding */
+  height: calc(100vh - 6.5rem);
   border: 1px solid #ddd;
   border-radius: 0.75rem;
   overflow: hidden;
@@ -17,8 +18,8 @@
 
 .viewer-reset {
   position: absolute;
-  right: 1rem;
-  bottom: 1rem;
+  right: 2rem;
+  bottom: 2rem;
 
   width: 3rem;
   height: 3rem;
