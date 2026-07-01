@@ -13,6 +13,7 @@ const routes: RouteObject[] = [
   },
   { path: "/tree/:id/:digest", element: <TreePage /> },
   { path: "/mesh/:id/:digest", element: <MeshPage /> },
+  { path: "/forbidden", element: <div>403 Forbidden</div> },
 
   { path: "/__dev/playground", element: <Playground /> },
 ];

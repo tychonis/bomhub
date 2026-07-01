@@ -19,6 +19,9 @@ if (USE_MOCK) {
             const current = encodeURIComponent(window.location.href);
             window.location.href = `${API_ROOT}/login?redirect=${current}`;
           }
+          if (response.status === 403) {
+            window.location.href = "/forbidden";
+          }
         },
       ],
     },
