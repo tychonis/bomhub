@@ -9,12 +9,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/spf13/viper"
 
-	"github.com/tychonis/cyanotype/core/parser/hcl"
 	"github.com/tychonis/cyanotype/model"
 
 	"github.com/tychonis/bomhub/internal/db"
+	"github.com/tychonis/bomhub/internal/setup"
 )
 
 type Server struct {
@@ -82,11 +81,7 @@ func (s *Server) SaveDefinition(ctx *gin.Context) {
 
 func (s *Server) GetCatalog(ctx *gin.Context) {
 	tag := ctx.Param("id")
-	core := hcl.NewCoreFromAPI(
-		viper.GetString("cyanotype.core"),
-		viper.GetString("cyanotype.token"),
-		tag,
-	)
+	core := setup.CreateDefaultCyanotype(tag)
 	content, err := core.ExportCatalog()
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
@@ -98,11 +93,7 @@ func (s *Server) GetCatalog(ctx *gin.Context) {
 func (s *Server) GetBOMTree(ctx *gin.Context) {
 	tag := ctx.Param("id")
 	digest := ctx.Param("digest")
-	core := hcl.NewCoreFromAPI(
-		viper.GetString("cyanotype.core"),
-		viper.GetString("cyanotype.token"),
-		tag,
-	)
+	core := setup.CreateDefaultCyanotype(tag)
 	root, err := core.Catalog.Get(digest)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusNotFound)
