@@ -28,6 +28,16 @@ type OIDCConfig struct {
 	PublicKeyURL string
 	PublicKeySet *jwk.Cache
 	Audience     string
+
+	// DEBUG / temporary deployment only.
+	//
+	// Set to false when serving over plain HTTP (e.g. direct IP access while
+	// waiting for HTTPS/domain setup). Browsers reject Secure cookies over HTTP,
+	// so authentication will not work otherwise.
+	//
+	// WARNING: Never disable this in production. Cookies without the Secure flag
+	// can be transmitted over unencrypted HTTP and are vulnerable to interception.
+	Secure bool
 }
 
 func (c *OIDCConfig) RegisterTo(router *gin.Engine) {
@@ -79,14 +89,13 @@ func (c *OIDCConfig) Login(ctx *gin.Context) {
 		Value:    state,
 		Path:     "/",
 		HttpOnly: true,
-		Secure:   true,
+		Secure:   c.Secure,
 	})
 	http.SetCookie(ctx.Writer, &http.Cookie{
 		Name:     "after_login",
 		Value:    afterLogin,
 		Path:     CALLBACK_PATH,
 		HttpOnly: true,
-		Secure:   true,
 	})
 
 	target := c.OAuthConfig.AuthCodeURL(state)
@@ -103,7 +112,7 @@ func (c *OIDCConfig) Callback(ctx *gin.Context) {
 	afterLogin, _ := ctx.Cookie("after_login")
 	token, err := c.OAuthConfig.Exchange(ctx, ctx.Query("code"))
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, nil)
+		ctx.JSON(http.StatusInternalServerError, nil)
 		return
 	}
 	http.SetCookie(ctx.Writer, &http.Cookie{
@@ -111,7 +120,7 @@ func (c *OIDCConfig) Callback(ctx *gin.Context) {
 		Value:    token.Extra("id_token").(string),
 		Path:     "/",
 		HttpOnly: true,
-		Secure:   true,
+		Secure:   c.Secure,
 	})
 	// Remove redirect cookie
 	http.SetCookie(ctx.Writer, &http.Cookie{
@@ -121,7 +130,6 @@ func (c *OIDCConfig) Callback(ctx *gin.Context) {
 		MaxAge:   -1,
 		Expires:  time.Unix(0, 0),
 		HttpOnly: true,
-		Secure:   true,
 	})
 	ctx.Redirect(http.StatusFound, afterLogin)
 }

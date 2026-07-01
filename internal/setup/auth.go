@@ -38,5 +38,7 @@ func CreateDefaultAuthConfig() *auth.OIDCConfig {
 		PublicKeyURL: publicKeys,
 		PublicKeySet: cache,
 		Audience:     viper.GetString("oidc.client_id"),
+		// DEBUG: allow insecure cookies for direct IP access
+		Secure: viper.GetString("env") != "ip",
 	}
 }
