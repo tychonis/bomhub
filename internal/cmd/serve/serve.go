@@ -82,7 +82,11 @@ func (s *Server) SaveDefinition(ctx *gin.Context) {
 
 func (s *Server) GetCatalog(ctx *gin.Context) {
 	tag := ctx.Param("id")
-	core := hcl.NewCoreFromAPI(viper.GetString("cyanotype.core"), tag)
+	core := hcl.NewCoreFromAPI(
+		viper.GetString("cyanotype.core"),
+		viper.GetString("cyanotype.token"),
+		tag,
+	)
 	content, err := core.ExportCatalog()
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
@@ -94,7 +98,11 @@ func (s *Server) GetCatalog(ctx *gin.Context) {
 func (s *Server) GetBOMTree(ctx *gin.Context) {
 	tag := ctx.Param("id")
 	digest := ctx.Param("digest")
-	core := hcl.NewCoreFromAPI(viper.GetString("cyanotype.core"), tag)
+	core := hcl.NewCoreFromAPI(
+		viper.GetString("cyanotype.core"),
+		viper.GetString("cyanotype.token"),
+		tag,
+	)
 	root, err := core.Catalog.Get(digest)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusNotFound)

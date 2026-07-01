@@ -135,7 +135,11 @@ type Mesh struct {
 func (s *Server) GetToRenderMeshes(ctx *gin.Context) {
 	tag := ctx.Param("id")
 	digest := ctx.Param("digest")
-	core := hcl.NewCoreFromAPI(viper.GetString("cyanotype.core"), tag)
+	core := hcl.NewCoreFromAPI(
+		viper.GetString("cyanotype.core"),
+		viper.GetString("cyanotype.token"),
+		tag,
+	)
 	core.Ranker = &ranker.TypeRanker{PreferedType: process.DRAWING}
 	root, err := core.Catalog.Get(digest)
 	if err != nil {

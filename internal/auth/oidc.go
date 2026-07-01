@@ -49,6 +49,11 @@ func (c *OIDCConfig) RegisterTo(router *gin.Engine) {
 }
 
 func (c *OIDCConfig) Authorize(ctx *gin.Context) {
+	if AllowM2MAccess(ctx) {
+		ctx.Next()
+		return
+	}
+
 	if PublicResources.Contains(resFromCtx(ctx)) {
 		ctx.Next()
 		return
@@ -74,7 +79,7 @@ func (c *OIDCConfig) Authorize(ctx *gin.Context) {
 		return
 	}
 	ctx.Set("user", user)
-	if !AllowAccess(ctx, user) {
+	if !AllowUserAccess(ctx, user) {
 		ctx.AbortWithStatus(http.StatusForbidden)
 		return
 	}

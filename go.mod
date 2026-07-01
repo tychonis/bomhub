@@ -12,7 +12,7 @@ require (
 	github.com/lestrrat-go/jwx/v3 v3.1.1
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
-	github.com/tychonis/cyanotype v0.0.0-20260624091438-350f3465f49f
+	github.com/tychonis/cyanotype v0.0.0-20260701054414-04ae40cc60b2
 	golang.org/x/oauth2 v0.36.0
 )
 

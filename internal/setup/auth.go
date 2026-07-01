@@ -24,6 +24,9 @@ func CreateDefaultAuthConfig() *auth.OIDCConfig {
 		jwk.WithMaxInterval(20*time.Minute),
 	)
 
+	// TODO: use a more secure way for M2M access.
+	auth.M2MToken = viper.GetString("oidc.m2m_token")
+
 	return &auth.OIDCConfig{
 		OAuthConfig: &oauth2.Config{
 			ClientID:     viper.GetString("oidc.client_id"),
