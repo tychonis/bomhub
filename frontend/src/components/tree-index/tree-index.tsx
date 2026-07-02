@@ -166,14 +166,10 @@ export function TreeIndex(props) {
               toggle(digest);
             }}
           >
-            {isExpanded ? (
-              <DownOutlined style={{ fontSize: 12 }} />
-            ) : (
-              <RightOutlined style={{ fontSize: 12 }} />
-            )}
+            {isExpanded ? <DownOutlined /> : <RightOutlined />}
           </button>
         ) : (
-          <span style={{ width: 16 }} />
+          <span className={styles["notoggle"]} />
         )}
 
         {/* part label */}

@@ -27,6 +27,14 @@
   color: #666;
 }
 
+.toggle :global(.anticon) {
+  font-size: 0.75rem;
+}
+
+.notoggle {
+  width: 1rem;
+}
+
 .part-label {
   flex-shrink: 1;
   overflow: hidden;
