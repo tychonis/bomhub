@@ -23,7 +23,7 @@
 
 .toggle {
   all: unset;
-  margin-right: 4px;
+  margin-right: 0.25rem;
   color: #666;
 }
 
@@ -48,11 +48,11 @@
 }
 
 .reuse-badge {
-  margin-left: 4px;
-  font-size: 10px;
+  margin-left: 0.25rem;
+  font-size: 0.6rem;
   line-height: 1;
   color: #b7791f;
   background-color: #fefcbf;
-  border-radius: 4px;
-  padding: 0 4px;
+  border-radius: 0.25rem;
+  padding: 0 0.25rem;
 }
