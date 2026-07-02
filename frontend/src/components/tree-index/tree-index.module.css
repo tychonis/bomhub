@@ -17,7 +17,8 @@
   font-weight: 800;
 }
 
-.row:hover:not(.selected) {
+.row:hover:not(.selected),
+.row.meshhover:not(.selected) {
   background-color: #f9f9f9;
 }
 

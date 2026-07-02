@@ -36,6 +36,7 @@ export function MeshView(props: {
   nodes: any;
   selectedDigest: string;
   setSelectedDigest: React.Dispatch<React.SetStateAction<string>>;
+  setHovered: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const { id } = useParams<{ id: string }>();
 
@@ -79,7 +80,8 @@ export function MeshView(props: {
 
     const hoverControl = MESH.createHoverController(
       mesh,
-      props.setSelectedDigest
+      props.setSelectedDigest,
+      props.setHovered
     );
 
     hoverControl.attach();

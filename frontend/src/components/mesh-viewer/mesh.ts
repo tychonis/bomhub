@@ -247,10 +247,6 @@ export const dispose = (m: Mesh) => {
   m.dispose();
 };
 
-export type InteractionState = {
-  hovered: THREE.Mesh | null;
-};
-
 export type HoverController = {
   attach: () => void;
   detach: () => void;
@@ -258,7 +254,8 @@ export type HoverController = {
 
 export const createHoverController = (
   mesh: Mesh,
-  setSelectedID: React.Dispatch<React.SetStateAction<string>>
+  setSelectedID: React.Dispatch<React.SetStateAction<string>>,
+  setHovered: React.Dispatch<React.SetStateAction<string>>
 ): HoverController => {
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
@@ -271,9 +268,16 @@ export const createHoverController = (
   const updateHover = (nextHovered: THREE.Mesh | null) => {
     if (hovered === nextHovered) return;
 
-    if (hovered) setHighlight(hovered, false);
+    if (hovered) {
+      setHighlight(hovered, false);
+      setHovered("");
+    }
     hovered = nextHovered;
-    if (hovered) setHighlight(hovered, true);
+    if (hovered) {
+      setHighlight(hovered, true);
+      const hoveredID = findObjectId(hovered);
+      if (hoveredID) setHovered(hoveredID);
+    }
   };
 
   const pointerEventObject = (event: PointerEvent): THREE.Mesh | null => {

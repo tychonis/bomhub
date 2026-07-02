@@ -35,6 +35,7 @@ export const MeshPage = () => {
   const { id, digest } = useParams<{ id: string; digest: string }>();
 
   const [selectedDigest, setSelectedDigest] = useState<string | null>(null);
+  const [current, setCurrent] = useState<string>("");
   const [bom, setBom] = useState<BpcDocument | null>(null);
 
   useEffect(() => {
@@ -61,11 +62,14 @@ export const MeshPage = () => {
         reuseIndex={bom.usage}
         selectedDigest={selectedDigest}
         onSelect={setSelectedDigest}
+        current={current}
+        setCurrent={setCurrent}
       />
       <MeshView
         nodes={bom.nodes}
         selectedDigest={selectedDigest}
         setSelectedDigest={setSelectedDigest}
+        setHovered={setCurrent}
       />
       <ItemDetails
         node={bom.nodes[selectedDigest]}

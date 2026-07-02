@@ -70,14 +70,14 @@ export function TreeIndex(props) {
     reuseIndex,
     selectedDigest,
     onSelect,
+    current,
+    setCurrent,
     rowHeight = 28,
   } = props;
 
   const [expanded, setExpanded] = useState<Set<string>>(
     () => new Set([rootDigest])
   );
-
-  const [current, setCurrent] = useState<string>("");
 
   const toggle = useCallback((id: string) => {
     setExpanded((prev) => {
@@ -138,6 +138,7 @@ export function TreeIndex(props) {
       styles.row,
       selectedDigest === digest ? styles["selected"] : "",
       reusedRowSet.has(digest) ? styles["reused"] : "",
+      current === digest ? styles["meshhover"] : "",
     ]
       .filter(Boolean)
       .join(" ");
