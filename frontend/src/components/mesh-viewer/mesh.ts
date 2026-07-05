@@ -137,6 +137,8 @@ export const createDefaultMesh = (mount: HTMLElement): Mesh => {
   setLighting(scene);
 
   const loader = new GLTFLoader();
+  loader.setWithCredentials(true);
+
   const dracoLoader = new DRACOLoader();
   dracoLoader.setDecoderPath(DRACO_DECODER_PATH);
   loader.setDRACOLoader(dracoLoader);
