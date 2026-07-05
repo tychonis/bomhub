@@ -126,7 +126,6 @@ type Mesh struct {
 	Item      string            `json:"item"`
 	Name      string            `json:"name"`
 	ItemName  string            `json:"item_name"`
-	Path      string            `json:"path"`
 	Rotation  *model.Quaternion `json:"rotation,omitempty"`
 	Placement *model.Vec3       `json:"placement,omitempty"`
 }
@@ -151,13 +150,13 @@ func (s *Server) GetToRenderMeshes(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
+	// If the parent node has no children, return a single mesh representing the parent item.
 	if len(parentNode.Children) <= 0 {
 		ret := []*Mesh{
 			{
 				Item:      parent.Digest,
-				Name:      "root",
+				Name:      "leaf",
 				ItemName:  parent.Content.Name,
-				Path:      "/dev/" + tag + "/" + parent.Content.Name + ".glb",
 				Rotation:  nil,
 				Placement: nil,
 			},
@@ -194,7 +193,6 @@ func (s *Server) GetToRenderMeshes(ctx *gin.Context) {
 		mesh.Item = child.Item.Digest
 		mesh.Name = child.Name
 		mesh.ItemName = child.Item.Content.Name
-		mesh.Path = "/dev/" + tag + "/" + child.Item.Content.Name + ".glb"
 		ret = append(ret, mesh)
 	}
 	ctx.JSON(http.StatusOK, ret)

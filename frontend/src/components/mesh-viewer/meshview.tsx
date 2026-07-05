@@ -24,13 +24,16 @@ async function getModels(id: string, digest: string): Promise<MESH.ModelDef[]> {
     ret.push({
       name: def.name,
       item: def.item,
-      path: def.path,
       rotation: new THREE.Quaternion().fromArray(def.rotation),
       shift: new THREE.Vector3().fromArray(def.placement),
     });
   }
   return ret;
 }
+
+const getItemPath = (item) => {
+  return `${API_ROOT}/object/${item}.glb`;
+};
 
 export function MeshView(props: {
   nodes: any;
@@ -70,8 +73,9 @@ export function MeshView(props: {
         console.log(`Loading ${models.length} models for digest ${node.item}`);
         for (const m of models) {
           const nodeID = findNode(node, m.name);
-          console.log(`Loading model at node ${nodeID}: ${m.path}`);
-          MESH.loadModel(mesh, nodeID, m.path, m.rotation, m.shift);
+          const path = getItemPath(m.item);
+          console.log(`Loading model at node ${nodeID}: ${path}`);
+          MESH.loadModel(mesh, nodeID, path, m.rotation, m.shift);
         }
       })
       .catch((error) => {
