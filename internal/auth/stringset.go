@@ -1,3 +1,7 @@
+// https://github.com/deckarep/golang-set/issues/172
+// TODO: consider replacing this if golang-set decides to keep its scope to minimalistic set operations.
+//
+// For now, we only need a simple string set implementation.
 package auth
 
 type StringSet struct {
