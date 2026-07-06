@@ -4,7 +4,6 @@ go 1.25.0
 
 require (
 	github.com/coreos/go-oidc/v3 v3.19.0
-	github.com/deckarep/golang-set/v2 v2.9.0
 	github.com/gin-gonic/gin v1.12.0
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.10.0
@@ -66,7 +65,6 @@ require (
 	github.com/ugorji/go/codec v1.3.1 // indirect
 	github.com/valyala/fastjson v1.6.10 // indirect
 	github.com/zclconf/go-cty v1.18.1 // indirect
-	go.mongodb.org/mongo-driver v1.17.4 // indirect
 	go.mongodb.org/mongo-driver/v2 v2.7.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/arch v0.28.0 // indirect

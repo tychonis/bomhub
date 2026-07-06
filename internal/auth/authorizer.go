@@ -3,7 +3,6 @@ package auth
 import (
 	"strings"
 
-	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,8 +11,8 @@ import (
 // TODO: Use a more secure method for M2M authentication, such as OAuth2 client credentials flow.
 var M2MToken string
 
-var PublicResources = mapset.NewSet[string]()
-var MemberResources = mapset.NewSet[string]()
+var PublicResources = NewStringSet()
+var MemberResources = NewStringSet()
 
 func GrantPublicAccess(res string) {
 	PublicResources.Add(res)
