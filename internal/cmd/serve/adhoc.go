@@ -133,9 +133,10 @@ type Mesh struct {
 func (s *Server) GetToRenderMeshes(ctx *gin.Context) {
 	tag := ctx.Param("id")
 	digest := ctx.Param("digest")
-	core := setup.CreateDefaultCyanotype(tag)
-	core.Ranker = &ranker.TypeRanker{PreferedType: process.DRAWING}
-	root, err := core.Catalog.Get(digest)
+	catalog := setup.CreateDefaultCatalog(tag)
+	instantiator := setup.CreateDefaultInstantiator()
+	instantiator.Ranker = &ranker.TypeRanker{PreferedType: process.DRAWING}
+	root, err := catalog.Get(digest)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusNotFound)
 		return
@@ -145,7 +146,7 @@ func (s *Server) GetToRenderMeshes(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusNotFound)
 		return
 	}
-	parentNode, err := core.BuildTree("tmp", parent)
+	parentNode, err := instantiator.InstantiateTree(catalog, "tmp", parent)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return

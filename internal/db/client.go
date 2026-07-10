@@ -57,9 +57,9 @@ func (c *Client) SaveDefinition(ctx context.Context, digest []byte, content any)
 	}
 
 	const q = `
-INSERT INTO object (object_digest, content)
+INSERT INTO definition (symbol_digest, content)
 VALUES ($1, $2::jsonb)
-ON CONFLICT (object_digest)
+ON CONFLICT (symbol_digest)
 DO UPDATE SET
   content = EXCLUDED.content,
   updated_at = now()
@@ -77,7 +77,49 @@ RETURNING content;
 }
 
 func (c *Client) GetDefinition(ctx context.Context, digest []byte) (json.RawMessage, error) {
-	const q = `SELECT content FROM object WHERE object_digest = $1;`
+	const q = `SELECT content FROM definition WHERE symbol_digest = $1;`
+	var raw json.RawMessage
+	err := c.pool.QueryRow(ctx, q, digest).Scan(&raw)
+	return raw, err
+}
+
+func (c *Client) SaveMetadata(ctx context.Context, digest []byte, content any) (json.RawMessage, error) {
+	body, err := json.Marshal(content)
+	if err != nil {
+		return nil, err
+	}
+
+	const q = `
+INSERT INTO metadata (definition_id, content)
+SELECT d.definition_id, val.content
+FROM (VALUES ($1::bytea, $2::jsonb)) AS val(digest, content)
+	LEFT JOIN definition d
+    ON val.digest = d.symbol_digest
+ON CONFLICT (definition_id)
+DO UPDATE SET
+  content = EXCLUDED.content,
+  updated_at = now()
+RETURNING content;
+`
+
+	var ret json.RawMessage
+	err = c.pool.QueryRow(ctx, q, digest, body).
+		Scan(&ret)
+	if err != nil {
+		return nil, err
+	}
+
+	return ret, nil
+}
+
+func (c *Client) GetMetadata(ctx context.Context, digest []byte) (json.RawMessage, error) {
+	const q = `
+SELECT m.content
+FROM metadata m
+  LEFT JOIN definition d
+    ON m.definition_id = d.definition_id
+WHERE d.symbol_digest = $1;
+`
 	var raw json.RawMessage
 	err := c.pool.QueryRow(ctx, q, digest).Scan(&raw)
 	return raw, err

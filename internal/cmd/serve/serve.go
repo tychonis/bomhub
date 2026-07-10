@@ -79,10 +79,44 @@ func (s *Server) SaveDefinition(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 }
 
+func (s *Server) GetMetadata(ctx *gin.Context) {
+	digest, err := hex.DecodeString(ctx.Param("digest"))
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	obj, err := s.DB.GetMetadata(ctx, digest)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+	ctx.Data(http.StatusOK, "application/json; charset=utf-8", obj)
+}
+
+func (s *Server) SaveMetadata(ctx *gin.Context) {
+	digest, err := hex.DecodeString(ctx.Param("digest"))
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	defer ctx.Request.Body.Close()
+	data, err := io.ReadAll(ctx.Request.Body)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	_, err = s.DB.SaveMetadata(ctx, digest, json.RawMessage(data))
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	ctx.Status(http.StatusAccepted)
+}
+
 func (s *Server) GetCatalog(ctx *gin.Context) {
 	tag := ctx.Param("id")
-	core := setup.CreateDefaultCyanotype(tag)
-	content, err := core.ExportCatalog()
+	catalog := setup.CreateDefaultCatalog(tag)
+	content, err := catalog.Export()
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
@@ -93,8 +127,8 @@ func (s *Server) GetCatalog(ctx *gin.Context) {
 func (s *Server) GetBOMTree(ctx *gin.Context) {
 	tag := ctx.Param("id")
 	digest := ctx.Param("digest")
-	core := setup.CreateDefaultCyanotype(tag)
-	root, err := core.Catalog.Get(digest)
+	catalog := setup.CreateDefaultCatalog(tag)
+	root, err := catalog.Get(digest)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusNotFound)
 		return
@@ -104,7 +138,8 @@ func (s *Server) GetBOMTree(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusNotFound)
 		return
 	}
-	rootNode, err := core.BuildTree("root", rootItem)
+	instantiator := setup.CreateDefaultInstantiator()
+	rootNode, err := instantiator.InstantiateTree(catalog, "root", rootItem)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
 		return
