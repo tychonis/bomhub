@@ -1,6 +1,8 @@
 package serve
 
 import (
+	"log/slog"
+
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
 
@@ -21,7 +23,11 @@ func run(cmd *cobra.Command, args []string) {
 	dbpool := setup.CreateDefaultDBPool()
 	dbc := db.NewClient(dbpool)
 
-	server := serve.Server{DB: dbc}
+	server, err := serve.NewServer(dbc, 256)
+	if err != nil {
+		slog.Error("failed to create server", "err", err)
+		return
+	}
 
 	router := setup.CreateDefaultRouter()
 	router.Use(func(ctx *gin.Context) {

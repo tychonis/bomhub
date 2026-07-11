@@ -3,21 +3,50 @@ package serve
 import (
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	lru "github.com/hashicorp/golang-lru/v2"
+	"golang.org/x/sync/singleflight"
 
+	"github.com/tychonis/cyanotype/core/catalog"
 	"github.com/tychonis/cyanotype/model"
 
 	"github.com/tychonis/bomhub/internal/db"
 	"github.com/tychonis/bomhub/internal/setup"
 )
 
+type BOMTreeCacheKey struct {
+	Tag      string
+	Revision model.RevisionID
+	Digest   model.Digest
+}
+
+func (k BOMTreeCacheKey) String() string {
+	return fmt.Sprintf("%s-%s-%s", k.Tag, k.Revision, k.Digest)
+}
+
 type Server struct {
 	DB *db.Client
+
+	bomTreeCache *lru.Cache[BOMTreeCacheKey, []byte]
+	bomTreeGroup singleflight.Group
+}
+
+func NewServer(db *db.Client, bomTreeCacheSize int) (*Server, error) {
+	cache, err := lru.New[BOMTreeCacheKey, []byte](bomTreeCacheSize)
+	if err != nil {
+		return nil, err
+	}
+	return &Server{
+		DB:           db,
+		bomTreeCache: cache,
+		bomTreeGroup: singleflight.Group{},
+	}, nil
 }
 
 func (s *Server) GetBOMs(ctx *gin.Context) {
@@ -124,30 +153,64 @@ func (s *Server) GetCatalog(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, json.RawMessage(content))
 }
 
-func (s *Server) GetBOMTree(ctx *gin.Context) {
-	tag := ctx.Param("id")
-	digest := ctx.Param("digest")
-	catalog := setup.CreateDefaultCatalog(tag)
+func (s *Server) getBOMTree(catalog *catalog.Catalog, digest model.Digest) ([]byte, error) {
 	root, err := catalog.Get(digest)
 	if err != nil {
-		ctx.AbortWithStatus(http.StatusNotFound)
-		return
+		return nil, err
 	}
 	rootItem, ok := root.(*model.Item)
 	if !ok {
-		ctx.AbortWithStatus(http.StatusNotFound)
-		return
+		return nil, fmt.Errorf("item not found")
 	}
 	instantiator := setup.CreateDefaultInstantiator()
 	rootNode, err := instantiator.InstantiateTree(catalog, "root", rootItem)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
-		return
+		return nil, err
 	}
-	content, err := rootNode.Export()
+	return rootNode.Export()
+}
+
+func (s *Server) GetBOMTree(ctx *gin.Context) {
+	tag := ctx.Param("id")
+	digest := ctx.Param("digest")
+	catalog := setup.CreateDefaultCatalog(tag)
+	latestRevision, err := catalog.GetLatestRevision()
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
+		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
-	ctx.JSON(http.StatusOK, json.RawMessage(content))
+	key := BOMTreeCacheKey{
+		Tag:      tag,
+		Digest:   digest,
+		Revision: latestRevision.Digest,
+	}
+
+	content, ok := s.bomTreeCache.Get(key)
+	if ok {
+		ctx.JSON(http.StatusOK, json.RawMessage(content))
+		return
+	}
+
+	value, err, _ := s.bomTreeGroup.Do(key.String(), func() (interface{}, error) {
+		if content, ok := s.bomTreeCache.Get(key); ok {
+			return content, nil
+		}
+		content, err = s.getBOMTree(catalog, model.Digest(digest))
+		if err != nil {
+			return nil, err
+		}
+		s.bomTreeCache.Add(key, content)
+		return content, nil
+	})
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	contentBytes, ok := value.([]byte)
+	if !ok {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	ctx.JSON(http.StatusOK, json.RawMessage(contentBytes))
+	return
 }

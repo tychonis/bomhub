@@ -6,6 +6,7 @@ require (
 	github.com/coreos/go-oidc/v3 v3.19.0
 	github.com/gin-gonic/gin v1.12.0
 	github.com/google/uuid v1.6.0
+	github.com/hashicorp/golang-lru/v2 v2.0.7
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/lestrrat-go/httprc/v3 v3.0.6
 	github.com/lestrrat-go/jwx/v3 v3.1.1
@@ -13,6 +14,7 @@ require (
 	github.com/spf13/viper v1.21.0
 	github.com/tychonis/cyanotype v0.0.0-20260711044007-a45c01f97a6f
 	golang.org/x/oauth2 v0.36.0
+	golang.org/x/sync v0.22.0
 )
 
 replace github.com/tychonis/cyanotype => ../cyanotype
@@ -65,7 +67,6 @@ require (
 	golang.org/x/arch v0.28.0 // indirect
 	golang.org/x/crypto v0.54.0 // indirect
 	golang.org/x/net v0.57.0 // indirect
-	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/text v0.40.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
