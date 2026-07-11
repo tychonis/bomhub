@@ -15,6 +15,13 @@ import (
 	"github.com/tychonis/cyanotype/model"
 )
 
+func getItemName(item *model.Item) string {
+	if item == nil || item.Content == nil {
+		return ""
+	}
+	return item.Content.Name
+}
+
 func (s *Server) GetIndex(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
@@ -81,7 +88,7 @@ func (s *Server) GetRoots(ctx *gin.Context) {
 		json.Unmarshal(def, &item)
 		r := rootResp{
 			Digest: digest,
-			Name:   item.Content.Name,
+			Name:   getItemName(&item),
 		}
 		resp.Roots = append(resp.Roots, &r)
 	}
@@ -157,7 +164,7 @@ func (s *Server) GetToRenderMeshes(ctx *gin.Context) {
 			{
 				Item:      parent.Digest,
 				Name:      "leaf",
-				ItemName:  parent.Content.Name,
+				ItemName:  getItemName(parent),
 				Rotation:  nil,
 				Placement: nil,
 			},
@@ -193,7 +200,7 @@ func (s *Server) GetToRenderMeshes(ctx *gin.Context) {
 		}
 		mesh.Item = child.Item.Digest
 		mesh.Name = child.Name
-		mesh.ItemName = child.Item.Content.Name
+		mesh.ItemName = getItemName(child.Item)
 		ret = append(ret, mesh)
 	}
 	ctx.JSON(http.StatusOK, ret)

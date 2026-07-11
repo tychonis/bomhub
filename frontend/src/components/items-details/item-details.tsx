@@ -57,7 +57,7 @@ export function ItemDetails({ node, item, reuseCount }) {
 
     setAttrs(GenerateAttrList(node, item).concat(extra));
 
-    GetItemDetails(item.id).then((result) => {
+    GetItemDetails(node.item).then((result) => {
       const finalExtra = extra.concat([
         ["Details:", <>{result["image"]}</>], // replace with actual content
       ]);

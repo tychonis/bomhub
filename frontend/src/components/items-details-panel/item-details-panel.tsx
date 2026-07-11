@@ -62,7 +62,7 @@ export function ItemDetailsPanel({ node, item, reuseCount }) {
     setImage(DEFAULT_IMAGE);
     setAttrs(GenerateAttrList(node, item).concat(extra));
 
-    GetItemDetails(item.id).then((result) => {
+    GetItemDetails(node.item).then((result) => {
       const finalExtra = extra.concat([
         ["Details:", <>{result["image"]}</>], // replace with actual content
       ]);
