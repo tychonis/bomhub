@@ -1,12 +1,14 @@
 package serve
 
 import (
+	"context"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log/slog"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -21,31 +23,42 @@ import (
 )
 
 type BOMTreeCacheKey struct {
-	Tag      string
 	Revision model.RevisionID
-	Digest   model.Digest
+	Root     model.Digest
 }
 
 func (k BOMTreeCacheKey) String() string {
-	return fmt.Sprintf("%s-%s-%s", k.Tag, k.Revision, k.Digest)
+	return fmt.Sprintf("%s-%s", k.Revision, k.Root)
 }
+
+type CatalogCacheKey model.RevisionID
 
 type Server struct {
 	DB *db.Client
 
 	bomTreeCache *lru.Cache[BOMTreeCacheKey, []byte]
 	bomTreeGroup singleflight.Group
+	catalogCache *lru.Cache[CatalogCacheKey, *catalog.Catalog]
+	catalogGroup singleflight.Group
 }
 
+const CatalogCacheSize = 8
+
 func NewServer(db *db.Client, bomTreeCacheSize int) (*Server, error) {
-	cache, err := lru.New[BOMTreeCacheKey, []byte](bomTreeCacheSize)
+	bomTreeCache, err := lru.New[BOMTreeCacheKey, []byte](bomTreeCacheSize)
+	if err != nil {
+		return nil, err
+	}
+	catalogCache, err := lru.New[CatalogCacheKey, *catalog.Catalog](CatalogCacheSize)
 	if err != nil {
 		return nil, err
 	}
 	return &Server{
 		DB:           db,
-		bomTreeCache: cache,
+		bomTreeCache: bomTreeCache,
 		bomTreeGroup: singleflight.Group{},
+		catalogCache: catalogCache,
+		catalogGroup: singleflight.Group{},
 	}, nil
 }
 
@@ -142,9 +155,50 @@ func (s *Server) SaveMetadata(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 }
 
+func (s *Server) getCatalogRevision(tag string, rev model.RevisionID) (*catalog.Catalog, error) {
+	key := CatalogCacheKey(rev)
+	if catalog, ok := s.catalogCache.Get(key); ok {
+		return catalog, nil
+	}
+	value, err, _ := s.catalogGroup.Do(rev, func() (interface{}, error) {
+		if catalog, ok := s.catalogCache.Get(key); ok {
+			return catalog, nil
+		}
+		catalog := setup.CreateDefaultCatalog(tag)
+		ordinaryRev, err := catalog.GetLatestRevision()
+		if err != nil {
+			return nil, err
+		}
+		// Use the actual revision of the catalog to cache.
+		s.catalogCache.Add(CatalogCacheKey(ordinaryRev.Digest), catalog)
+		return catalog, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	catalog, ok := value.(*catalog.Catalog)
+	if !ok {
+		return nil, fmt.Errorf("invalid catalog type")
+	}
+	return catalog, nil
+}
+
+func (s *Server) getCatalog(tag string) (*catalog.Catalog, error) {
+	head, err := s.GetCatalogHead(tag)
+	if err != nil {
+		// This is a hacky way to make sure we fetch new catalog.
+		head = model.RevisionID("invalid")
+	}
+	return s.getCatalogRevision(tag, head)
+}
+
 func (s *Server) GetCatalog(ctx *gin.Context) {
 	tag := ctx.Param("id")
-	catalog := setup.CreateDefaultCatalog(tag)
+	catalog, err := s.getCatalog(tag)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
 	content, err := catalog.Export()
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
@@ -173,16 +227,19 @@ func (s *Server) getBOMTree(catalog *catalog.Catalog, digest model.Digest) ([]by
 func (s *Server) GetBOMTree(ctx *gin.Context) {
 	tag := ctx.Param("id")
 	digest := ctx.Param("digest")
-	catalog := setup.CreateDefaultCatalog(tag)
+	catalog, err := s.getCatalog(tag)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
 	latestRevision, err := catalog.GetLatestRevision()
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 	key := BOMTreeCacheKey{
-		Tag:      tag,
-		Digest:   digest,
 		Revision: latestRevision.Digest,
+		Root:     digest,
 	}
 
 	content, ok := s.bomTreeCache.Get(key)
@@ -212,5 +269,24 @@ func (s *Server) GetBOMTree(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, json.RawMessage(contentBytes))
-	return
+}
+
+func (s *Server) GetCatalogHead(tag string) (model.RevisionID, error) {
+	id, err := strconv.ParseInt(tag, 10, 32)
+	if err != nil {
+		return "", err
+	}
+	summary, err := s.DB.GetWorkspaceSummary(context.TODO(), int(id))
+	if err != nil {
+		return "", err
+	}
+	type content struct {
+		LatestRevision model.RevisionID `json:"latest_revision"`
+	}
+	var c content
+	err = json.Unmarshal(summary, &c)
+	if err != nil {
+		return "", err
+	}
+	return c.LatestRevision, nil
 }

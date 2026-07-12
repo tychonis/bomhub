@@ -19,7 +19,7 @@ interface BpcDocument {
 async function getRawBPC(id: string, digest: string): Promise<BpcDocument> {
   const [tree, catalog] = await Promise.all([
     bomhub.get(`${API_ROOT}/tree/${id}/${digest}`).json(),
-    bomhub.get(`${API_ROOT}/catalog/${id}`).json(),
+    bomhub.get(`${API_ROOT}/workspace/${id}/catalog`).json(),
   ]);
 
   const doc: BpcDocument = {
