@@ -140,7 +140,11 @@ type Mesh struct {
 func (s *Server) GetToRenderMeshes(ctx *gin.Context) {
 	tag := ctx.Param("id")
 	digest := ctx.Param("digest")
-	catalog := setup.CreateDefaultCatalog(tag)
+	catalog, err := s.getCatalog(tag)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
 	instantiator := setup.CreateDefaultInstantiator()
 	instantiator.Ranker = &ranker.TypeRanker{PreferedType: process.DRAWING}
 	root, err := catalog.Get(digest)
