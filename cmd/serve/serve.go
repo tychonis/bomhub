@@ -53,15 +53,8 @@ func run(cmd *cobra.Command, args []string) {
 	auth.GrantMemberAccess(auth.ResourceFromPath("POST", "/metadata/:digest"))
 	auth.GrantMemberAccess(auth.ResourceFromPath("GET", "/metadata/:digest"))
 
-	router.POST("/bom_index/:id", server.SaveIndex)
-	router.GET("/bom_index/:id", server.GetIndex)
-	auth.GrantMemberAccess(auth.ResourceFromPath("POST", "/bom_index/:id"))
-	auth.GrantMemberAccess(auth.ResourceFromPath("GET", "/bom_index/:id"))
-
-	router.GET("/catalog/:id", server.GetCatalog)
 	router.GET("/tree/:id/:digest", server.GetBOMTree)
 	router.GET("/models/:id/:digest", server.GetToRenderMeshes)
-	auth.GrantMemberAccess(auth.ResourceFromPath("GET", "/workspace/:id/catalog"))
 	auth.GrantMemberAccess(auth.ResourceFromPath("GET", "/tree/:id/:digest"))
 	auth.GrantMemberAccess(auth.ResourceFromPath("GET", "/models/:id/:digest"))
 
