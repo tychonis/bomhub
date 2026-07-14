@@ -72,7 +72,7 @@ export function TreeIndex(props) {
     onSelect,
     current,
     setCurrent,
-    rowHeight = 28,
+    rowHeight = 24,
   } = props;
 
   const [expanded, setExpanded] = useState<Set<string>>(

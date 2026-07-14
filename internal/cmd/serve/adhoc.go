@@ -146,7 +146,7 @@ func (s *Server) GetToRenderMeshes(ctx *gin.Context) {
 		return
 	}
 	instantiator := setup.CreateDefaultInstantiator()
-	instantiator.Ranker = &ranker.TypeRanker{PreferedType: process.DRAWING}
+	instantiator.Ranker = ranker.NewCatalogTypeRanker(catalog, process.DRAWING)
 	root, err := catalog.Get(digest)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusNotFound)
