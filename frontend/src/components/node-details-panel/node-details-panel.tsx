@@ -26,6 +26,7 @@ function GenerateAttrList(node) {
   const rows: [string, React.ReactNode][] = [
     ["Item ID:", node.item],
     ["Node ID:", node.id],
+    ["Process ID:", node.process],
   ];
 
   if (node.qty !== undefined) {
@@ -40,18 +41,32 @@ function GenerateAttrList(node) {
 }
 
 export function NodeDetails({ node }) {
+  const [title, setTitle] = useState<string>(node.item);
   const [attrs, setAttrs] = useState<[string, React.ReactNode][]>([]);
 
   useEffect(() => {
     const extra: [string, React.ReactNode][] = [];
-
     setAttrs(GenerateAttrList(node).concat(extra));
 
-    GetSymbolDetails(node.item).then((result) => {
-      const finalExtra = extra.concat([
-        ["Details:", <>{result["image"]}</>], // replace with actual content
-      ]);
-      setAttrs(GenerateAttrList(node).concat(finalExtra));
+    const symbols = [
+      ["Item", node.item],
+      ["Process", node.process],
+      ["Coitem", node.coitem],
+      ["Coprocess", node.coprocess],
+    ] as const;
+
+    Promise.all(
+      symbols.map(async ([label, id]) => ({
+        label,
+        result: id ? await GetSymbolDetails(id) : undefined,
+      }))
+    ).then((results) => {
+      console.log("results", results);
+      results.map(({ label, result }) => {
+        if (label == "Item" && result?.content?.details?.label) {
+          setTitle(result.content.details.label);
+        }
+      });
     });
   }, [node]);
 
@@ -63,7 +78,7 @@ export function NodeDetails({ node }) {
 
   return (
     <div className={styles["panel"]}>
-      <h2 className={styles["title"]}>{node.item}</h2>
+      <h2 className={styles["title"]}>{title}</h2>
       <div className={styles["panel-content"]}>
         <table className={styles["item-attrs"]}>
           <tbody>

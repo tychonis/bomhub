@@ -11,6 +11,7 @@ import (
 
 	"github.com/tychonis/bomhub/internal/setup"
 	"github.com/tychonis/cyanotype/core/process"
+	"github.com/tychonis/cyanotype/core/qualifier"
 	"github.com/tychonis/cyanotype/core/ranker"
 	"github.com/tychonis/cyanotype/model"
 )
@@ -147,17 +148,32 @@ func (s *Server) GetToRenderMeshes(ctx *gin.Context) {
 	}
 	instantiator := setup.CreateDefaultInstantiator()
 	instantiator.Ranker = ranker.NewCatalogTypeRanker(catalog, process.DRAWING)
-	root, err := catalog.Get(digest)
+	parentSym, err := catalog.Get(digest)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusNotFound)
 		return
 	}
-	parent, ok := root.(*model.Item)
-	if !ok {
+	var coItem *model.CoItem
+	var ok bool
+	switch parent := parentSym.(type) {
+	case *model.CoItem:
+		coItem = parent
+	case *model.Item:
+		coItemSym, err := catalog.FindCurrent(qualifier.ImplicitCoItem(parent))
+		if err != nil {
+			ctx.AbortWithStatus(http.StatusNotFound)
+			return
+		}
+		coItem, ok = coItemSym.(*model.CoItem)
+		if !ok {
+			ctx.AbortWithStatus(http.StatusNotFound)
+			return
+		}
+	default:
 		ctx.AbortWithStatus(http.StatusNotFound)
 		return
 	}
-	parentNode, err := instantiator.InstantiateTree(catalog, "tmp", parent)
+	parentNode, err := instantiator.ExpandNode(catalog, "tmp", coItem)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
@@ -166,9 +182,9 @@ func (s *Server) GetToRenderMeshes(ctx *gin.Context) {
 	if len(parentNode.Children) <= 0 {
 		ret := []*Mesh{
 			{
-				Item:      parent.Digest,
+				Item:      parentNode.Item.Digest,
 				Name:      "leaf",
-				ItemName:  getItemName(parent),
+				ItemName:  getItemName(parentNode.Item),
 				Rotation:  nil,
 				Placement: nil,
 			},

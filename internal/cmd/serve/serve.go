@@ -201,7 +201,7 @@ func (s *Server) getBOMTree(catalog *catalog.Catalog, digest model.Digest) ([]by
 		return nil, fmt.Errorf("item not found")
 	}
 	instantiator := setup.CreateDefaultInstantiator()
-	rootNode, err := instantiator.InstantiateTree(catalog, "root", rootItem)
+	rootNode, err := instantiator.InstantiateTreeFromItem(catalog, "root", rootItem)
 	if err != nil {
 		return nil, err
 	}
