@@ -95,7 +95,6 @@ export default function DebouncedSearch({
           // Optionally surface an error option
           setOptions([]);
           setOpen(false);
-          // eslint-disable-next-line no-console
           console.error("search error", err);
         }
       } finally {
@@ -116,8 +115,8 @@ export default function DebouncedSearch({
         {loading
           ? "Search part name/number etc."
           : query.trim().length < minLength
-          ? ""
-          : "No results"}
+            ? ""
+            : "No results"}
       </Typography.Text>
     </div>
   );

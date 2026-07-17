@@ -122,20 +122,21 @@ export function FormationTree(props: FormationTreeProps) {
   const toggle = useCallback((id: string) => {
     setExpanded((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
       return next;
     });
   }, []);
 
-  const rows = useMemo(
-    () => buildVisibleRows(nodes, rootId, expanded),
-    [nodes, rootId, expanded]
-  );
+  const { rows, visible } = useMemo(() => {
+    const rows = buildVisibleRows(nodes, rootId, expanded);
+    const visible = new Set(rows.map((row) => row.id));
 
-  const visible = new Set<string>();
-  for (const row of rows) {
-    visible.add(row.id);
-  }
+    return { rows, visible };
+  }, [nodes, rootId, expanded]);
 
   const reusedRows = useMemo(
     () => buildReusedRows(nodes, visible, reuseIndex, current),

@@ -5,7 +5,6 @@ go 1.25.0
 require (
 	github.com/coreos/go-oidc/v3 v3.19.0
 	github.com/gin-gonic/gin v1.12.0
-	github.com/google/uuid v1.6.0
 	github.com/hashicorp/golang-lru/v2 v2.0.7
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/lestrrat-go/httprc/v3 v3.0.6

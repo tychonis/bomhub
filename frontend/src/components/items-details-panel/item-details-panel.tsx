@@ -46,12 +46,6 @@ function GenerateAttrList(node, item) {
 export function ItemDetailsPanel({ node, item, reuseCount }) {
   const [attrs, setAttrs] = useState<[string, React.ReactNode][]>([]);
   const [image, setImage] = useState<string>(DEFAULT_IMAGE);
-  if (!node || !item) {
-    return (
-      <div className={styles["empty"]}>Select a part to view details.</div>
-    );
-  }
-
   useEffect(() => {
     const extra: [string, React.ReactNode][] = [];
 
@@ -70,6 +64,12 @@ export function ItemDetailsPanel({ node, item, reuseCount }) {
       setImage(result["image"]);
     });
   }, [node, item, reuseCount]);
+
+  if (!node || !item) {
+    return (
+      <div className={styles["empty"]}>Select a part to view details.</div>
+    );
+  }
 
   return (
     <div className={styles["panel"]}>

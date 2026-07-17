@@ -53,7 +53,7 @@ export const TreePage = () => {
         setSelectedDigest(bpc.root);
       })
       .catch(console.error);
-  }, [digest]);
+  }, [id, digest]);
 
   useEffect(() => {
     getAttachments(selectedDigest).then((attc) => {

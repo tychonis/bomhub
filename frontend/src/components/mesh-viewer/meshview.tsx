@@ -97,7 +97,13 @@ export function MeshView(props: {
       hoverControl.detach();
       MESH.dispose(mesh);
     };
-  }, [props.nodes, props.selectedDigest, props.setSelectedDigest]);
+  }, [
+    id,
+    props.nodes,
+    props.setHovered,
+    props.selectedDigest,
+    props.setSelectedDigest,
+  ]);
 
   return (
     <div className={styles["viewer-container"]}>

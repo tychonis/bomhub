@@ -47,7 +47,7 @@ export const MeshPage = () => {
         setSelectedDigest(bpc.root);
       })
       .catch(console.error);
-  }, [digest]);
+  }, [id, digest]);
 
   if (!bom) {
     return <></>;
@@ -71,11 +71,7 @@ export const MeshPage = () => {
         setSelectedDigest={setSelectedDigest}
         setHovered={setCurrent}
       />
-      <NodeDetails
-        node={bom.nodes[selectedDigest]}
-        item={bom.items[bom.nodes[selectedDigest].item]}
-        reuseCount={1}
-      />
+      <NodeDetails node={bom.nodes[selectedDigest]} />
     </div>
   );
 };

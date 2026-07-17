@@ -45,11 +45,11 @@ async function getRawBPCs(): Promise<Bpc[]> {
 
   for (const ref of refs) {
     const match = ref.repo.match(
-      /^https:\/\/github\.com\/([^\/]+)\/([^\/]+)(\/)?$/
+      /^https:\/\/github\.com\/([^/]+)\/([^/]+)(\/)?$/
     );
     if (!match) continue;
 
-    const [_, owner, repo] = match;
+    const [, owner, repo] = match;
 
     const data: any = await ky
       .get(`https://api.github.com/repos/${owner}/${repo}/branches`)

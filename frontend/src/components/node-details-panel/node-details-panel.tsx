@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { API_ROOT } from "api/constants";
 import bomhub from "api/ky";
 
-async function GetItemDetails(itemID: string): Promise<any> {
-  return bomhub.get(`${API_ROOT}/definition/${itemID}`).json();
+async function GetSymbolDetails(symbolID: string): Promise<any> {
+  return bomhub.get(`${API_ROOT}/definition/${symbolID}`).json();
 }
 
 function DetailRow({
@@ -22,9 +22,8 @@ function DetailRow({
   );
 }
 
-function GenerateAttrList(node, item) {
+function GenerateAttrList(node) {
   const rows: [string, React.ReactNode][] = [
-    ["Part #:", item.part_number || "—"],
     ["Item ID:", node.item],
     ["Node ID:", node.id],
   ];
@@ -40,34 +39,31 @@ function GenerateAttrList(node, item) {
   return rows;
 }
 
-export function NodeDetails({ node, item, reuseCount }) {
+export function NodeDetails({ node }) {
   const [attrs, setAttrs] = useState<[string, React.ReactNode][]>([]);
-  if (!node || !item) {
+
+  useEffect(() => {
+    const extra: [string, React.ReactNode][] = [];
+
+    setAttrs(GenerateAttrList(node).concat(extra));
+
+    GetSymbolDetails(node.item).then((result) => {
+      const finalExtra = extra.concat([
+        ["Details:", <>{result["image"]}</>], // replace with actual content
+      ]);
+      setAttrs(GenerateAttrList(node).concat(finalExtra));
+    });
+  }, [node]);
+
+  if (!node) {
     return (
       <div className={styles["empty"]}>Select a part to view details.</div>
     );
   }
 
-  useEffect(() => {
-    const extra: [string, React.ReactNode][] = [];
-
-    if (reuseCount > 1) {
-      extra.push(["Used In:", <>{reuseCount} places</>]);
-    }
-
-    setAttrs(GenerateAttrList(node, item).concat(extra));
-
-    GetItemDetails(node.item).then((result) => {
-      const finalExtra = extra.concat([
-        ["Details:", <>{result["image"]}</>], // replace with actual content
-      ]);
-      setAttrs(GenerateAttrList(node, item).concat(finalExtra));
-    });
-  }, [node, item, reuseCount]);
-
   return (
     <div className={styles["panel"]}>
-      <h2 className={styles["title"]}>{item.qualifier}</h2>
+      <h2 className={styles["title"]}>{node.item}</h2>
       <div className={styles["panel-content"]}>
         <table className={styles["item-attrs"]}>
           <tbody>
