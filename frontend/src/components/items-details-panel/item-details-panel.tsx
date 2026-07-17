@@ -7,7 +7,7 @@ const DEFAULT_IMAGE =
   "https://media.printables.com/media/prints/32741/stls/320849_1e9f2158-27da-4374-a4b2-586850f4d47a/thumbs/cover/180x180/png/king-body-v2_preview.webp";
 
 async function GetItemDetails(itemID: string): Promise<any> {
-  return bomhub.get(`${API_ROOT}/item/${itemID}`).json();
+  return bomhub.get(`${API_ROOT}/definition/${itemID}`).json();
 }
 
 function DetailRow({

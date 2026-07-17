@@ -11,7 +11,6 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	lru "github.com/hashicorp/golang-lru/v2"
 	"golang.org/x/sync/singleflight"
 
@@ -70,21 +69,6 @@ func (s *Server) GetBOMs(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, boms)
-}
-
-func (s *Server) GetItem(ctx *gin.Context) {
-	itemID := ctx.Param("id")
-	parsed, err := uuid.Parse(itemID)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, nil)
-		return
-	}
-	details, err := s.DB.GetItemDetails(ctx, parsed)
-	if err != nil {
-		ctx.JSON(http.StatusNotFound, nil)
-		return
-	}
-	ctx.JSON(http.StatusOK, details)
 }
 
 func (s *Server) GetDefinition(ctx *gin.Context) {

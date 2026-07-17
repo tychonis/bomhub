@@ -1,10 +1,10 @@
-import styles from "./item-details.module.css";
+import styles from "./node-details-panel.module.css";
 import { useEffect, useState } from "react";
 import { API_ROOT } from "api/constants";
 import bomhub from "api/ky";
 
 async function GetItemDetails(itemID: string): Promise<any> {
-  return bomhub.get(`${API_ROOT}/item/${itemID}`).json();
+  return bomhub.get(`${API_ROOT}/definition/${itemID}`).json();
 }
 
 function DetailRow({
@@ -40,7 +40,7 @@ function GenerateAttrList(node, item) {
   return rows;
 }
 
-export function ItemDetails({ node, item, reuseCount }) {
+export function NodeDetails({ node, item, reuseCount }) {
   const [attrs, setAttrs] = useState<[string, React.ReactNode][]>([]);
   if (!node || !item) {
     return (

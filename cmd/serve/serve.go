@@ -21,9 +21,7 @@ var Cmd = &cobra.Command{
 
 func registerServer(router *gin.Engine, server *serve.Server) {
 	router.GET("/boms", server.GetBOMs)
-	router.GET("/item/:id", server.GetItem)
 	auth.GrantMemberAccess(auth.ResourceFromPath("GET", "/boms"))
-	auth.GrantMemberAccess(auth.ResourceFromPath("GET", "/item/:id"))
 
 	router.POST("/definition/:digest", server.SaveDefinition)
 	router.GET("/definition/:digest", server.GetDefinition)
