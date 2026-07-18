@@ -246,11 +246,11 @@ func (s *Server) GetModel(ctx *gin.Context) {
 	}
 	for _, artifact := range item.Content.Artifacts {
 		if artifact.Tag == "model" {
-			ctx.Redirect(http.StatusFound, "object/"+artifact.Digest)
+			ctx.Redirect(http.StatusFound, "/api/object/"+artifact.Digest)
 			return
 		}
 	}
 	// backward compatible hack. use 404 in the future.
-	ctx.Redirect(http.StatusFound, "object/"+digest+".glb")
+	ctx.Redirect(http.StatusFound, "/api/object/"+digest+".glb")
 	// ctx.AbortWithStatus(http.StatusNotFound)
 }

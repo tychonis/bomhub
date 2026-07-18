@@ -31,8 +31,8 @@ async function getModels(id: string, digest: string): Promise<MESH.ModelDef[]> {
   return ret;
 }
 
-const getItemPath = (item) => {
-  return `${API_ROOT}/object/${item}.glb`;
+const getItemPath = (id, item) => {
+  return `${API_ROOT}/model/${id}/${item}`;
 };
 
 export function MeshView(props: {
@@ -73,7 +73,7 @@ export function MeshView(props: {
         console.log(`Loading ${models.length} models for digest ${node.item}`);
         for (const m of models) {
           const nodeID = findNode(node, m.name);
-          const path = getItemPath(m.item);
+          const path = getItemPath(id, m.item);
           console.log(`Loading model at node ${nodeID}: ${path}`);
           MESH.loadModel(mesh, nodeID, path, m.rotation, m.shift);
         }
