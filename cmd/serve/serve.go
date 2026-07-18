@@ -35,8 +35,10 @@ func registerServer(router *gin.Engine, server *serve.Server) {
 
 	router.GET("/tree/:id/:digest", server.GetBOMTree)
 	router.GET("/models/:id/:digest", server.GetToRenderMeshes)
+	router.GET("/model/:id/:digest", server.GetModel)
 	auth.GrantMemberAccess(auth.ResourceFromPath("GET", "/tree/:id/:digest"))
 	auth.GrantMemberAccess(auth.ResourceFromPath("GET", "/models/:id/:digest"))
+	auth.GrantMemberAccess(auth.ResourceFromPath("GET", "/model/:id/:digest"))
 
 	router.GET("/workspace/:id", server.GetWorkspaceSummary)
 	router.POST("/workspace/:id", server.SaveWorkspaceSummary)
