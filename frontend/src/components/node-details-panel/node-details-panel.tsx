@@ -2,6 +2,7 @@ import styles from "./node-details-panel.module.css";
 import { useEffect, useState } from "react";
 import { API_ROOT } from "api/constants";
 import bomhub from "api/ky";
+import { Artifact } from "components/artifact/artifact";
 
 async function GetSymbolDetails(symbolID: string): Promise<any> {
   return bomhub.get(`${API_ROOT}/definition/${symbolID}`).json();
@@ -29,15 +30,31 @@ function GenerateAttrList(node) {
     ["Process ID:", node.process],
   ];
 
-  if (node.qty !== undefined) {
-    rows.push(["Quantity:", node.qty]);
-  }
-
-  if (node.variant) {
-    rows.push(["Variant:", node.variant]);
-  }
-
   return rows;
+}
+
+const capitalize = (s: string) => s[0]?.toUpperCase() + s.slice(1);
+
+function getArtifacts(symbol) {
+  if (!symbol || !symbol.content || !symbol.content.artifacts) {
+    return [];
+  }
+
+  const validArtifacts = [];
+  for (const artifact of symbol.content.artifacts) {
+    console.log("artifact", artifact);
+    if (!artifact.digest || !artifact.path) {
+      continue;
+    }
+    validArtifacts.push([
+      capitalize(artifact.tag),
+      <Artifact
+        digest={artifact.digest}
+        filename={artifact.path.split("/").pop() ?? artifact.path}
+      />,
+    ]);
+  }
+  return validArtifacts;
 }
 
 export function NodeDetails({ node }) {
@@ -65,6 +82,10 @@ export function NodeDetails({ node }) {
       results.map(({ label, result }) => {
         if (label == "Item" && result?.content?.details?.label) {
           setTitle(result.content.details.label);
+        }
+        const artifacts = getArtifacts(result);
+        if (artifacts.length > 0) {
+          setAttrs((prev) => prev.concat(artifacts));
         }
       });
     });
