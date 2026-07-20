@@ -33,7 +33,8 @@ func (k BOMTreeCacheKey) String() string {
 type CatalogCacheKey model.RevisionID
 
 type Server struct {
-	DB *db.Client
+	StorageAPIBase string
+	DB             *db.Client
 
 	bomTreeCache *lru.Cache[BOMTreeCacheKey, []byte]
 	bomTreeGroup singleflight.Group
@@ -43,7 +44,7 @@ type Server struct {
 
 const CatalogCacheSize = 8
 
-func NewServer(db *db.Client, bomTreeCacheSize int) (*Server, error) {
+func NewServer(db *db.Client, bomTreeCacheSize int, storageAPIBase string) (*Server, error) {
 	bomTreeCache, err := lru.New[BOMTreeCacheKey, []byte](bomTreeCacheSize)
 	if err != nil {
 		return nil, err
@@ -53,11 +54,12 @@ func NewServer(db *db.Client, bomTreeCacheSize int) (*Server, error) {
 		return nil, err
 	}
 	return &Server{
-		DB:           db,
-		bomTreeCache: bomTreeCache,
-		bomTreeGroup: singleflight.Group{},
-		catalogCache: catalogCache,
-		catalogGroup: singleflight.Group{},
+		StorageAPIBase: storageAPIBase,
+		DB:             db,
+		bomTreeCache:   bomTreeCache,
+		bomTreeGroup:   singleflight.Group{},
+		catalogCache:   catalogCache,
+		catalogGroup:   singleflight.Group{},
 	}, nil
 }
 

@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import CameraControls from "camera-controls";
-import * as conv from "./conversion";
 
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
@@ -219,8 +218,8 @@ export const loadModel = (
       const object = gltf.scene;
       object.userData.id = id;
 
-      object.quaternion.copy(conv.CADToThreeRotation(rotation));
-      object.position.copy(conv.CADToThreePosition(position));
+      object.quaternion.copy(rotation);
+      object.position.copy(position);
 
       object.traverse((child) => {
         if (child instanceof THREE.Mesh) {

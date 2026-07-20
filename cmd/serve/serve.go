@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
 	"github.com/tychonis/bomhub/internal/auth"
 	"github.com/tychonis/bomhub/internal/cmd/serve"
@@ -74,7 +75,7 @@ func run(cmd *cobra.Command, args []string) {
 		dbc.LogActivity(ctx, user.(string), ctx.FullPath())
 	})
 
-	server, err := serve.NewServer(dbc, 256)
+	server, err := serve.NewServer(dbc, 256, viper.GetString("storage.base"))
 	if err != nil {
 		slog.Error("failed to create server", "err", err)
 		return

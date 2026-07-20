@@ -19,7 +19,7 @@ const CAD_TO_THREE_BASIS = new THREE.Quaternion().setFromAxisAngle(
 );
 
 export function CADToThreeRotation(q: THREE.Quaternion): THREE.Quaternion {
-  return q;
+  return q.clone().invert();
 }
 
 export function CADToThreeRotation_Freecad(

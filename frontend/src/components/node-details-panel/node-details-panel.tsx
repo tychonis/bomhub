@@ -42,7 +42,6 @@ function getArtifacts(symbol) {
 
   const validArtifacts = [];
   for (const artifact of symbol.content.artifacts) {
-    console.log("artifact", artifact);
     if (!artifact.digest || !artifact.path) {
       continue;
     }
