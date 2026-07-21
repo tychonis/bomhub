@@ -45,6 +45,8 @@ export function MeshView(props: {
 
   const mountRef = useRef<HTMLDivElement | null>(null);
   const meshRef = useRef<MESH.Mesh | null>(null);
+  const selectedFromMeshRef = useRef(false);
+  console.log(selectedFromMeshRef.current);
 
   // Initialize the Three.js viewer once.
   useEffect(() => {
@@ -54,9 +56,15 @@ export function MeshView(props: {
     const mesh = MESH.createDefaultMesh(mount);
     meshRef.current = mesh;
 
+    const selectFromMesh = (digest: string) => {
+      selectedFromMeshRef.current = true;
+      const select = props.setSelectedDigest;
+      select(digest);
+    };
+
     const mouseControl = MESH.createMouseController(
       mesh,
-      props.setSelectedDigest,
+      selectFromMesh,
       props.setHovered
     );
 
@@ -77,6 +85,9 @@ export function MeshView(props: {
     const node = props.nodes[props.selectedDigest];
     if (!node) return;
 
+    const preserveCamera = selectedFromMeshRef.current;
+    selectedFromMeshRef.current = false;
+
     // TODO: fix this hack.
     // right now, node is generated from the tree,
     // but getModels api returns models constructed from the parent instead of the root node.
@@ -89,7 +100,6 @@ export function MeshView(props: {
           return child;
         }
       }
-
       return undefined;
     };
 
@@ -101,12 +111,18 @@ export function MeshView(props: {
           const nodeID = findNode(node, model.name);
           if (!nodeID) {
             console.warn(`No matching node for model ${model.name}`);
-            continue;
           }
 
           const path = getItemPath(id, model.item);
 
-          MESH.loadModel(mesh, nodeID, path, model.rotation, model.shift);
+          MESH.loadModel(
+            mesh,
+            nodeID,
+            path,
+            model.rotation,
+            model.shift,
+            preserveCamera
+          );
         }
       })
       .catch((error) => {

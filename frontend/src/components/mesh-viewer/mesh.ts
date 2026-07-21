@@ -210,7 +210,8 @@ export const loadModel = (
   id: string,
   url: string,
   rotation: THREE.Quaternion = new THREE.Quaternion(0, 0, 0, 1),
-  position: THREE.Vector3 = new THREE.Vector3(0, 0, 0)
+  position: THREE.Vector3 = new THREE.Vector3(0, 0, 0),
+  preserveCamera: boolean = false
 ) => {
   mesh.loader.load(
     url,
@@ -233,6 +234,9 @@ export const loadModel = (
 
       mesh.scene.add(object);
       mesh.objects.push(object);
+      if (!preserveCamera) {
+        fitCameraToObjects(mesh);
+      }
     },
     undefined,
     (error) => {
