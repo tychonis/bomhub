@@ -233,8 +233,6 @@ export const loadModel = (
 
       mesh.scene.add(object);
       mesh.objects.push(object);
-
-      fitCameraToObjects(mesh);
     },
     undefined,
     (error) => {
@@ -242,6 +240,28 @@ export const loadModel = (
     }
   );
 };
+
+export function clearModels(mesh: Mesh) {
+  for (const object of mesh.objects.values()) {
+    object.removeFromParent();
+
+    object.traverse((child) => {
+      if (!(child instanceof THREE.Mesh)) return;
+
+      child.geometry.dispose();
+
+      const materials = Array.isArray(child.material)
+        ? child.material
+        : [child.material];
+
+      for (const material of materials) {
+        material.dispose();
+      }
+    });
+  }
+
+  mesh.objects = [];
+}
 
 export const dispose = (m: Mesh) => {
   m.dispose();
@@ -252,9 +272,9 @@ export type HoverController = {
   detach: () => void;
 };
 
-export const createHoverController = (
+export const createMouseController = (
   mesh: Mesh,
-  setSelectedID: React.Dispatch<React.SetStateAction<string>>,
+  setSelectedDigest: React.Dispatch<React.SetStateAction<string>>,
   setHovered: React.Dispatch<React.SetStateAction<string>>
 ): HoverController => {
   const raycaster = new THREE.Raycaster();
@@ -308,14 +328,14 @@ export const createHoverController = (
     const duration = event.timeStamp - downTime;
     const dx = event.clientX - downX;
     const dy = event.clientY - downY;
-    const distance = dx + dy;
+    const distance = Math.abs(dx) + Math.abs(dy);
 
     if (duration > 200 || distance > 10) return;
 
     const clicked = pointerEventObject(event);
     const clickedID = findObjectId(clicked);
 
-    if (clickedID) setSelectedID(clickedID);
+    if (clickedID) setSelectedDigest(clickedID);
   };
 
   const handlePointerLeave = () => {

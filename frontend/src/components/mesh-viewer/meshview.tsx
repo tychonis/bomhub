@@ -44,66 +44,84 @@ export function MeshView(props: {
   const { id } = useParams<{ id: string }>();
 
   const mountRef = useRef<HTMLDivElement | null>(null);
-  const resetRef = useRef<HTMLButtonElement | null>(null);
+  const meshRef = useRef<MESH.Mesh | null>(null);
 
+  // Initialize the Three.js viewer once.
   useEffect(() => {
     const mount = mountRef.current;
-    const resetButton = resetRef.current;
-    if (!mount || !resetButton) return;
+    if (!mount) return;
 
     const mesh = MESH.createDefaultMesh(mount);
+    meshRef.current = mesh;
+
+    const mouseControl = MESH.createMouseController(
+      mesh,
+      props.setSelectedDigest,
+      props.setHovered
+    );
+
+    mouseControl.attach();
+
+    return () => {
+      mouseControl.detach();
+      MESH.dispose(mesh);
+      meshRef.current = null;
+    };
+  }, [props.setHovered, props.setSelectedDigest]);
+
+  // Update models without recreating the viewer or camera.
+  useEffect(() => {
+    const mesh = meshRef.current;
+    if (!mesh || !id) return;
 
     const node = props.nodes[props.selectedDigest];
+    if (!node) return;
 
     // TODO: fix this hack.
     // right now, node is generated from the tree,
     // but getModels api returns models constructed from the parent instead of the root node.
     // therefore the nodeID won't match and we need to use the name to match the model to the node.
-    const findNode = (parent, name) => {
+    const findNode = (parent: any, name: string) => {
       for (const child of parent.children) {
         const childNode = props.nodes[child];
-        if (childNode.name == name) {
+
+        if (childNode.name === name) {
           return child;
         }
       }
+
+      return undefined;
     };
+
+    MESH.clearModels(mesh);
 
     getModels(id, node.item)
       .then((models) => {
-        console.log(`Loading ${models.length} models for digest ${node.item}`);
-        for (const m of models) {
-          const nodeID = findNode(node, m.name);
-          const path = getItemPath(id, m.item);
-          console.log(`Loading model at node ${nodeID}: ${path}`);
-          MESH.loadModel(mesh, nodeID, path, m.rotation, m.shift);
+        for (const model of models) {
+          const nodeID = findNode(node, model.name);
+          if (!nodeID) {
+            console.warn(`No matching node for model ${model.name}`);
+            continue;
+          }
+
+          const path = getItemPath(id, model.item);
+
+          MESH.loadModel(mesh, nodeID, path, model.rotation, model.shift);
         }
       })
       .catch((error) => {
         console.error("Failed to load models:", error);
       });
 
-    const hoverControl = MESH.createHoverController(
-      mesh,
-      props.setSelectedDigest,
-      props.setHovered
-    );
+    return;
+  }, [id, props.nodes, props.selectedDigest]);
 
-    hoverControl.attach();
-    resetButton.addEventListener("click", () => {
+  const resetCamera = () => {
+    const mesh = meshRef.current;
+    if (mesh) {
       MESH.fitCameraToObjects(mesh);
-    });
-
-    return () => {
-      hoverControl.detach();
-      MESH.dispose(mesh);
-    };
-  }, [
-    id,
-    props.nodes,
-    props.setHovered,
-    props.selectedDigest,
-    props.setSelectedDigest,
-  ]);
+    }
+  };
 
   return (
     <div className={styles["viewer-container"]}>
@@ -112,7 +130,7 @@ export function MeshView(props: {
         className={styles["viewer-reset"]}
         aria-label="Reset camera"
         title="Reset camera"
-        ref={resetRef}
+        onClick={resetCamera}
       >
         <AimOutlined />
       </button>
