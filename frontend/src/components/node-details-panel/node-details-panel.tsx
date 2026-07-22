@@ -77,7 +77,6 @@ export function NodeDetails({ node }) {
         result: id ? await GetSymbolDetails(id) : undefined,
       }))
     ).then((results) => {
-      console.log("results", results);
       results.map(({ label, result }) => {
         if (label == "Item" && result?.content?.details?.label) {
           setTitle(result.content.details.label);

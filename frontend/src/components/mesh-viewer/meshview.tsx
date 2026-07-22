@@ -46,7 +46,6 @@ export function MeshView(props: {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const meshRef = useRef<MESH.Mesh | null>(null);
   const selectedFromMeshRef = useRef(false);
-  console.log(selectedFromMeshRef.current);
 
   // Initialize the Three.js viewer once.
   useEffect(() => {
