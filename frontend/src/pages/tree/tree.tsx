@@ -48,7 +48,6 @@ export const TreePage = () => {
     setSelectedDigest(null);
     getRawBPC(id, digest)
       .then((bpc) => {
-        console.log("root is " + bpc.root);
         setBom(bpc);
         setSelectedDigest(bpc.root);
       })

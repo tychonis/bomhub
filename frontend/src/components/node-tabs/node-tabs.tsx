@@ -22,7 +22,6 @@ export function NodeTabs({ node }) {
       children: <div></div>,
     },
   ];
-  console.log(node);
   return (
     <div className={styles["node-tabs"]}>
       <h2 className={styles["title"]}>{node?.name}</h2>

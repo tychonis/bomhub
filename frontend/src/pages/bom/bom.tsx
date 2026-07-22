@@ -38,7 +38,6 @@ interface Bpc {
 }
 
 async function getRawBPCs(): Promise<Bpc[]> {
-  console.log(API_ROOT);
   const refs: BpcRef[] = await bomhub.get(`${API_ROOT}/boms`).json();
 
   const bpcs: Bpc[] = [];
