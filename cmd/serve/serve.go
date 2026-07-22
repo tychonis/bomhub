@@ -41,6 +41,9 @@ func registerServer(router *gin.Engine, server *serve.Server) {
 	auth.GrantMemberAccess(auth.ResourceFromPath("GET", "/models/:id/:digest"))
 	auth.GrantMemberAccess(auth.ResourceFromPath("GET", "/model/:id/:digest"))
 
+	router.GET("/history/:id/:digest", server.GetHistory)
+	auth.GrantMemberAccess(auth.ResourceFromPath("GET", "/history/:id/:digest"))
+
 	router.GET("/workspace/:id", server.GetWorkspaceSummary)
 	router.POST("/workspace/:id", server.SaveWorkspaceSummary)
 	router.GET("/workspace/:id/catalog", server.GetCatalog)

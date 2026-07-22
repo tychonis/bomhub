@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/tychonis/bomhub/internal/setup"
+	"github.com/tychonis/cyanotype/core/instantiator"
 	"github.com/tychonis/cyanotype/core/process"
 	"github.com/tychonis/cyanotype/core/qualifier"
 	"github.com/tychonis/cyanotype/core/ranker"
@@ -253,4 +254,20 @@ func (s *Server) GetModel(ctx *gin.Context) {
 	// backward compatible hack. use 404 in the future.
 	ctx.Redirect(http.StatusFound, s.StorageAPIBase+"/object/"+digest+".glb")
 	// ctx.AbortWithStatus(http.StatusNotFound)
+}
+
+func (s *Server) GetHistory(ctx *gin.Context) {
+	tag := ctx.Param("id")
+	digest := ctx.Param("digest")
+	catalog, err := s.getCatalog(tag)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	history, err := instantiator.History(catalog, digest)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+	ctx.JSON(http.StatusOK, history)
 }

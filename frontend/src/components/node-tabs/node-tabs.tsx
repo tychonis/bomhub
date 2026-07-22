@@ -2,7 +2,9 @@ import styles from "./node-tabs.module.css";
 
 import { Tabs } from "antd";
 import type { TabsProps } from "antd";
+import { NodeHistory } from "components/node-history-tab/node-history-tab";
 import { NodeOverview } from "components/node-overview-tab/node-overview-tab";
+import { NodeVariant } from "components/node-variant-tab/node-variant-tab";
 
 export function NodeTabs({ node }) {
   const tabItems: TabsProps["items"] = [
@@ -14,12 +16,12 @@ export function NodeTabs({ node }) {
     {
       key: "variant",
       label: "Variant",
-      children: <div></div>,
+      children: <NodeVariant node={node} />,
     },
     {
       key: "history",
       label: "History",
-      children: <div></div>,
+      children: <NodeHistory node={node} />,
     },
     {
       key: "actions",
