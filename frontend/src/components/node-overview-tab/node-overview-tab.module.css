@@ -1,22 +1,24 @@
 .empty {
   margin: 1rem;
-  width: 30%;
+  width: 100%;
   font-style: italic;
   color: #888;
 }
 
-.panel {
-  width: 30%;
+.tab {
+  width: 100%;
   overflow: scroll;
+  display: flex;
+  align-items: flex-start;
 }
 
-.panel table {
+.tab table {
   width: 100%;
   font-size: 1rem;
   border-collapse: collapse;
 }
 
-.panel td {
+.tab td {
   vertical-align: center;
   text-align: left;
   overflow-wrap: anywhere;
@@ -29,11 +31,6 @@
 
 .value {
   font-family: "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
-}
-
-.title {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
 }
 
 .jump-button {
@@ -51,10 +48,5 @@
 
 .item-attrs {
   width: 70%;
-  margin: 1rem;
-}
-
-.panel-content {
-  display: flex;
-  align-items: flex-start;
+  /* margin: 1rem; */
 }

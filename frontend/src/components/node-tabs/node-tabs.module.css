@@ -1,0 +1,10 @@
+.node-tabs {
+  width: 30%;
+  margin-right: 1rem;
+  overflow: scroll;
+}
+
+.title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}

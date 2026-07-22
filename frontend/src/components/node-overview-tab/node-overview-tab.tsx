@@ -1,4 +1,4 @@
-import styles from "./node-details-panel.module.css";
+import styles from "./node-overview-tab.module.css";
 import { useEffect, useState } from "react";
 import { API_ROOT } from "api/constants";
 import bomhub from "api/ky";
@@ -56,8 +56,7 @@ function getArtifacts(symbol) {
   return validArtifacts;
 }
 
-export function NodeDetails({ node }) {
-  const [title, setTitle] = useState<string>(node.item);
+export function NodeOverview({ node }) {
   const [attrs, setAttrs] = useState<[string, React.ReactNode][]>([]);
 
   useEffect(() => {
@@ -77,10 +76,7 @@ export function NodeDetails({ node }) {
         result: id ? await GetSymbolDetails(id) : undefined,
       }))
     ).then((results) => {
-      results.map(({ label, result }) => {
-        if (label == "Item" && result?.content?.details?.label) {
-          setTitle(result.content.details.label);
-        }
+      results.map(({ result }) => {
         const artifacts = getArtifacts(result);
         if (artifacts.length > 0) {
           setAttrs((prev) => prev.concat(artifacts));
@@ -96,17 +92,14 @@ export function NodeDetails({ node }) {
   }
 
   return (
-    <div className={styles["panel"]}>
-      <h2 className={styles["title"]}>{title}</h2>
-      <div className={styles["panel-content"]}>
-        <table className={styles["item-attrs"]}>
-          <tbody>
-            {attrs.map(([label, value], i) => (
-              <DetailRow key={i} label={label} value={value} />
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div className={styles["tab"]}>
+      <table className={styles["item-attrs"]}>
+        <tbody>
+          {attrs.map(([label, value], i) => (
+            <DetailRow key={i} label={label} value={value} />
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
