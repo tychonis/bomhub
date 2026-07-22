@@ -21,6 +21,11 @@ export function NodeTabs({ node }) {
       label: "History",
       children: <div></div>,
     },
+    {
+      key: "actions",
+      label: "Actions",
+      children: <div></div>,
+    },
   ];
   return (
     <div className={styles["node-tabs"]}>
