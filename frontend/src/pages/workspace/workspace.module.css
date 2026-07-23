@@ -11,3 +11,7 @@
 .ws-container .title {
   width: 100%;
 }
+
+.ws-container :global(.anticon) {
+  font-size: 2rem;
+}

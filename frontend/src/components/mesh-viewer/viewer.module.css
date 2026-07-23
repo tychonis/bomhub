@@ -32,7 +32,7 @@
   border-radius: 50%;
   background: #fff;
 
-  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+  box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 15%);
   cursor: pointer;
 
   transition:
@@ -42,13 +42,13 @@
 
 .viewer-reset:hover {
   background: #f5f5f5;
-  box-shadow: 0 4px 12px rgb(0 0 0 / 20%);
+  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 20%);
 }
 
 .viewer-reset:active {
   background: #e6f4ff;
 }
 
-.viewer-reset .anticon {
-  font-size: 18px;
+.viewer-reset :global(.anticon) {
+  font-size: 1.5rem;
 }
