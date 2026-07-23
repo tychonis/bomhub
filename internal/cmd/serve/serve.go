@@ -14,6 +14,7 @@ import (
 	lru "github.com/hashicorp/golang-lru/v2"
 	"golang.org/x/sync/singleflight"
 
+	"github.com/tychonis/cyanotype/core/bomtree"
 	"github.com/tychonis/cyanotype/core/catalog"
 	"github.com/tychonis/cyanotype/model"
 
@@ -198,12 +199,16 @@ func (s *Server) getBOMTree(catalog *catalog.Catalog, digest model.Digest) ([]by
 	if err != nil {
 		return nil, err
 	}
-	rootItem, ok := root.(*model.Item)
-	if !ok {
-		return nil, fmt.Errorf("item not found")
-	}
 	instantiator := setup.CreateDefaultInstantiator()
-	rootNode, err := instantiator.InstantiateTreeFromItem(catalog, rootItem.Content.Name, rootItem)
+	var rootNode *bomtree.Node
+	switch rootSym := root.(type) {
+	case *model.Item:
+		rootNode, err = instantiator.InstantiateTreeFromItem(catalog, rootSym.GetName(), rootSym)
+	case *model.CoItem:
+		rootNode, err = instantiator.InstantiateTree(catalog, rootSym.GetName(), rootSym)
+	default:
+		return nil, fmt.Errorf("unexpected root type")
+	}
 	if err != nil {
 		return nil, err
 	}

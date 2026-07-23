@@ -49,6 +49,11 @@ export const MeshPage = () => {
       .catch(console.error);
   }, [id, digest]);
 
+  if (!digest) {
+    console.log("No digest provided");
+    return <></>;
+  }
+
   if (!bom) {
     return <></>;
   }

@@ -5,6 +5,7 @@ import { TreePage } from "pages/tree/tree";
 import { Workspace } from "pages/workspace/workspace";
 import { MeshPage } from "pages/mesh/mesh";
 import { MainLayout, SimpleLayout } from "layout/layout";
+import { MeshRedirect } from "pages/mesh-redirect/mesh-redirect";
 
 const routes: RouteObject[] = [
   {
@@ -26,6 +27,10 @@ const root = [
   {
     element: <SimpleLayout />,
     children: [
+      {
+        path: "/mesh/:id",
+        element: <MeshRedirect />,
+      },
       {
         path: "/mesh/:id/:digest",
         element: <MeshPage />,
