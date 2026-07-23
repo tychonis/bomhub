@@ -5,7 +5,8 @@ import { WorkspaceSummary } from "components/workspace-summary/workspace-summary
 import { TreeRootSelector } from "components/tree-root-selector/tree-root-selector";
 import { API_ROOT } from "api/constants";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import ApartmentOutlined from "@ant-design/icons/lib/icons/ApartmentOutlined";
 
 async function getWorkspaceDetails(id: string): Promise<any> {
   const detail = await bomhub.get(`${API_ROOT}/workspace/${id}`).json();
@@ -31,6 +32,7 @@ export const Workspace = () => {
   const [wsName, setWsName] = useState<string>();
   const [roots, setRoots] = useState<string[]>([]);
   const [details, setDetails] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!digest) return;
@@ -51,7 +53,8 @@ export const Workspace = () => {
 
   return (
     <div className={styles["ws-container"]}>
-      <Title label={wsName}></Title>
+      <Title label={wsName}></Title>{" "}
+      <ApartmentOutlined onClick={() => navigate(`/mesh/${digest}`)} />
       <WorkspaceSummary details={details}></WorkspaceSummary>
       <TreeRootSelector id={digest} roots={roots}></TreeRootSelector>
     </div>

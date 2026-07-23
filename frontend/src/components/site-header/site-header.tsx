@@ -12,6 +12,7 @@ export const SiteHeader = () => {
         src={tychonisLogo}
         className={styles["header-logo"]}
         alt="Tychonis logo"
+        onClick={() => (window.location.href = "/")}
       />
       <Search
         placeholder="Search part number etc"
