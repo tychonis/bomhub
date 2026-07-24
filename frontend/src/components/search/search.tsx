@@ -129,7 +129,7 @@ export default function DebouncedSearch({
       options={options}
       onSelect={(val, option) => onPick?.(val, option as Option)}
       open={open}
-      onDropdownVisibleChange={setOpen}
+      onOpenChange={setOpen}
       notFoundContent={notFoundContent}
       disabled={disabled}
       popupMatchSelectWidth={true}

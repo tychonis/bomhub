@@ -16,6 +16,12 @@
   height: 100%;
 }
 
+.viewer-progress {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
 .viewer-reset {
   position: absolute;
   right: 2rem;

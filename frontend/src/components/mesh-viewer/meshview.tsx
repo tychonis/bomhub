@@ -2,11 +2,12 @@ import styles from "./viewer.module.css";
 
 import bomhub from "api/ky";
 import { API_ROOT } from "api/constants";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import * as MESH from "./mesh";
 import { useParams } from "react-router-dom";
 import { AimOutlined } from "@ant-design/icons";
+import Progress from "antd/es/progress/progress";
 
 async function getModels(id: string, digest: string): Promise<MESH.ModelDef[]> {
   const rawModelDef = await bomhub
@@ -35,6 +36,35 @@ const getItemPath = (id, item) => {
   return `${API_ROOT}/model/${id}/${item}`;
 };
 
+type modelLoadingProgress = {
+  total: number;
+  loaded: number;
+  failed: number;
+};
+
+function ProgressIndicator({ progress }: { progress: modelLoadingProgress }) {
+  const { total, loaded, failed } = progress;
+  if (total === 0 || total === loaded) {
+    return null;
+  }
+  const percent = total > 0 ? (loaded / total) * 100 : 0;
+  const status = failed > 0 ? "exception" : "active";
+
+  return (
+    <div className={styles["viewer-progress"]}>
+      <Progress
+        type="circle"
+        trailColor="#e6f4ff"
+        percent={percent}
+        status={status}
+        strokeWidth={20}
+        size={14}
+        format={() => `${loaded}/${total} loaded`}
+      />
+    </div>
+  );
+}
+
 export function MeshView(props: {
   nodes: any;
   selectedDigest: string;
@@ -46,6 +76,11 @@ export function MeshView(props: {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const meshRef = useRef<MESH.Mesh | null>(null);
   const selectedFromMeshRef = useRef(false);
+  const [progress, setProgress] = useState<modelLoadingProgress>({
+    total: 0,
+    loaded: 0,
+    failed: 0,
+  });
 
   // Initialize the Three.js viewer once.
   useEffect(() => {
@@ -106,6 +141,7 @@ export function MeshView(props: {
 
     getModels(id, node.item)
       .then((models) => {
+        setProgress({ total: models.length, loaded: 0, failed: 0 });
         for (const model of models) {
           const nodeID = findNode(node, model.name);
           if (!nodeID) {
@@ -121,7 +157,13 @@ export function MeshView(props: {
             model.rotation,
             model.shift,
             preserveCamera
-          );
+          ).then((ok) => {
+            if (ok) {
+              setProgress((prev) => ({ ...prev, loaded: prev.loaded + 1 }));
+            } else {
+              setProgress((prev) => ({ ...prev, failed: prev.failed + 1 }));
+            }
+          });
         }
       })
       .catch((error) => {
@@ -141,6 +183,7 @@ export function MeshView(props: {
   return (
     <div className={styles["viewer-container"]}>
       <div ref={mountRef} className={styles["viewer"]} />
+      <ProgressIndicator progress={progress} />
       <button
         className={styles["viewer-reset"]}
         aria-label="Reset camera"

@@ -213,36 +213,39 @@ export const loadModel = (
   position: THREE.Vector3 = new THREE.Vector3(0, 0, 0),
   preserveCamera: boolean = false
 ) => {
-  mesh.loader.load(
-    url,
-    (gltf) => {
-      const object = gltf.scene;
-      object.userData.id = id;
+  return new Promise((resolve) => {
+    mesh.loader.load(
+      url,
+      (gltf) => {
+        const object = gltf.scene;
+        object.userData.id = id;
 
-      object.quaternion.copy(rotation);
-      object.position.copy(position);
+        object.quaternion.copy(rotation);
+        object.position.copy(position);
 
-      object.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          if (Array.isArray(child.material)) {
-            child.material = child.material.map((m) => m.clone());
-          } else {
-            child.material = child.material.clone();
+        object.traverse((child) => {
+          if (child instanceof THREE.Mesh) {
+            if (Array.isArray(child.material)) {
+              child.material = child.material.map((m) => m.clone());
+            } else {
+              child.material = child.material.clone();
+            }
           }
-        }
-      });
+        });
 
-      mesh.scene.add(object);
-      mesh.objects.push(object);
-      if (!preserveCamera) {
-        fitCameraToObjects(mesh);
+        mesh.scene.add(object);
+        mesh.objects.push(object);
+        if (!preserveCamera) {
+          fitCameraToObjects(mesh);
+        }
+        resolve(true);
+      },
+      undefined,
+      () => {
+        resolve(false);
       }
-    },
-    undefined,
-    (error) => {
-      console.error("Error loading model:", error);
-    }
-  );
+    );
+  });
 };
 
 export function clearModels(mesh: Mesh) {
