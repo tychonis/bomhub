@@ -48,7 +48,8 @@ function ProgressIndicator({ progress }: { progress: modelLoadingProgress }) {
     return null;
   }
   const percent = total > 0 ? (loaded / total) * 100 : 0;
-  const status = failed > 0 ? "exception" : "active";
+  const status =
+    failed > 0 && failed + loaded === total ? "exception" : "active";
 
   return (
     <div className={styles["viewer-progress"]}>
