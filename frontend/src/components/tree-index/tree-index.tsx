@@ -132,6 +132,7 @@ export function TreeIndex(props) {
     const { id: digest, depth } = rows[index];
     const node = nodes[digest];
     const item = items[node.item];
+    const title = item?.content.name || node.item;
     const isExpanded = expanded.has(digest);
     const hasChildren = node.children.length > 0;
     const isReused = (reuseIndex[node.item]?.length || 0) > 1;
@@ -175,8 +176,8 @@ export function TreeIndex(props) {
         )}
 
         {/* part label */}
-        <span className={styles["part-label"]}>
-          {item?.content.name || node.item}
+        <span className={styles["part-label"]} title={title}>
+          {title}
           {node.qty !== undefined && (
             <span className={styles["part-qty"]}> ×{node.qty}</span>
           )}
