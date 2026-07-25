@@ -83,7 +83,13 @@ func (s *Server) GetRoots(ctx *gin.Context) {
 		digest := hex.EncodeToString(root)
 		def, err := s.DB.GetDefinition(ctx, root)
 		if err != nil {
-			ctx.AbortWithStatus(http.StatusInternalServerError)
+			ctx.AbortWithStatusJSON(
+				http.StatusInternalServerError,
+				gin.H{
+					"error":  "failed to get definition",
+					"symbol": digest,
+				},
+			)
 			return
 		}
 		var item model.Item
