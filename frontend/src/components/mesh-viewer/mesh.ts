@@ -307,7 +307,7 @@ export const createMouseController = (
     }
   };
 
-  const pointerEventObject = (event: PointerEvent): THREE.Mesh | null => {
+  const pointerEventHit = (event: PointerEvent): THREE.Intersection | null => {
     const rect = mesh.renderer.domElement.getBoundingClientRect();
 
     pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -316,9 +316,21 @@ export const createMouseController = (
     raycaster.setFromCamera(pointer, mesh.camera);
 
     const hits = raycaster.intersectObjects(mesh.objects, true);
-    const obj = hits[0]?.object;
+    return hits[0] ?? null;
+  };
 
-    return obj instanceof THREE.Mesh ? obj : null;
+  const pointerEventObject = (event: PointerEvent): THREE.Mesh | null => {
+    const hit = pointerEventHit(event);
+    return hit?.object instanceof THREE.Mesh ? hit.object : null;
+  };
+
+  // @ts-expect-error TS6133
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const pointerEventCoordinate = (
+    event: PointerEvent
+  ): THREE.Vector3 | null => {
+    const hit = pointerEventHit(event);
+    return hit?.point ?? null;
   };
 
   const handlePointerMove = (event: PointerEvent) => {
@@ -339,6 +351,7 @@ export const createMouseController = (
 
     if (duration > 200 || distance > 10) return;
 
+    // console.log("Clicked coordinates:", pointerEventCoordinate(event));
     const clicked = pointerEventObject(event);
     const clickedID = findObjectId(clicked);
 
