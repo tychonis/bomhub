@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS bom (
     repo TEXT,
     bpc TEXT,
     summary JSONB,
+    active BOOLEAN DEFAULT true,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
