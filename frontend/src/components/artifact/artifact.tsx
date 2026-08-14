@@ -1,6 +1,7 @@
 import styles from "./artifact.module.css";
 import { FileOutlined } from "@ant-design/icons";
 import mime from "mime";
+import { API_ROOT } from "api/constants";
 
 export function Artifact({
   digest,
@@ -10,7 +11,7 @@ export function Artifact({
   filename: string;
 }) {
   const download = async () => {
-    const response = await fetch(`/api/object/${digest}`, {
+    const response = await fetch(`${API_ROOT}/object/${digest}`, {
       credentials: "include",
     });
 
