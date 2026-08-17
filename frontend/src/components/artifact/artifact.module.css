@@ -3,3 +3,7 @@
   align-items: center;
   cursor: pointer;
 }
+
+.artifact span {
+  margin-right: 0.3rem;
+}

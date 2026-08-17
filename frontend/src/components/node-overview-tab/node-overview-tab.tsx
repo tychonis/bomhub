@@ -25,9 +25,9 @@ function DetailRow({
 
 function GenerateAttrList(node) {
   const rows: [string, React.ReactNode][] = [
-    ["Item ID:", node.item],
-    ["Node ID:", node.id],
-    ["Process ID:", node.process],
+    ["Node ID:", digestValue(node.id)],
+    ["Item ID:", digestValue(node.item)],
+    ["Process ID:", digestValue(node.process)],
   ];
 
   return rows;
@@ -42,18 +42,22 @@ function getArtifacts(symbol) {
 
   const validArtifacts = [];
   for (const artifact of symbol.content.artifacts) {
-    if (!artifact.digest || !artifact.path) {
+    if (!artifact.digest || !artifact.filename) {
       continue;
     }
     validArtifacts.push([
       capitalize(artifact.tag),
-      <Artifact
-        digest={artifact.digest}
-        filename={artifact.path.split("/").pop() ?? artifact.path}
-      />,
+      <Artifact digest={artifact.digest} filename={artifact.filename} />,
     ]);
   }
   return validArtifacts;
+}
+
+function digestValue(digest: string) {
+  if (!digest) {
+    return "—";
+  }
+  return <div title={digest}>{digest.slice(0, 8)}</div>;
 }
 
 export function NodeOverview({ node }) {
