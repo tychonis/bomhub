@@ -55,7 +55,7 @@ function ProgressIndicator({ progress }: { progress: modelLoadingProgress }) {
     <div className={styles["viewer-progress"]}>
       <Progress
         type="circle"
-        trailColor="#e6f4ff"
+        railColor="#e6f4ff"
         percent={percent}
         status={status}
         strokeWidth={20}

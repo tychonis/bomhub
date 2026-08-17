@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
-    "antd": "^5.20.2",
+    "antd": "^6.6.0",
     "camera-controls": "^3.1.2",
     "ky": "^1.8.1",
     "mime": "^4.1.0",
@@ -30,6 +30,7 @@
     "@types/react-window": "^1.8.8",
     "@vitejs/plugin-react": "^4.6.0",
     "baseline-browser-mapping": "^2.10.7",
+    "esbuild": "^0.28.2",
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
