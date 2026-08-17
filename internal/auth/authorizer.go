@@ -26,6 +26,22 @@ func ResourceFromPath(method string, path string) string {
 	return method + ":" + path
 }
 
+func GET(path string) string {
+	return ResourceFromPath("GET", path)
+}
+
+func POST(path string) string {
+	return ResourceFromPath("POST", path)
+}
+
+func PUT(path string) string {
+	return ResourceFromPath("PUT", path)
+}
+
+func DELETE(path string) string {
+	return ResourceFromPath("DELETE", path)
+}
+
 func resFromCtx(ctx *gin.Context) string {
 	return ResourceFromPath(ctx.Request.Method, ctx.FullPath())
 }
