@@ -117,7 +117,7 @@ func (s *Server) SaveWorkspaceSummary(ctx *gin.Context) {
 	}
 	_, err = s.DB.SaveWorkspaceSummary(ctx, id, json.RawMessage(data))
 	if err != nil {
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 	ctx.Status(http.StatusAccepted)
