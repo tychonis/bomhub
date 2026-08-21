@@ -120,7 +120,7 @@ export function MeshView(props: {
     const node = props.nodes[props.selectedDigest];
     if (!node) return;
 
-    const preserveCamera = selectedFromMeshRef.current;
+    let preserveCamera = selectedFromMeshRef.current;
     selectedFromMeshRef.current = false;
 
     // TODO: fix this hack.
@@ -143,6 +143,10 @@ export function MeshView(props: {
     getModels(id, node.item)
       .then((models) => {
         setProgress({ total: models.length, loaded: 0, failed: 0 });
+        // TODO: fix this hack. leaf node should use parent coordinates.
+        if (models.length === 1) {
+          preserveCamera = false;
+        }
         for (const model of models) {
           const nodeID = findNode(node, model.name);
           if (!nodeID) {
