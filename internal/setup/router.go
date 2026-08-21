@@ -6,14 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"github.com/tychonis/bomhub/internal/auth"
+	"github.com/tychonis/bomhub/internal/version"
 )
-
-var Version = "unknown"
 
 func HealthCheckHandler(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"status":  "ok",
-		"version": Version,
+		"version": version.Version,
 	})
 }
 
