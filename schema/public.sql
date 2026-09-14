@@ -53,3 +53,12 @@ CREATE TABLE IF NOT EXISTS root (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS root_index ON root(bom_id);
+
+CREATE TABLE IF NOT EXISTS scene (
+    scene_id SERIAL PRIMARY KEY,
+    definition_id INT REFERENCES definition(definition_id),
+    object_digest BYTEA,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS scene_index ON scene(definition_id);

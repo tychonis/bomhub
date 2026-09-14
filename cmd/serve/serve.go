@@ -35,7 +35,7 @@ func registerServer(router *gin.Engine, server *serve.Server) {
 	auth.GrantMemberAccess(auth.GET("/metadata/:digest"))
 
 	router.GET("/tree/:id/:digest", server.GetBOMTree)
-	router.GET("/models/:id/:digest", server.GetToRenderMeshes)
+	router.GET("/models/:id/:digest", server.GetDisassembledScene)
 	router.GET("/model/:id/:digest", server.GetModel)
 	auth.GrantMemberAccess(auth.GET("/tree/:id/:digest"))
 	auth.GrantMemberAccess(auth.GET("/models/:id/:digest"))
@@ -56,6 +56,11 @@ func registerServer(router *gin.Engine, server *serve.Server) {
 	auth.GrantMemberAccess(auth.GET("/workspace/:id/roots"))
 	auth.GrantMemberAccess(auth.POST("/workspace/:id/index"))
 	auth.GrantMemberAccess(auth.GET("/workspace/:id/index"))
+
+	router.GET("/scene/:digest", server.GetScene)
+	router.POST("/scene/:digest", server.SaveScene)
+	auth.GrantMemberAccess(auth.GET("/scene/:digest"))
+	auth.GrantMemberAccess(auth.POST("/scene/:digest"))
 }
 
 func registerStorage(router *gin.Engine, s storage.ObjectStore) {

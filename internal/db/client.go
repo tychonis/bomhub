@@ -118,3 +118,31 @@ WHERE d.symbol_digest = $1;
 	err := c.pool.QueryRow(ctx, q, digest).Scan(&raw)
 	return raw, err
 }
+
+func (c *Client) GetScene(ctx context.Context, item []byte) ([]byte, error) {
+	const q = `
+SELECT object_digest
+FROM scene s
+  LEFT JOIN definition d
+    ON s.definition_id = d.definition_id
+WHERE d.symbol_digest = $1;
+`
+	var sceneDigest []byte
+	err := c.pool.QueryRow(ctx, q, item).Scan(&sceneDigest)
+	return sceneDigest, err
+}
+
+func (c *Client) SaveScene(ctx context.Context, item []byte, objectDigest []byte) error {
+	const q = `
+INSERT INTO scene (definition_id, object_digest)
+SELECT d.definition_id, $2
+FROM definition d
+WHERE d.symbol_digest = $1
+ON CONFLICT (definition_id)
+DO UPDATE SET
+  object_digest = EXCLUDED.object_digest,
+  updated_at = now();
+`
+	_, err := c.pool.Exec(ctx, q, item, objectDigest)
+	return err
+}

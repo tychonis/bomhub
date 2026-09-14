@@ -9,11 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/tychonis/bomhub/internal/setup"
 	"github.com/tychonis/cyanotype/core/instantiator"
-	"github.com/tychonis/cyanotype/core/process"
-	"github.com/tychonis/cyanotype/core/qualifier"
-	"github.com/tychonis/cyanotype/core/ranker"
 	"github.com/tychonis/cyanotype/model"
 )
 
@@ -135,102 +131,6 @@ func (s *Server) GetWorkspaceSummary(ctx *gin.Context) {
 		return
 	}
 	ctx.Data(http.StatusOK, "application/json; charset=utf-8", obj)
-}
-
-type Mesh struct {
-	Item      string            `json:"item"`
-	Name      string            `json:"name"`
-	ItemName  string            `json:"item_name"`
-	Rotation  *model.Quaternion `json:"rotation,omitempty"`
-	Placement *model.Vec3       `json:"placement,omitempty"`
-}
-
-func (s *Server) GetToRenderMeshes(ctx *gin.Context) {
-	tag := ctx.Param("id")
-	digest := ctx.Param("digest")
-	catalog, err := s.getCatalog(tag)
-	if err != nil {
-		ctx.AbortWithStatus(http.StatusInternalServerError)
-		return
-	}
-	instantiator := setup.CreateDefaultInstantiator()
-	instantiator.Ranker = ranker.NewCatalogTypeRanker(catalog, process.DRAWING)
-	parentSym, err := catalog.Get(digest)
-	if err != nil {
-		ctx.AbortWithStatus(http.StatusNotFound)
-		return
-	}
-	var coItem *model.CoItem
-	var ok bool
-	switch parent := parentSym.(type) {
-	case *model.CoItem:
-		coItem = parent
-	case *model.Item:
-		coItemSym, err := catalog.FindCurrent(qualifier.ImplicitCoItem(parent))
-		if err != nil {
-			ctx.AbortWithStatus(http.StatusNotFound)
-			return
-		}
-		coItem, ok = coItemSym.(*model.CoItem)
-		if !ok {
-			ctx.AbortWithStatus(http.StatusNotFound)
-			return
-		}
-	default:
-		ctx.AbortWithStatus(http.StatusNotFound)
-		return
-	}
-	parentNode, err := instantiator.ExpandNode(catalog, "tmp", coItem)
-	if err != nil {
-		ctx.AbortWithStatus(http.StatusInternalServerError)
-		return
-	}
-	// If the parent node has no children, return a single mesh representing the parent item.
-	if len(parentNode.Children) <= 0 {
-		ret := []*Mesh{
-			{
-				Item:      parentNode.Item.Digest,
-				Name:      "leaf",
-				ItemName:  getItemName(parentNode.Item),
-				Rotation:  nil,
-				Placement: nil,
-			},
-		}
-		ctx.JSON(http.StatusOK, ret)
-		return
-	}
-
-	ret := make([]*Mesh, 0, len(parentNode.Children))
-	placement := make(map[string]*Mesh)
-	p := parentNode.Process
-	if p.Content.GetType() == process.DRAWING {
-		content, ok := p.Content.(*process.Drawing)
-		if !ok {
-			ctx.AbortWithStatus(http.StatusInternalServerError)
-			return
-		}
-		for _, comp := range content.Components {
-			placement[comp.Name] = &Mesh{
-				Rotation:  comp.Rotation,
-				Placement: comp.Translation,
-			}
-		}
-	}
-	children := parentNode.Children
-	for _, child := range children {
-		mesh, ok := placement[child.Name]
-		if !ok {
-			mesh = &Mesh{
-				Rotation:  &model.IdentityQuaternion,
-				Placement: &model.IdentityVec3,
-			}
-		}
-		mesh.Item = child.Item.Digest
-		mesh.Name = child.Name
-		mesh.ItemName = getItemName(child.Item)
-		ret = append(ret, mesh)
-	}
-	ctx.JSON(http.StatusOK, ret)
 }
 
 func (s *Server) GetModel(ctx *gin.Context) {
