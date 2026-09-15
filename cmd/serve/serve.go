@@ -64,8 +64,10 @@ func registerServer(router *gin.Engine, server *serve.Server) {
 }
 
 func registerStorage(router *gin.Engine, s storage.ObjectStore) {
+	router.HEAD("/object/*key", storage.ServeObjectHandler(s))
 	router.GET("/object/*key", storage.ServeObjectHandler(s))
 	router.POST("/object/*key", storage.UploadObjectHandler(s))
+	auth.GrantMemberAccess(auth.HEAD("/object/*key"))
 	auth.GrantMemberAccess(auth.GET("/object/*key"))
 	auth.GrantMemberAccess(auth.POST("/object/*key"))
 }

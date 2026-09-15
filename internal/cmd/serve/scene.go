@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/tychonis/cyanotype/core/scene"
+	"github.com/tychonis/cyanotype/model"
 )
 
 func (s *Server) GetDisassembledScene(ctx *gin.Context) {
@@ -51,15 +52,13 @@ func (s *Server) SaveScene(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	var body struct {
-		ObjectDigest string `json:"object_digest"`
-	}
+	var body model.Artifact
 	err = ctx.BindJSON(&body)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	objectDigest, err := hex.DecodeString(body.ObjectDigest)
+	objectDigest, err := hex.DecodeString(body.Digest)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return

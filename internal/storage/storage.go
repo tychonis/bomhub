@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -147,7 +148,12 @@ func ServeObjectHandler(store ObjectStore) gin.HandlerFunc {
 		defer r.Close()
 
 		c.Header("Content-Type", info.ContentType)
+		c.Header("Content-Length", strconv.FormatInt(info.Size, 10))
 		c.Header("Content-Disposition", `inline; filename="`+info.Name+`"`)
+		if c.Request.Method == http.MethodHead {
+			c.Status(http.StatusOK)
+			return
+		}
 		c.DataFromReader(http.StatusOK, info.Size, info.ContentType, r, nil)
 	}
 }

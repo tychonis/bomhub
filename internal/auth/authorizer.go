@@ -34,6 +34,10 @@ func POST(path string) string {
 	return ResourceFromPath("POST", path)
 }
 
+func HEAD(path string) string {
+	return ResourceFromPath("HEAD", path)
+}
+
 func PUT(path string) string {
 	return ResourceFromPath("PUT", path)
 }
