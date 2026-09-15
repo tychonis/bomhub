@@ -44,6 +44,11 @@ func registerServer(router *gin.Engine, server *serve.Server) {
 	router.GET("/history/:id/:digest", server.GetHistory)
 	auth.GrantMemberAccess(auth.GET("/history/:id/:digest"))
 
+	router.GET("/module/*module", server.GetModule)
+	router.POST("/module/*module", server.CreateModule)
+	auth.GrantMemberAccess(auth.GET("/module/*module"))
+	auth.GrantMemberAccess(auth.POST("/module/*module"))
+
 	router.GET("/workspace/:id", server.GetWorkspaceSummary)
 	router.POST("/workspace/:id", server.SaveWorkspaceSummary)
 	router.GET("/workspace/:id/catalog", server.GetCatalog)

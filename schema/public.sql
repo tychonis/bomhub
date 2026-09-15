@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS bom (
     bom_id SERIAL PRIMARY KEY,
     name TEXT,
+    module_name TEXT,
     repo TEXT,
     bpc TEXT,
     summary JSONB,
@@ -8,6 +9,7 @@ CREATE TABLE IF NOT EXISTS bom (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
+CREATE UNIQUE INDEX IF NOT EXISTS idx_bom_module_name ON bom(module_name);
 
 CREATE TABLE IF NOT EXISTS activity (
     activity_id SERIAL PRIMARY KEY,

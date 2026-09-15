@@ -9,6 +9,7 @@ import (
 	"log/slog"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	lru "github.com/hashicorp/golang-lru/v2"
@@ -280,4 +281,37 @@ func (s *Server) GetCatalogHead(tag string) (model.RevisionID, error) {
 		return "", err
 	}
 	return c.LatestRevision, nil
+}
+
+func (s *Server) GetModule(ctx *gin.Context) {
+	module := strings.TrimPrefix(ctx.Param("module"), "/")
+
+	id, err := s.DB.GetWorkspaceID(ctx, module)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"id": id})
+}
+
+func (s *Server) CreateModule(ctx *gin.Context) {
+	module := strings.TrimPrefix(ctx.Param("module"), "/")
+	if module == "" {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	id, created, err := s.DB.CreateModule(ctx, module)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	status := http.StatusOK
+	if created {
+		status = http.StatusCreated
+	}
+
+	ctx.JSON(status, gin.H{"id": id})
 }

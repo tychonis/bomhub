@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"encoding/json"
+	"errors"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -145,4 +146,35 @@ DO UPDATE SET
 `
 	_, err := c.pool.Exec(ctx, q, item, objectDigest)
 	return err
+}
+
+func (c *Client) GetWorkspaceID(ctx context.Context, module string) (int, error) {
+	var id int
+	const q = `SELECT bom_id FROM bom WHERE module_name = $1 AND active = true`
+	err := c.pool.QueryRow(ctx, q, module).Scan(&id)
+	return id, err
+}
+
+func (c *Client) CreateModule(ctx context.Context, module string) (int, bool, error) {
+	var id int
+	const q = `
+INSERT INTO bom (module_name)
+  VALUES ($1)
+    ON CONFLICT (module_name) DO NOTHING
+RETURNING bom_id
+`
+	err := c.pool.QueryRow(ctx, q, module).Scan(&id)
+
+	if err == nil {
+		return id, true, nil
+	}
+
+	if !errors.Is(err, pgx.ErrNoRows) {
+		return 0, false, err
+	}
+
+	err = c.pool.QueryRow(ctx,
+		`SELECT bom_id FROM bom WHERE module_name = $1`, module).Scan(&id)
+
+	return id, false, err
 }
