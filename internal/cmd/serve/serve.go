@@ -152,7 +152,11 @@ func (s *Server) getCatalogRevision(tag string, rev model.RevisionID) (*catalog.
 		if catalog, ok := s.catalogCache.Get(key); ok {
 			return catalog, nil
 		}
-		catalog := setup.CreateDefaultCatalog(tag)
+		// TODO: cleanup this. bomhub and cyanotype are intertwined.
+		// catalog probably should be db based instead of calling the bomhub itself.
+		tagint, _ := strconv.Atoi(tag)
+		module, _ := s.DB.GetWorkspaceModule(context.TODO(), tagint)
+		catalog := setup.CreateDefaultCatalog(module)
 		ordinaryRev, err := catalog.GetLatestRevision()
 		if err != nil {
 			return nil, err

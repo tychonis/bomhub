@@ -63,4 +63,4 @@ CREATE TABLE IF NOT EXISTS scene (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
-CREATE INDEX IF NOT EXISTS scene_index ON scene(definition_id);
+CREATE UNIQUE INDEX IF NOT EXISTS scene_index ON scene(definition_id);

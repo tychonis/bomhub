@@ -46,6 +46,13 @@ func (c *Client) GetRoots(ctx context.Context, id int) ([][]byte, error) {
 	return pgx.CollectRows(rows, pgx.RowTo[[]byte])
 }
 
+func (c *Client) GetWorkspaceModule(ctx context.Context, id int) (string, error) {
+	const q = `SELECT COALESCE(module_name, '') FROM bom WHERE bom_id = $1;`
+	var module string
+	err := c.pool.QueryRow(ctx, q, id).Scan(&module)
+	return module, err
+}
+
 func (c *Client) GetWorkspaceSummary(ctx context.Context, id int) (json.RawMessage, error) {
 	const q = `SELECT summary FROM bom WHERE bom_id = $1;`
 	var raw json.RawMessage

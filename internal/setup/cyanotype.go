@@ -7,11 +7,11 @@ import (
 	"github.com/tychonis/cyanotype/core/instantiator"
 )
 
-func CreateDefaultCatalog(tag string) *catalog.Catalog {
+func CreateDefaultCatalog(module string) *catalog.Catalog {
 	return catalog.NewRemoteCatalog(
 		viper.GetString("cyanotype.core"),
 		viper.GetString("cyanotype.token"),
-		tag,
+		module,
 	)
 }
 
