@@ -12,6 +12,8 @@ const DRACO_DECODER_PATH =
 export type ModelDef = {
   name: string;
   item: string;
+  source: string;
+  type: string;
   rotation?: THREE.Quaternion;
   shift?: THREE.Vector3;
 };

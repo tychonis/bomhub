@@ -15,25 +15,25 @@ async function getModels(id: string, digest: string): Promise<MESH.ModelDef[]> {
     .json();
   const ret: MESH.ModelDef[] = [];
 
-  for (const def of rawModelDef) {
-    if (!def.rotation) {
-      def.rotation = [0, 0, 0, 1];
-    }
-    if (!def.placement) {
-      def.placement = [0, 0, 0];
-    }
+  for (const def of rawModelDef.objects) {
+    const rotation = def.placement.rotation
+      ? def.placement.rotation
+      : [0, 0, 0, 1];
+    const shift = def.placement.position ? def.placement.position : [0, 0, 0];
     ret.push({
       name: def.name,
       item: def.item,
-      rotation: new THREE.Quaternion().fromArray(def.rotation),
-      shift: new THREE.Vector3().fromArray(def.placement),
+      source: def.source,
+      type: def.type,
+      rotation: new THREE.Quaternion().fromArray(rotation),
+      shift: new THREE.Vector3().fromArray(shift),
     });
   }
   return ret;
 }
 
-const getItemPath = (id, item) => {
-  return `${API_ROOT}/model/${id}/${item}`;
+const getItemPath = (source) => {
+  return `${API_ROOT}/scene/${source}`;
 };
 
 type modelLoadingProgress = {
@@ -153,7 +153,7 @@ export function MeshView(props: {
             console.warn(`No matching node for model ${model.name}`);
           }
 
-          const path = getItemPath(id, model.item);
+          const path = getItemPath(model.source);
 
           MESH.loadModel(
             mesh,
