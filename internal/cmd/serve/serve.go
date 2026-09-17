@@ -157,6 +157,9 @@ func (s *Server) getCatalogRevision(tag string, rev model.RevisionID) (*catalog.
 		tagint, _ := strconv.Atoi(tag)
 		module, _ := s.DB.GetWorkspaceModule(context.TODO(), tagint)
 		catalog := setup.CreateDefaultCatalog(module)
+		if catalog == nil {
+			return nil, fmt.Errorf("failed to create catalog")
+		}
 		ordinaryRev, err := catalog.GetLatestRevision()
 		if err != nil {
 			return nil, err
