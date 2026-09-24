@@ -93,10 +93,6 @@ export default function DebouncedSearch({
     <AutoComplete
       className={className}
       value={query}
-      showSearch={{
-        onSearch: setQuery,
-        filterOption: false,
-      }}
       options={validQuery ? options : []}
       onSelect={(value, option) => onPick?.(value, option as Option)}
       open={validQuery && open}
