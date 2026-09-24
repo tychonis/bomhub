@@ -61,12 +61,9 @@ function digestValue(digest: string) {
 }
 
 export function NodeOverview({ node }) {
-  const [attrs, setAttrs] = useState<[string, React.ReactNode][]>([]);
+  const [extras, setExtras] = useState<[string, React.ReactNode][]>([]);
 
   useEffect(() => {
-    const extra: [string, React.ReactNode][] = [];
-    setAttrs(GenerateAttrList(node).concat(extra));
-
     const symbols = [
       ["Item", node.item],
       ["Process", node.process],
@@ -80,12 +77,7 @@ export function NodeOverview({ node }) {
         result: id ? await GetSymbolDetails(id) : undefined,
       }))
     ).then((results) => {
-      results.map(({ result }) => {
-        const artifacts = getArtifacts(result);
-        if (artifacts.length > 0) {
-          setAttrs((prev) => prev.concat(artifacts));
-        }
-      });
+      setExtras(results.flatMap(({ result }) => getArtifacts(result)));
     });
   }, [node]);
 
@@ -94,6 +86,8 @@ export function NodeOverview({ node }) {
       <div className={styles["empty"]}>Select a part to view details.</div>
     );
   }
+
+  const attrs = GenerateAttrList(node).concat(extras);
 
   return (
     <div className={styles["tab"]}>
