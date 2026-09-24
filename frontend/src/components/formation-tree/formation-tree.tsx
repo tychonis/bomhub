@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useCallback } from "react";
-import { FixedSizeList as List } from "react-window";
+import { useState, useMemo, useCallback } from "react";
+import { List, type RowComponentProps } from "react-window";
 import { RightOutlined, DownOutlined } from "@ant-design/icons";
 import styles from "./formation-tree.module.css";
 
@@ -144,13 +144,7 @@ export function FormationTree(props: FormationTreeProps) {
   );
   const reusedRowSet = new Set(reusedRows);
 
-  const Row = ({
-    index,
-    style,
-  }: {
-    index: number;
-    style: React.CSSProperties;
-  }) => {
+  const Row = ({ index, style }: RowComponentProps) => {
     const { id, depth } = rows[index];
     const node = nodes[id];
     const item = items[node.item_id];
@@ -220,13 +214,15 @@ export function FormationTree(props: FormationTreeProps) {
   return (
     <div className={styles["formation-tree"]}>
       <List
-        height={window.innerHeight}
-        width={"100%"}
-        itemCount={rows.length}
-        itemSize={rowHeight}
-      >
-        {Row}
-      </List>
+        style={{
+          height: window.innerHeight,
+          width: "100%",
+        }}
+        rowCount={rows.length}
+        rowHeight={rowHeight}
+        rowComponent={Row}
+        rowProps={{}}
+      />
     </div>
   );
 }

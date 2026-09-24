@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { FixedSizeList as List } from "react-window";
+import { List, type RowComponentProps } from "react-window";
 import { RightOutlined, DownOutlined } from "@ant-design/icons";
 import styles from "./tree-index.module.css";
 
@@ -205,7 +205,7 @@ export function TreeIndex(props) {
     return new Set(buildReusedRows(nodes, visible, reuseIndex, current));
   }, [nodes, rows, reuseIndex, current]);
 
-  const Row = ({ index, style }) => {
+  const Row = ({ index, style }: RowComponentProps) => {
     const row = rows[index];
 
     return (
@@ -226,13 +226,15 @@ export function TreeIndex(props) {
   return (
     <div className={styles["tree-index"]}>
       <List
-        height={window.innerHeight * 0.9}
-        width="100%"
-        itemCount={rows.length}
-        itemSize={rowHeight}
-      >
-        {Row}
-      </List>
+        style={{
+          height: window.innerHeight * 0.9,
+          width: "100%",
+        }}
+        rowCount={rows.length}
+        rowHeight={rowHeight}
+        rowComponent={Row}
+        rowProps={{}}
+      />
     </div>
   );
 }
