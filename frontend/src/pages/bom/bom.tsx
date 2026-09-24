@@ -80,8 +80,6 @@ export const Bom = ({ index }: { index: number }) => {
   const [bpc, setBpc] = useState<Bpc | null>(null);
 
   useEffect(() => {
-    setBpc(null);
-    setSelectedId(null);
     getRawBPC(index).then(setBpc).catch(console.error);
   }, [index]);
 

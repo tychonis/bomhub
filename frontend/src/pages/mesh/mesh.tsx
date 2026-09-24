@@ -34,13 +34,15 @@ async function getRawBPC(id: string, digest: string): Promise<BpcDocument> {
 export const MeshPage = () => {
   const { id, digest } = useParams<{ id: string; digest: string }>();
 
+  return <Mesh key={`${id}:${digest}`} id={id} digest={digest} />;
+};
+
+const Mesh = ({ id, digest }) => {
   const [selectedDigest, setSelectedDigest] = useState<string | null>(null);
   const [current, setCurrent] = useState<string>("");
   const [bom, setBom] = useState<BpcDocument | null>(null);
 
   useEffect(() => {
-    setBom(null);
-    setSelectedDigest(null);
     getRawBPC(id, digest)
       .then((bpc) => {
         setBom(bpc);

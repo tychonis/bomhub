@@ -6,7 +6,7 @@ import { TreeRootSelector } from "components/tree-root-selector/tree-root-select
 import { API_ROOT } from "api/constants";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import ApartmentOutlined from "@ant-design/icons/lib/icons/ApartmentOutlined";
+import ApartmentOutlined from "@ant-design/icons/ApartmentOutlined";
 
 async function getWorkspaceDetails(id: string): Promise<any> {
   const detail = await bomhub.get(`${API_ROOT}/workspace/${id}`).json();
