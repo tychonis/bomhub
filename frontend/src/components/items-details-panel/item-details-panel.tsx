@@ -44,32 +44,45 @@ function GenerateAttrList(node, item) {
 }
 
 export function ItemDetailsPanel({ node, item, reuseCount }) {
-  const [attrs, setAttrs] = useState<[string, React.ReactNode][]>([]);
-  const [image, setImage] = useState<string>(DEFAULT_IMAGE);
+  const [details, setDetails] = useState(null);
+
   useEffect(() => {
-    const extra: [string, React.ReactNode][] = [];
-
-    if (reuseCount > 1) {
-      extra.push(["Used In:", <>{reuseCount} places</>]);
-    }
-
-    setImage(DEFAULT_IMAGE);
-    setAttrs(GenerateAttrList(node, item).concat(extra));
+    let cancelled = false;
 
     GetItemDetails(node.item).then((result) => {
-      const finalExtra = extra.concat([
-        ["Details:", <>{result["image"]}</>], // replace with actual content
-      ]);
-      setAttrs(GenerateAttrList(node, item).concat(finalExtra));
-      setImage(result["image"]);
+      if (!cancelled) {
+        setDetails({
+          item: node.item,
+          result,
+        });
+      }
     });
-  }, [node, item, reuseCount]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [node.item]);
 
   if (!node || !item) {
     return (
       <div className={styles["empty"]}>Select a part to view details.</div>
     );
   }
+
+  const currentDetails = details?.item === node.item ? details.result : null;
+
+  const extra: [string, React.ReactNode][] = [];
+
+  if (reuseCount > 1) {
+    extra.push(["Used In:", <>{reuseCount} places</>]);
+  }
+
+  if (currentDetails) {
+    extra.push(["Details:", <>{currentDetails["image"]}</>]);
+  }
+
+  const attrs = GenerateAttrList(node, item).concat(extra);
+  const image = currentDetails?.["image"] ?? DEFAULT_IMAGE;
 
   return (
     <div className={styles["panel"]}>
