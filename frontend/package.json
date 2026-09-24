@@ -13,7 +13,7 @@
     "@ant-design/icons": "^6.3.4",
     "antd": "^6.6.0",
     "camera-controls": "^3.1.2",
-    "ky": "^1.8.1",
+    "ky": "^2.1.0",
     "mime": "^4.1.0",
     "mime-types": "^3.0.2",
     "react": "^19.3.0",
