@@ -34,6 +34,7 @@
 
 .notoggle {
   width: 1rem;
+  flex-shrink: 0;
 }
 
 .part-label {
