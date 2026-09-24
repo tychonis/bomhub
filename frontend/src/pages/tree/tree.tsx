@@ -38,14 +38,15 @@ async function getAttachments(id: string) {
 
 export const TreePage = () => {
   const { id, digest } = useParams<{ id: string; digest: string }>();
+  return <Tree key={`${id}:${digest}`} id={id} digest={digest} />;
+};
 
+const Tree = ({ id, digest }) => {
   const [selectedDigest, setSelectedDigest] = useState<string | null>(null);
   const [bom, setBom] = useState<BpcDocument | null>(null);
   const [attachements, setAttachements] = useState([]);
 
   useEffect(() => {
-    setBom(null);
-    setSelectedDigest(null);
     getRawBPC(id, digest)
       .then((bpc) => {
         setBom(bpc);
