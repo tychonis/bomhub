@@ -1,4 +1,5 @@
 // import { TestPage } from "pages/test-page/test-page";
+import React from "react";
 import { HomeOutlined } from "@ant-design/icons";
 import { Landing } from "pages/landing/landing";
 
@@ -6,8 +7,8 @@ export interface Component {
   path: string;
   key: string;
   label: string;
-  icon: JSX.Element;
-  element: JSX.Element;
+  icon: React.JSX.Element;
+  element: React.JSX.Element;
   children: Component[];
 }
 
