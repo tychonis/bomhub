@@ -5,38 +5,35 @@ import { API_ROOT } from "api/constants";
 import styles from "./workspace-activity.module.css";
 
 interface Revision {
-  digest: string;
-  created_at: string;
+  id: string;
+  created_at: number;
 }
 
-interface RevisionsResponse {
-  revisions: Revision[];
-}
-
-async function getRevisions(id: string): Promise<RevisionsResponse> {
+async function getRevisions(id: string): Promise<Revision[]> {
   return bomhub.get(`${API_ROOT}/workspace/${id}/revisions`).json();
 }
 
-function formatDate(date: string) {
-  return new Date(date).toLocaleString();
+function formatTimestamp(timestamp: number) {
+  return new Date(timestamp / 1000000).toLocaleString();
 }
 
 export function WorkspaceActivity({ workspaceId }: { workspaceId: string }) {
   const [revisions, setRevisions] = useState<Revision[]>([]);
 
   useEffect(() => {
-    getRevisions(workspaceId).then((data) => {
-      setRevisions(data.revisions);
+    getRevisions(workspaceId).then((revisions) => {
+      setRevisions(revisions);
     });
   }, [workspaceId]);
 
+  console.log(revisions);
   return (
     <section className={styles["activity"]}>
       <h2 className={styles["heading"]}>Recent activity</h2>
 
       <div className={styles["timeline"]}>
         {revisions.map((revision) => (
-          <div className={styles["entry"]} key={revision.digest}>
+          <div className={styles["entry"]} key={revision.id}>
             <div className={styles["marker"]} />
 
             <div className={styles["content"]}>
@@ -44,9 +41,9 @@ export function WorkspaceActivity({ workspaceId }: { workspaceId: string }) {
 
               <div className={styles["metadata"]}>
                 <span className={styles["digest"]}>
-                  {revision.digest.slice(0, 7)}
+                  {revision.id.slice(0, 7)}
                 </span>
-                <span>{formatDate(revision.created_at)}</span>
+                <span>{formatTimestamp(revision.created_at)}</span>
               </div>
             </div>
           </div>

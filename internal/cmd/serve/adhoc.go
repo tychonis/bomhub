@@ -99,6 +99,21 @@ func (s *Server) GetRoots(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
+func (s *Server) GetRevisions(ctx *gin.Context) {
+	tag := ctx.Param("id")
+	catalog, err := s.getCatalog(tag)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	revisions, err := catalog.GetNewerRevisions(nil)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	ctx.JSON(http.StatusOK, revisions)
+}
+
 func (s *Server) SaveWorkspaceSummary(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
