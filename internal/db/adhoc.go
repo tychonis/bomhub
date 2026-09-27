@@ -54,7 +54,15 @@ func (c *Client) GetWorkspaceModule(ctx context.Context, id int) (string, error)
 }
 
 func (c *Client) GetWorkspaceSummary(ctx context.Context, id int) (json.RawMessage, error) {
-	const q = `SELECT summary FROM bom WHERE bom_id = $1;`
+	const q = `
+SELECT jsonb_build_object(
+	'name', name,
+	'repo', repo,
+	'updated_at', updated_at
+) || summary
+FROM bom
+WHERE bom_id = $1;
+	`
 	var raw json.RawMessage
 	err := c.pool.QueryRow(ctx, q, id).Scan(&raw)
 	return raw, err
