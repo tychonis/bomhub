@@ -23,18 +23,17 @@ type BOMItem struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 	Repo string `json:"repo"`
-	BPC  string `json:"bpc"`
 }
 
 func (c *Client) GetBOMItems(ctx context.Context) ([]*BOMItem, error) {
-	sql := "SELECT bom_id, name, repo, bpc FROM bom WHERE active = true;"
+	sql := "SELECT bom_id, name, repo FROM bom WHERE active = true;"
 	rows, err := c.pool.Query(ctx, sql)
 	if err != nil {
 		return nil, err
 	}
 	return pgx.CollectRows(rows, func(row pgx.CollectableRow) (*BOMItem, error) {
 		var item BOMItem
-		err := row.Scan(&item.ID, &item.Name, &item.Repo, &item.BPC)
+		err := row.Scan(&item.ID, &item.Name, &item.Repo)
 		return &item, err
 	})
 }

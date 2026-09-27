@@ -1,0 +1,74 @@
+.activity {
+  min-width: 0;
+}
+
+.heading {
+  margin: 0 0 1rem;
+
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.entry {
+  position: relative;
+
+  display: flex;
+  gap: 0.8rem;
+
+  padding-bottom: 1.25rem;
+}
+
+.entry:not(:last-child)::before {
+  content: "";
+
+  position: absolute;
+  top: 0.7rem;
+  bottom: -0.1rem;
+  left: 0.3rem;
+
+  width: 1px;
+  background: #e5e7eb;
+}
+
+.marker {
+  position: relative;
+  z-index: 1;
+
+  width: 0.65rem;
+  height: 0.65rem;
+  margin-top: 0.3rem;
+  flex: 0 0 auto;
+
+  background: #94a3b8;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+
+.content {
+  min-width: 0;
+}
+
+.description {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  margin-top: 0.2rem;
+
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.digest {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}

@@ -1,17 +1,37 @@
 .ws-container {
-  height: 80vh;
   width: 90vw;
   min-width: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  align-content: flex-start;
+  min-height: 80vh;
+
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(18rem, 1fr);
+  grid-template-rows: auto 1fr;
+  gap: 2rem;
+  align-items: start;
 }
 
-.ws-container .title {
-  width: 100%;
+.ws-summary {
+  grid-column: 1 / -1;
 }
 
-.ws-container :global(.anticon) {
-  font-size: 2rem;
+.ws-roots {
+  grid-column: 1;
+  min-width: 0;
+}
+
+.ws-activity {
+  grid-column: 2;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .ws-container {
+    grid-template-columns: 1fr;
+  }
+
+  .ws-summary,
+  .ws-main,
+  .ws-aside {
+    grid-column: 1;
+  }
 }
