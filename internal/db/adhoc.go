@@ -56,8 +56,7 @@ func (c *Client) GetWorkspaceModule(ctx context.Context, id int) (string, error)
 func (c *Client) GetWorkspaceSummary(ctx context.Context, id int) (json.RawMessage, error) {
 	const q = `
 SELECT jsonb_build_object(
-	'name', name,
-	'repo', repo,
+	'created_at', created_at,
 	'updated_at', updated_at
 ) || summary
 FROM bom

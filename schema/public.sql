@@ -1,9 +1,6 @@
 CREATE TABLE IF NOT EXISTS bom (
     bom_id SERIAL PRIMARY KEY,
-    name TEXT,
     module_name TEXT,
-    repo TEXT,
-    bpc TEXT,
     summary JSONB,
     active BOOLEAN DEFAULT true,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),

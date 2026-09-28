@@ -26,8 +26,15 @@ type BOMItem struct {
 }
 
 func (c *Client) GetBOMItems(ctx context.Context) ([]*BOMItem, error) {
-	sql := "SELECT bom_id, name, repo FROM bom WHERE active = true;"
-	rows, err := c.pool.Query(ctx, sql)
+	q := `
+SELECT
+	bom_id,
+	COALESCE(summary->>'name', 'unknown'),
+	COALESCE(summary->>'repo', 'unknown')
+FROM bom
+WHERE active = true;
+`
+	rows, err := c.pool.Query(ctx, q)
 	if err != nil {
 		return nil, err
 	}
