@@ -56,9 +56,8 @@ export const WorkspaceSummary = ({ workspaceId }: { workspaceId: string }) => {
         </div>
 
         <div className={styles["stats"]}>
-          <Stat value={details.part_count || 0} label="Parts" />
-          <Stat value={details.unique_parts || 0} label="Unique" />
-          <Stat value={details.root_count || 0} label="Roots" />{" "}
+          <Stat value={details.total_items || 0} label="Variant" />
+          <Stat value={details.total_coitems || 0} label="Types" />{" "}
           <Stat
             value={details.latest_revision?.slice(0, 7) || ""}
             label="Revision"
