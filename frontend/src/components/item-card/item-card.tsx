@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import ApartmentOutlined from "@ant-design/icons/ApartmentOutlined";
+import { useEffect, useState } from "react";
 
 import styles from "./item-card.module.css";
 
@@ -18,11 +19,24 @@ export function ItemCard({
   uniqueParts,
   thumbnail,
 }: ItemCardProps) {
+  const [thumbnailError, setThumbnailError] = useState(false);
+
+  useEffect(() => {
+    setThumbnailError(false);
+  }, [thumbnail]);
+
+  const showThumbnail = thumbnail && !thumbnailError;
+
   return (
     <Link to={to} className={styles["card"]}>
       <div className={styles["preview"]}>
-        {thumbnail ? (
-          <img className={styles["thumbnail"]} src={thumbnail} alt="" />
+        {showThumbnail ? (
+          <img
+            className={styles["thumbnail"]}
+            src={thumbnail}
+            alt=""
+            onError={() => setThumbnailError(true)}
+          />
         ) : (
           <ApartmentOutlined />
         )}

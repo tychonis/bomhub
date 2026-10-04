@@ -43,6 +43,7 @@ export function TreeRootSelector({ workspaceId }: { workspaceId: string }) {
             to={`/mesh/${workspaceId}/${root.digest}`}
             partCount={root.part_count}
             uniqueParts={root.unique_parts}
+            thumbnail={`${API_ROOT}/representation/${root.digest}?type=thumbnail`}
           />
         ))}
 
