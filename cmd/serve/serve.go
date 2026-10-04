@@ -36,10 +36,8 @@ func registerServer(router *gin.Engine, server *serve.Server) {
 
 	router.GET("/tree/:id/:digest", server.GetBOMTree)
 	router.GET("/models/:id/:digest", server.GetDisassembledScene)
-	router.GET("/model/:id/:digest", server.GetModel)
 	auth.GrantMemberAccess(auth.GET("/tree/:id/:digest"))
 	auth.GrantMemberAccess(auth.GET("/models/:id/:digest"))
-	auth.GrantMemberAccess(auth.GET("/model/:id/:digest"))
 
 	router.GET("/history/:id/:digest", server.GetHistory)
 	auth.GrantMemberAccess(auth.GET("/history/:id/:digest"))
@@ -64,10 +62,10 @@ func registerServer(router *gin.Engine, server *serve.Server) {
 	auth.GrantMemberAccess(auth.GET("/workspace/:id/index"))
 	auth.GrantMemberAccess(auth.GET("/workspace/:id/revisions"))
 
-	router.GET("/scene/:digest", server.GetScene)
-	router.POST("/scene/:digest", server.SaveScene)
-	auth.GrantMemberAccess(auth.GET("/scene/:digest"))
-	auth.GrantMemberAccess(auth.POST("/scene/:digest"))
+	router.GET("/representation/:digest", server.GetRepresentation)
+	router.POST("/representation/:digest", server.SaveRepresentation)
+	auth.GrantMemberAccess(auth.GET("/representation/:digest"))
+	auth.GrantMemberAccess(auth.POST("/representation/:digest"))
 }
 
 func registerStorage(router *gin.Engine, s storage.ObjectStore) {

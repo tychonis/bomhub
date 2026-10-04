@@ -33,7 +33,7 @@ async function getModels(id: string, digest: string): Promise<MESH.ModelDef[]> {
 }
 
 const getItemPath = (source) => {
-  return `${API_ROOT}/scene/${source}`;
+  return `${API_ROOT}/representation/${source}?type=scene`;
 };
 
 type modelLoadingProgress = {

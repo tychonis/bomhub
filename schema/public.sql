@@ -53,11 +53,14 @@ CREATE TABLE IF NOT EXISTS root (
 );
 CREATE INDEX IF NOT EXISTS root_index ON root(bom_id);
 
-CREATE TABLE IF NOT EXISTS scene (
-    scene_id SERIAL PRIMARY KEY,
-    definition_id INT REFERENCES definition(definition_id),
-    object_digest BYTEA,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+CREATE TABLE representation (
+    representation_id SERIAL PRIMARY KEY,
+    symbol_digest BYTEA NOT NULL,
+    type TEXT NOT NULL,
+    object_digest BYTEA NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT now()
 );
-CREATE UNIQUE INDEX IF NOT EXISTS scene_index ON scene(definition_id);
+
+CREATE INDEX representation_lookup_index
+    ON representation(symbol_digest, type);

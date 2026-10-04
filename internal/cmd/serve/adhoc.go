@@ -148,35 +148,6 @@ func (s *Server) GetWorkspaceSummary(ctx *gin.Context) {
 	ctx.Data(http.StatusOK, "application/json; charset=utf-8", obj)
 }
 
-func (s *Server) GetModel(ctx *gin.Context) {
-	tag := ctx.Param("id")
-	digest := ctx.Param("digest")
-	catalog, err := s.getCatalog(tag)
-	if err != nil {
-		ctx.AbortWithStatus(http.StatusInternalServerError)
-		return
-	}
-	sym, err := catalog.Get(digest)
-	if err != nil {
-		ctx.AbortWithStatus(http.StatusNotFound)
-		return
-	}
-	item, ok := sym.(*model.Item)
-	if !ok {
-		ctx.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
-	for _, artifact := range item.Content.Artifacts {
-		if artifact.Tag == "model" {
-			ctx.Redirect(http.StatusFound, s.StorageAPIBase+"/object/"+artifact.Digest)
-			return
-		}
-	}
-	// backward compatible hack. use 404 in the future.
-	ctx.Redirect(http.StatusFound, s.StorageAPIBase+"/object/"+digest+".glb")
-	// ctx.AbortWithStatus(http.StatusNotFound)
-}
-
 func (s *Server) GetHistory(ctx *gin.Context) {
 	tag := ctx.Param("id")
 	digest := ctx.Param("digest")

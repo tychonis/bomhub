@@ -31,13 +31,18 @@ func (s *Server) GetDisassembledScene(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, rendered)
 }
 
-func (s *Server) GetScene(ctx *gin.Context) {
+func (s *Server) GetRepresentation(ctx *gin.Context) {
 	digest, err := hex.DecodeString(ctx.Param("digest"))
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	obj, err := s.DB.GetScene(ctx, digest)
+	typ := ctx.Query("type")
+	if typ == "" {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	obj, err := s.DB.GetRepresentation(ctx, digest, typ)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusNotFound)
 		return
@@ -46,7 +51,7 @@ func (s *Server) GetScene(ctx *gin.Context) {
 	ctx.Redirect(http.StatusFound, s.StorageAPIBase+"/object/"+objhex)
 }
 
-func (s *Server) SaveScene(ctx *gin.Context) {
+func (s *Server) SaveRepresentation(ctx *gin.Context) {
 	digest, err := hex.DecodeString(ctx.Param("digest"))
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
@@ -63,7 +68,7 @@ func (s *Server) SaveScene(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	err = s.DB.SaveScene(ctx, digest, objectDigest)
+	err = s.DB.SaveRepresentation(ctx, digest, objectDigest, body.Tag)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
