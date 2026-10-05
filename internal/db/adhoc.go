@@ -83,23 +83,3 @@ func (c *Client) SaveWorkspaceSummary(ctx context.Context, id int, content any) 
 
 	return ret, nil
 }
-
-func (c *Client) GetRepresentation(ctx context.Context, item []byte, typ string) ([]byte, error) {
-	const q = `
-SELECT object_digest
-FROM representation r
-WHERE r.symbol_digest = $1 AND r.type = $2;
-`
-	var thumbnailDigest []byte
-	err := c.pool.QueryRow(ctx, q, item, typ).Scan(&thumbnailDigest)
-	return thumbnailDigest, err
-}
-
-func (c *Client) SaveRepresentation(ctx context.Context, item []byte, objectDigest []byte, typ string) error {
-	const q = `
-INSERT INTO representation (symbol_digest, type, object_digest)
-VALUES ($1, $2, $3);
-`
-	_, err := c.pool.Exec(ctx, q, item, typ, objectDigest)
-	return err
-}

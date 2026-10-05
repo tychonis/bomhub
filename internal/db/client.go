@@ -126,31 +126,27 @@ WHERE d.symbol_digest = $1;
 	return raw, err
 }
 
-func (c *Client) GetScene(ctx context.Context, item []byte) ([]byte, error) {
+func (c *Client) GetRepresentation(ctx context.Context, item []byte, typ string) ([]byte, error) {
 	const q = `
 SELECT object_digest
-FROM scene s
-  LEFT JOIN definition d
-    ON s.definition_id = d.definition_id
-WHERE d.symbol_digest = $1;
+FROM representation r
+WHERE r.symbol_digest = $1 AND r.type = $2;
 `
-	var sceneDigest []byte
-	err := c.pool.QueryRow(ctx, q, item).Scan(&sceneDigest)
-	return sceneDigest, err
+	var thumbnailDigest []byte
+	err := c.pool.QueryRow(ctx, q, item, typ).Scan(&thumbnailDigest)
+	return thumbnailDigest, err
 }
 
-func (c *Client) SaveScene(ctx context.Context, item []byte, objectDigest []byte) error {
+func (c *Client) SaveRepresentation(ctx context.Context, item []byte, objectDigest []byte, typ string) error {
 	const q = `
-INSERT INTO scene (definition_id, object_digest)
-SELECT d.definition_id, $2
-FROM definition d
-WHERE d.symbol_digest = $1
-ON CONFLICT (definition_id)
+INSERT INTO representation (symbol_digest, type, object_digest)
+VALUES ($1, $2, $3)
+ON CONFLICT (symbol_digest, type)
 DO UPDATE SET
-  object_digest = EXCLUDED.object_digest,
-  updated_at = now();
+    object_digest = EXCLUDED.object_digest,
+    updated_at = now();
 `
-	_, err := c.pool.Exec(ctx, q, item, objectDigest)
+	_, err := c.pool.Exec(ctx, q, item, typ, objectDigest)
 	return err
 }
 

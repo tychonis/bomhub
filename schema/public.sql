@@ -62,5 +62,5 @@ CREATE TABLE representation (
     updated_at TIMESTAMPTZ DEFAULT now()
 );
 
-CREATE INDEX representation_lookup_index
+CREATE UNIQUE INDEX representation_lookup_index
     ON representation(symbol_digest, type);
