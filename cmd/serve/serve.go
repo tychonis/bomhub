@@ -22,7 +22,7 @@ var Cmd = &cobra.Command{
 
 func registerServer(router *gin.Engine, server *serve.Server) {
 	router.GET("/boms", server.GetBOMs)
-	auth.GrantMemberAccess(auth.GET("/boms"))
+	auth.GrantPublicAccess(auth.GET("/boms"))
 
 	router.POST("/definition/:digest", server.SaveDefinition)
 	router.GET("/definition/:digest", server.GetDefinition)
@@ -49,15 +49,15 @@ func registerServer(router *gin.Engine, server *serve.Server) {
 
 	router.GET("/workspace/:id", server.GetWorkspaceSummary)
 	router.POST("/workspace/:id", server.SaveWorkspaceSummary)
-	router.GET("/workspace/:id/catalog", server.GetCatalog)
 	router.GET("/workspace/:id/roots", server.GetRoots)
+	router.GET("/workspace/:id/catalog", server.GetCatalog)
 	router.POST("/workspace/:id/index", server.SaveIndex)
 	router.GET("/workspace/:id/index", server.GetIndex)
 	router.GET("/workspace/:id/revisions", server.GetRevisions)
-	auth.GrantMemberAccess(auth.GET("/workspace/:id"))
+	auth.GrantPublicAccess(auth.GET("/workspace/:id"))
 	auth.GrantMemberAccess(auth.POST("/workspace/:id"))
+	auth.GrantPublicAccess(auth.GET("/workspace/:id/roots"))
 	auth.GrantMemberAccess(auth.GET("/workspace/:id/catalog"))
-	auth.GrantMemberAccess(auth.GET("/workspace/:id/roots"))
 	auth.GrantMemberAccess(auth.POST("/workspace/:id/index"))
 	auth.GrantMemberAccess(auth.GET("/workspace/:id/index"))
 	auth.GrantMemberAccess(auth.GET("/workspace/:id/revisions"))
@@ -90,7 +90,9 @@ func run(cmd *cobra.Command, args []string) {
 		dbc.LogActivity(ctx, user.(string), ctx.FullPath())
 	})
 
-	server, err := serve.NewServer(dbc, 256, viper.GetString("storage.base"))
+	viper.SetDefault("cache.size", 256)
+	cacheSize := viper.GetInt("cache.size")
+	server, err := serve.NewServer(dbc, cacheSize, viper.GetString("storage.base"))
 	if err != nil {
 		slog.Error("failed to create server", "err", err)
 		return
