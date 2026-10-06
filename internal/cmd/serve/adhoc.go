@@ -99,6 +99,34 @@ func (s *Server) GetRoots(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
+func (s *Server) CreateRoot(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	defer ctx.Request.Body.Close()
+	req := struct {
+		Digest string `json:"digest"`
+	}{}
+	err = ctx.ShouldBind(&req)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	rawDigest, err := hex.DecodeString(req.Digest)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	err = s.DB.CreateRoot(ctx, id, rawDigest)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	ctx.Status(http.StatusAccepted)
+}
+
 func (s *Server) GetRevisions(ctx *gin.Context) {
 	tag := ctx.Param("id")
 	catalog, err := s.getCatalog(tag)

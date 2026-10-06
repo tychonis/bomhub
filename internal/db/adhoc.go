@@ -46,6 +46,15 @@ func (c *Client) GetRoots(ctx context.Context, id int) ([][]byte, error) {
 	return pgx.CollectRows(rows, pgx.RowTo[[]byte])
 }
 
+func (c *Client) CreateRoot(ctx context.Context, id int, digest []byte) error {
+	const q = `
+INSERT INTO root (bom_id, root_digest)
+VALUES ($1, $2);
+`
+	_, err := c.pool.Exec(ctx, q, id, digest)
+	return err
+}
+
 func (c *Client) GetWorkspaceModule(ctx context.Context, id int) (string, error) {
 	const q = `SELECT COALESCE(module_name, '') FROM bom WHERE bom_id = $1;`
 	var module string
