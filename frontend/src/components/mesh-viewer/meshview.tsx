@@ -66,6 +66,9 @@ function ProgressIndicator({ progress }: { progress: modelLoadingProgress }) {
   );
 }
 
+const placementToMatrix = (shift: THREE.Vector3, rotation: THREE.Quaternion) =>
+  new THREE.Matrix4().compose(shift, rotation, new THREE.Vector3(1, 1, 1));
+
 export function MeshView(props: {
   nodes: any;
   selectedDigest: string;
@@ -73,10 +76,12 @@ export function MeshView(props: {
   setHovered: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const { id } = useParams<{ id: string }>();
+  const { setSelectedDigest, setHovered } = props;
 
   const mountRef = useRef<HTMLDivElement | null>(null);
   const meshRef = useRef<MESH.Mesh | null>(null);
   const selectedFromMeshRef = useRef(false);
+  const coordinateRef = useRef(new THREE.Matrix4());
   const [progress, setProgress] = useState<modelLoadingProgress>({
     total: 0,
     loaded: 0,
@@ -91,16 +96,24 @@ export function MeshView(props: {
     const mesh = MESH.createDefaultMesh(mount);
     meshRef.current = mesh;
 
-    const selectFromMesh = (digest: string) => {
+    const selectObject = (object: THREE.Object3D) => {
+      const modelObj = MESH.findModelObject(object);
+      if (!modelObj) return;
+
+      coordinateRef.current.compose(
+        modelObj.position,
+        modelObj.quaternion,
+        modelObj.scale
+      );
+
       selectedFromMeshRef.current = true;
-      const select = props.setSelectedDigest;
-      select(digest);
+      setSelectedDigest(modelObj.userData.id);
     };
 
     const mouseControl = MESH.createMouseController(
       mesh,
-      selectFromMesh,
-      props.setHovered
+      selectObject,
+      setHovered
     );
 
     mouseControl.attach();
@@ -110,7 +123,7 @@ export function MeshView(props: {
       MESH.dispose(mesh);
       meshRef.current = null;
     };
-  }, [props.setHovered, props.setSelectedDigest]);
+  }, [setHovered, setSelectedDigest]);
 
   // Update models without recreating the viewer or camera.
   useEffect(() => {
@@ -120,7 +133,11 @@ export function MeshView(props: {
     const node = props.nodes[props.selectedDigest];
     if (!node) return;
 
-    let preserveCamera = selectedFromMeshRef.current;
+    const preserveCamera = selectedFromMeshRef.current;
+
+    if (!selectedFromMeshRef.current) {
+      coordinateRef.current.identity();
+    }
     selectedFromMeshRef.current = false;
 
     // TODO: fix this hack.
@@ -143,10 +160,7 @@ export function MeshView(props: {
     getModels(id, node.item)
       .then((models) => {
         setProgress({ total: models.length, loaded: 0, failed: 0 });
-        // TODO: fix this hack. leaf node should use parent coordinates.
-        if (models.length === 1) {
-          preserveCamera = false;
-        }
+
         for (const model of models) {
           const nodeID = findNode(node, model.name);
           if (!nodeID) {
@@ -155,12 +169,20 @@ export function MeshView(props: {
 
           const path = getItemPath(model.source);
 
+          const placementMat = placementToMatrix(model.shift, model.rotation);
+          placementMat.premultiply(coordinateRef.current);
+
+          const position = new THREE.Vector3();
+          const rotation = new THREE.Quaternion();
+          const scale = new THREE.Vector3();
+          placementMat.decompose(position, rotation, scale);
+
           MESH.loadModel(
             mesh,
             nodeID,
             path,
-            model.rotation,
-            model.shift,
+            rotation,
+            position,
             preserveCamera
           ).then((ok) => {
             if (ok) {

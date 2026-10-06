@@ -28,12 +28,18 @@ export type Mesh = {
   dispose: () => void;
 };
 
-export function findObjectId(obj: THREE.Object3D | null): string | undefined {
+export function findModelObject(
+  obj: THREE.Object3D | null
+): THREE.Object3D | undefined {
   while (obj) {
-    if (obj.userData?.id) return obj.userData.id;
+    if (obj.userData?.id) return obj;
     obj = obj.parent;
   }
   return undefined;
+}
+
+export function findObjectId(obj: THREE.Object3D | null): string | undefined {
+  return findModelObject(obj)?.userData?.id;
 }
 
 export function setHighlight(mesh: THREE.Mesh, on: boolean) {
@@ -283,7 +289,7 @@ export type HoverController = {
 
 export const createMouseController = (
   mesh: Mesh,
-  setSelectedDigest: React.Dispatch<React.SetStateAction<string>>,
+  selectObject: (object: THREE.Object3D) => void,
   setHovered: React.Dispatch<React.SetStateAction<string>>
 ): HoverController => {
   const raycaster = new THREE.Raycaster();
@@ -353,11 +359,8 @@ export const createMouseController = (
 
     if (duration > 200 || distance > 10) return;
 
-    // console.log("Clicked coordinates:", pointerEventCoordinate(event));
     const clicked = pointerEventObject(event);
-    const clickedID = findObjectId(clicked);
-
-    if (clickedID) setSelectedDigest(clickedID);
+    if (clicked) selectObject(clicked);
   };
 
   const handlePointerLeave = () => {
