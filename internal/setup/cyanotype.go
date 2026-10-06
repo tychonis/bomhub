@@ -4,7 +4,6 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/tychonis/cyanotype/core/catalog"
-	"github.com/tychonis/cyanotype/core/instantiator"
 )
 
 func CreateDefaultCatalog(module string) *catalog.Catalog {
@@ -13,8 +12,4 @@ func CreateDefaultCatalog(module string) *catalog.Catalog {
 		viper.GetString("cyanotype.token"),
 		module,
 	)
-}
-
-func CreateDefaultInstantiator() *instantiator.Instantiator {
-	return instantiator.New()
 }

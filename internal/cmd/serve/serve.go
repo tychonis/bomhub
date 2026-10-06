@@ -17,6 +17,8 @@ import (
 
 	"github.com/tychonis/cyanotype/core/bomtree"
 	"github.com/tychonis/cyanotype/core/catalog"
+	"github.com/tychonis/cyanotype/core/instantiator"
+	"github.com/tychonis/cyanotype/core/ranker"
 	"github.com/tychonis/cyanotype/model"
 
 	"github.com/tychonis/bomhub/internal/db"
@@ -207,13 +209,14 @@ func (s *Server) getBOMTree(catalog *catalog.Catalog, digest model.Digest) ([]by
 	if err != nil {
 		return nil, err
 	}
-	instantiator := setup.CreateDefaultInstantiator()
+	r := ranker.NewCatalogRanker(catalog)
+	ins := instantiator.New(r)
 	var rootNode *bomtree.Node
 	switch rootSym := root.(type) {
 	case *model.Item:
-		rootNode, err = instantiator.InstantiateTreeFromItem(catalog, rootSym.GetName(), rootSym)
+		rootNode, err = ins.InstantiateTreeFromItem(catalog, rootSym.GetName(), rootSym)
 	case *model.CoItem:
-		rootNode, err = instantiator.InstantiateTree(catalog, rootSym.GetName(), rootSym)
+		rootNode, err = ins.InstantiateTree(catalog, rootSym.GetName(), rootSym)
 	default:
 		return nil, fmt.Errorf("unexpected root type")
 	}
