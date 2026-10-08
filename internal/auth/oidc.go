@@ -24,10 +24,11 @@ func randB64URL(n int) string {
 }
 
 type OIDCConfig struct {
-	OAuthConfig  *oauth2.Config
-	PublicKeyURL string
-	PublicKeySet *jwk.Cache
-	Audience     string
+	OAuthConfig     *oauth2.Config
+	PublicKeyURL    string
+	PublicKeySet    *jwk.Cache
+	Audience        string
+	AllowPublicRead bool
 
 	// DEBUG / temporary deployment only.
 	//
@@ -48,16 +49,26 @@ func (c *OIDCConfig) RegisterTo(router *gin.Engine) {
 	router.GET(CALLBACK_PATH, c.Callback)
 }
 
+func (c *OIDCConfig) AllowPublicAccess(ctx *gin.Context) bool {
+	if c.AllowPublicRead {
+		return (ctx.Request.Method == "GET" ||
+			ctx.Request.Method == "HEAD" ||
+			PublicResources.Contains(resFromCtx(ctx)))
+	}
+	return PublicResources.Contains(resFromCtx(ctx))
+}
+
 func (c *OIDCConfig) Authorize(ctx *gin.Context) {
 	if AllowM2MAccess(ctx) {
 		ctx.Next()
 		return
 	}
 
-	if PublicResources.Contains(resFromCtx(ctx)) {
+	if c.AllowPublicAccess(ctx) {
 		ctx.Next()
 		return
 	}
+
 	token, err := ctx.Cookie("id_token")
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusUnauthorized)

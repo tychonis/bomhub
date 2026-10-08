@@ -26,6 +26,7 @@ func CreateDefaultAuthConfig() *auth.OIDCConfig {
 
 	// TODO: use a more secure way for M2M access.
 	auth.M2MToken = viper.GetString("oidc.m2m_token")
+	viper.SetDefault("oidc.allow_public_read", false)
 
 	return &auth.OIDCConfig{
 		OAuthConfig: &oauth2.Config{
@@ -38,9 +39,10 @@ func CreateDefaultAuthConfig() *auth.OIDCConfig {
 			RedirectURL: viper.GetString("endpoint") + "/auth/callback",
 			Scopes:      []string{oidc.ScopeOpenID, "email"},
 		},
-		PublicKeyURL: publicKeys,
-		PublicKeySet: cache,
-		Audience:     viper.GetString("oidc.client_id"),
+		PublicKeyURL:    publicKeys,
+		PublicKeySet:    cache,
+		Audience:        viper.GetString("oidc.client_id"),
+		AllowPublicRead: viper.GetBool("oidc.allow_public_read"),
 		// DEBUG: allow insecure cookies for direct IP access
 		Secure: viper.GetString("env") != "ip",
 	}
