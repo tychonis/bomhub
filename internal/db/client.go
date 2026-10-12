@@ -183,11 +183,18 @@ RETURNING bom_id
 	return id, false, err
 }
 
-func (c *Client) Search(ctx context.Context, query string) ([]model.ConcreteSymbol, error) {
+type SearchResult struct {
+	BOM     int                  `json:"bom_id"`
+	Content model.ConcreteSymbol `json:"content"`
+}
+
+func (c *Client) Search(ctx context.Context, query string) ([]*SearchResult, error) {
 	const q = `
-SELECT encode(symbol_digest, 'hex') AS digest, content
-FROM definition
-WHERE content->'content'->>'name' ILIKE '%' || $1 || '%'
+SELECT bom_id, encode(symbol_digest, 'hex') AS digest, d.content
+FROM definition d
+  LEFT JOIN metadata m
+    ON d.definition_id = m.definition_id
+WHERE d.content->'content'->>'name' ILIKE '%' || $1 || '%'
    OR encode(symbol_digest, 'hex') ILIKE '%' || $1 || '%'
 LIMIT 11;
 `
@@ -197,11 +204,12 @@ LIMIT 11;
 	}
 	defer rows.Close()
 
-	var results []model.ConcreteSymbol
+	var results []*SearchResult
 	for rows.Next() {
+		var bomID int
 		var digestHex string
 		var content []byte
-		err := rows.Scan(&digestHex, &content)
+		err := rows.Scan(&bomID, &digestHex, &content)
 		if err != nil {
 			return nil, err
 		}
@@ -209,7 +217,10 @@ LIMIT 11;
 		if err != nil {
 			return nil, err
 		}
-		results = append(results, result)
+		results = append(results, &SearchResult{
+			BOM:     bomID,
+			Content: result,
+		})
 	}
 	return results, nil
 }
