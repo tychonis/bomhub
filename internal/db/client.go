@@ -195,9 +195,10 @@ SELECT bom_id, encode(symbol_digest, 'hex') AS digest, d.content
 FROM definition d
   LEFT JOIN metadata m
     ON d.definition_id = m.definition_id
-WHERE d.content->'content'->>'name' ILIKE '%' || $1 || '%'
-   OR encode(symbol_digest, 'hex') ILIKE '%' || $1 || '%'
-LIMIT 11;
+WHERE d.content->>'type' = 'item'
+  AND (d.content->'content'->>'name' ILIKE '%' || $1 || '%'
+       OR encode(symbol_digest, 'hex') ILIKE '%' || $1 || '%')
+LIMIT 6;
 `
 	rows, err := c.pool.Query(ctx, q, query)
 	if err != nil {
