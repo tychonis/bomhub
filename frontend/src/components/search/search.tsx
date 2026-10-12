@@ -1,20 +1,32 @@
-import { useEffect, useMemo, useState } from "react";
-import { AutoComplete, Input, Spin, Typography } from "antd";
+import { useEffect, useState } from "react";
+import { AutoComplete, Input, Spin, Tag, Typography } from "antd";
+import { useNavigate } from "react-router-dom";
 
 import bomhub from "api/ky";
-export type Option = {
+import styles from "./search.module.css";
+
+type SearchResult = {
+  bom_id: number;
+  digest: string;
+  content: {
+    type: string;
+    content: {
+      name: string;
+    };
+  };
+};
+
+type Option = {
   value: string;
-  label: string;
+  label: React.ReactNode;
+  bom_id?: number;
+  disabled?: boolean;
 };
 
 export type DebouncedSearchProps = {
   placeholder?: string;
   debounceMs?: number;
   minLength?: number;
-  defaultValue?: string;
-  fetcher?: (query: string, signal: AbortSignal) => Promise<Option[]>;
-  onPick?: (value: string, option: Option) => void;
-  onSubmit?: (query: string) => void;
   autoFocus?: boolean;
   disabled?: boolean;
   className?: string;
@@ -23,42 +35,22 @@ export type DebouncedSearchProps = {
 export default function DebouncedSearch({
   placeholder = "Search part name/number etc.",
   debounceMs = 350,
-  minLength = 2,
-  defaultValue = "",
-  fetcher,
-  onPick,
-  onSubmit,
+  minLength = 4,
   autoFocus,
   disabled,
   className,
 }: DebouncedSearchProps) {
-  const [query, setQuery] = useState(defaultValue);
+  const navigate = useNavigate();
+
+  const [query, setQuery] = useState("");
   const [options, setOptions] = useState<Option[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const effectiveFetcher = useMemo(() => {
-    if (fetcher) return fetcher;
-
-    return async (q: string, signal: AbortSignal): Promise<Option[]> => {
-      const res = await bomhub.get(`/api/search?q=${encodeURIComponent(q)}`, {
-        signal,
-      });
-
-      if (!res.ok) {
-        throw new Error(`Search failed: ${res.status}`);
-      }
-
-      return res.json();
-    };
-  }, [fetcher]);
+  const validQuery = query.trim().length >= minLength;
 
   useEffect(() => {
-    const q = query.trim();
-
-    if (q.length < minLength) {
-      return;
-    }
+    if (!validQuery) return;
 
     const ctrl = new AbortController();
 
@@ -66,18 +58,45 @@ export default function DebouncedSearch({
       setLoading(true);
 
       try {
-        const result = await effectiveFetcher(q, ctrl.signal);
+        const results = (await bomhub
+          .get("api/search", {
+            searchParams: { q: query.trim() },
+            signal: ctrl.signal,
+          })
+          .json()) as SearchResult[];
 
-        setOptions(result);
+        if (ctrl.signal.aborted) return;
+
+        const next: Option[] = results.slice(0, 5).map((result) => ({
+          value: result.digest,
+          bom_id: result.bom_id,
+          label: (
+            <div className={styles.result}>
+              <span className={styles.name}>{result.content.content.name}</span>
+              <span className={styles.digest}>{result.digest.slice(0, 8)}</span>
+              <Tag className={styles.tag}>{result.content.type}</Tag>
+            </div>
+          ),
+        }));
+
+        if (results.length > 5) {
+          next.push({
+            value: "__more__",
+            label: "...",
+            disabled: true,
+          });
+        }
+
+        setOptions(next);
         setOpen(true);
       } catch (err) {
-        if ((err as Error)?.name !== "AbortError") {
+        if (!ctrl.signal.aborted) {
           console.error("search error", err);
           setOptions([]);
           setOpen(false);
         }
       } finally {
-        setLoading(false);
+        if (!ctrl.signal.aborted) setLoading(false);
       }
     }, debounceMs);
 
@@ -85,23 +104,25 @@ export default function DebouncedSearch({
       ctrl.abort();
       clearTimeout(handle);
     };
-  }, [query, debounceMs, minLength, effectiveFetcher]);
-
-  const validQuery = query.trim().length >= minLength;
+  }, [query, debounceMs, validQuery]);
 
   return (
     <AutoComplete
       className={className}
       value={query}
       options={validQuery ? options : []}
-      onSelect={(value, option) => onPick?.(value, option as Option)}
       open={validQuery && open}
       onOpenChange={setOpen}
+      onChange={setQuery}
+      onSelect={(value, option) => {
+        if (!option.bom_id) return;
+        navigate(`/mesh/${option.bom_id}/${value}`);
+      }}
       notFoundContent={
-        <div className="py-2 px-3 flex items-center gap-2">
+        <div className={styles.empty}>
           {loading && <Spin size="small" />}
           <Typography.Text type="secondary">
-            {loading ? "Searching..." : validQuery ? "No results" : ""}
+            {loading ? "Searching..." : "No results"}
           </Typography.Text>
         </div>
       }
@@ -114,8 +135,6 @@ export default function DebouncedSearch({
         allowClear
         autoFocus={autoFocus}
         loading={loading}
-        onSearch={(value) => onSubmit?.(value)}
-        onChange={(e) => setQuery(e.target.value)}
       />
     </AutoComplete>
   );

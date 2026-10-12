@@ -185,6 +185,7 @@ RETURNING bom_id
 
 type SearchResult struct {
 	BOM     int                  `json:"bom_id"`
+	Digest  model.Digest         `json:"digest"`
 	Content model.ConcreteSymbol `json:"content"`
 }
 
@@ -213,12 +214,13 @@ LIMIT 11;
 		if err != nil {
 			return nil, err
 		}
-		result, err := catalog.DeserializeSymbol("", model.Digest(digestHex), content)
+		result, err := catalog.DeserializeSymbol("", digestHex, content)
 		if err != nil {
 			return nil, err
 		}
 		results = append(results, &SearchResult{
 			BOM:     bomID,
+			Digest:  digestHex,
 			Content: result,
 		})
 	}

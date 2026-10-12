@@ -1,0 +1,33 @@
+.result {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.digest {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: #999;
+  font-family: monospace;
+}
+
+.tag {
+  flex-shrink: 0;
+  margin-inline-end: 0;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+}

@@ -1,6 +1,6 @@
 import styles from "./site-header.module.css";
 
-import Search from "antd/es/input/Search";
+import DebouncedSearch from "components/search/search";
 import tychonisLogo from "assets/logo.png";
 import { Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
@@ -14,7 +14,7 @@ export const SiteHeader = () => {
         alt="Tychonis logo"
         onClick={() => (window.location.href = "/")}
       />
-      <Search
+      <DebouncedSearch
         placeholder="Search part number etc"
         className={styles["header-search"]}
       />
