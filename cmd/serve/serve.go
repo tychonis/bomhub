@@ -24,15 +24,13 @@ func registerServer(router *gin.Engine, server *serve.Server) {
 	router.GET("/boms", server.GetBOMs)
 	auth.GrantPublicAccess(auth.GET("/boms"))
 
+	router.GET("/search", server.Search)
+	auth.GrantMemberAccess(auth.GET("/search"))
+
 	router.POST("/definition/:digest", server.SaveDefinition)
 	router.GET("/definition/:digest", server.GetDefinition)
 	auth.GrantMemberAccess(auth.POST("/definition/:digest"))
 	auth.GrantMemberAccess(auth.GET("/definition/:digest"))
-
-	router.POST("/metadata/:digest", server.SaveMetadata)
-	router.GET("/metadata/:digest", server.GetMetadata)
-	auth.GrantMemberAccess(auth.POST("/metadata/:digest"))
-	auth.GrantMemberAccess(auth.GET("/metadata/:digest"))
 
 	router.GET("/tree/:id/:digest", server.GetBOMTree)
 	router.GET("/models/:id/:digest", server.GetDisassembledScene)
@@ -55,6 +53,8 @@ func registerServer(router *gin.Engine, server *serve.Server) {
 	router.POST("/workspace/:id/index", server.SaveIndex)
 	router.GET("/workspace/:id/index", server.GetIndex)
 	router.GET("/workspace/:id/revisions", server.GetRevisions)
+	router.POST("/workspace/:id/metadata/:digest", server.SaveMetadata)
+	router.GET("/workspace/:id/metadata/:digest", server.GetMetadata)
 	auth.GrantMemberAccess(auth.GET("/workspace/:id"))
 	auth.GrantMemberAccess(auth.POST("/workspace/:id"))
 	auth.GrantMemberAccess(auth.GET("/workspace/:id/roots"))
@@ -63,6 +63,8 @@ func registerServer(router *gin.Engine, server *serve.Server) {
 	auth.GrantMemberAccess(auth.POST("/workspace/:id/index"))
 	auth.GrantMemberAccess(auth.GET("/workspace/:id/index"))
 	auth.GrantMemberAccess(auth.GET("/workspace/:id/revisions"))
+	auth.GrantMemberAccess(auth.POST("/workspace/:id/metadata/:digest"))
+	auth.GrantMemberAccess(auth.GET("/workspace/:id/metadata/:digest"))
 
 	router.GET("/representation/:digest", server.GetRepresentation)
 	router.POST("/representation/:digest", server.SaveRepresentation)

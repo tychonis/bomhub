@@ -7,6 +7,8 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/tychonis/cyanotype/core/catalog"
+	"github.com/tychonis/cyanotype/model"
 )
 
 type Client struct {
@@ -84,19 +86,19 @@ func (c *Client) GetDefinition(ctx context.Context, digest []byte) (json.RawMess
 	return raw, err
 }
 
-func (c *Client) SaveMetadata(ctx context.Context, digest []byte, content any) (json.RawMessage, error) {
+func (c *Client) SaveMetadata(ctx context.Context, bom_id int, digest []byte, content any) (json.RawMessage, error) {
 	body, err := json.Marshal(content)
 	if err != nil {
 		return nil, err
 	}
 
 	const q = `
-INSERT INTO metadata (definition_id, content)
-SELECT d.definition_id, val.content
-FROM (VALUES ($1::bytea, $2::jsonb)) AS val(digest, content)
+INSERT INTO metadata (bom_id, definition_id, content)
+SELECT $1, d.definition_id, val.content
+FROM (VALUES ($2::bytea, $3::jsonb)) AS val(digest, content)
 	LEFT JOIN definition d
     ON val.digest = d.symbol_digest
-ON CONFLICT (definition_id)
+ON CONFLICT (bom_id, definition_id)
 DO UPDATE SET
   content = EXCLUDED.content,
   updated_at = now()
@@ -104,7 +106,7 @@ RETURNING content;
 `
 
 	var ret json.RawMessage
-	err = c.pool.QueryRow(ctx, q, digest, body).
+	err = c.pool.QueryRow(ctx, q, bom_id, digest, body).
 		Scan(&ret)
 	if err != nil {
 		return nil, err
@@ -113,16 +115,16 @@ RETURNING content;
 	return ret, nil
 }
 
-func (c *Client) GetMetadata(ctx context.Context, digest []byte) (json.RawMessage, error) {
+func (c *Client) GetMetadata(ctx context.Context, bomID int, digest []byte) (json.RawMessage, error) {
 	const q = `
 SELECT m.content
 FROM metadata m
   LEFT JOIN definition d
     ON m.definition_id = d.definition_id
-WHERE d.symbol_digest = $1;
+WHERE m.bom_id = $1 AND d.symbol_digest = $2;
 `
 	var raw json.RawMessage
-	err := c.pool.QueryRow(ctx, q, digest).Scan(&raw)
+	err := c.pool.QueryRow(ctx, q, bomID, digest).Scan(&raw)
 	return raw, err
 }
 
@@ -179,4 +181,35 @@ RETURNING bom_id
 		`SELECT bom_id FROM bom WHERE module_name = $1`, module).Scan(&id)
 
 	return id, false, err
+}
+
+func (c *Client) Search(ctx context.Context, query string) ([]model.ConcreteSymbol, error) {
+	const q = `
+SELECT encode(symbol_digest, 'hex') AS digest, content
+FROM definition
+WHERE content->'content'->>'name' ILIKE '%' || $1 || '%'
+   OR encode(symbol_digest, 'hex') ILIKE '%' || $1 || '%'
+LIMIT 11;
+`
+	rows, err := c.pool.Query(ctx, q, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var results []model.ConcreteSymbol
+	for rows.Next() {
+		var digestHex string
+		var content []byte
+		err := rows.Scan(&digestHex, &content)
+		if err != nil {
+			return nil, err
+		}
+		result, err := catalog.DeserializeSymbol("", model.Digest(digestHex), content)
+		if err != nil {
+			return nil, err
+		}
+		results = append(results, result)
+	}
+	return results, nil
 }

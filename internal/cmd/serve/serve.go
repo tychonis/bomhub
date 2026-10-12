@@ -112,12 +112,17 @@ func (s *Server) SaveDefinition(ctx *gin.Context) {
 }
 
 func (s *Server) GetMetadata(ctx *gin.Context) {
+	bomID, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 	digest, err := hex.DecodeString(ctx.Param("digest"))
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	obj, err := s.DB.GetMetadata(ctx, digest)
+	obj, err := s.DB.GetMetadata(ctx, bomID, digest)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusNotFound)
 		return
@@ -126,6 +131,11 @@ func (s *Server) GetMetadata(ctx *gin.Context) {
 }
 
 func (s *Server) SaveMetadata(ctx *gin.Context) {
+	bomID, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 	digest, err := hex.DecodeString(ctx.Param("digest"))
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
@@ -137,9 +147,10 @@ func (s *Server) SaveMetadata(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	_, err = s.DB.SaveMetadata(ctx, digest, json.RawMessage(data))
+	_, err = s.DB.SaveMetadata(ctx, bomID, digest, json.RawMessage(data))
 	if err != nil {
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		slog.Warn(err.Error())
+		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 	ctx.Status(http.StatusAccepted)
@@ -273,6 +284,16 @@ func (s *Server) GetBOMTree(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, json.RawMessage(contentBytes))
 }
 
+func (s *Server) Search(ctx *gin.Context) {
+	query := ctx.Query("q")
+	results, err := s.DB.Search(context.TODO(), query)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	ctx.JSON(http.StatusOK, results)
+}
+
 func (s *Server) GetCatalogHead(tag string) (model.RevisionID, error) {
 	id, err := strconv.ParseInt(tag, 10, 32)
 	if err != nil {
@@ -309,6 +330,12 @@ func (s *Server) CreateModule(ctx *gin.Context) {
 	module := strings.TrimPrefix(ctx.Param("module"), "/")
 	if module == "" {
 		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	exist, err := s.DB.GetWorkspaceID(ctx, module)
+	if err == nil {
+		ctx.JSON(http.StatusOK, gin.H{"id": exist})
 		return
 	}
 
