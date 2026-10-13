@@ -11,6 +11,15 @@ export default defineConfig(({ mode }) => ({
       gzipSize: true,
       brotliSize: true,
     }),
+    {
+      name: "reload-imperative",
+      handleHotUpdate({ file, server }) {
+        if (file.endsWith(".ts")) {
+          server.ws.send({ type: "full-reload" });
+          return [];
+        }
+      },
+    },
   ],
   resolve: {
     tsconfigPaths: true,
