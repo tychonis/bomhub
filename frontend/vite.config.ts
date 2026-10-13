@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
     }),
     {
       name: "reload-imperative",
-      handleHotUpdate({ file, server }) {
+      hotUpdate({ file, server }) {
         if (file.endsWith(".ts")) {
           server.ws.send({ type: "full-reload" });
           return [];
