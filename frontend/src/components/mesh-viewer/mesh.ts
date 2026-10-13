@@ -295,6 +295,7 @@ export const createMouseController = (
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
 
+  let pointerDown = false;
   let hovered: THREE.Mesh | null = null;
   let downTime = 0;
   let downX = 0;
@@ -342,16 +343,23 @@ export const createMouseController = (
   };
 
   const handlePointerMove = (event: PointerEvent) => {
+    if (pointerDown) return;
     updateHover(pointerEventObject(event));
   };
 
   const handlePointerDown = (event: PointerEvent) => {
+    pointerDown = true;
     downTime = event.timeStamp;
     downX = event.clientX;
     downY = event.clientY;
   };
 
+  const handlePointerUpGlobal = () => {
+    pointerDown = false;
+  };
+
   const handlePointerUp = (event: PointerEvent) => {
+    pointerDown = false;
     const duration = event.timeStamp - downTime;
     const dx = event.clientX - downX;
     const dy = event.clientY - downY;
@@ -367,6 +375,10 @@ export const createMouseController = (
     updateHover(null);
   };
 
+  const handlePointerCancel = () => {
+    pointerDown = false;
+  };
+
   const el = mesh.renderer.domElement;
 
   return {
@@ -375,6 +387,8 @@ export const createMouseController = (
       el.addEventListener("pointerleave", handlePointerLeave);
       el.addEventListener("pointerdown", handlePointerDown);
       el.addEventListener("pointerup", handlePointerUp);
+      el.addEventListener("pointercancel", handlePointerCancel);
+      window.addEventListener("pointerup", handlePointerUpGlobal);
     },
 
     detach() {
@@ -382,6 +396,8 @@ export const createMouseController = (
       el.removeEventListener("pointerleave", handlePointerLeave);
       el.removeEventListener("pointerdown", handlePointerDown);
       el.removeEventListener("pointerup", handlePointerUp);
+      el.removeEventListener("pointercancel", handlePointerCancel);
+      window.removeEventListener("pointerup", handlePointerUpGlobal);
     },
   };
 };
