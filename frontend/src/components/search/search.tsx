@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AutoComplete, Input, Spin, Tag, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 
+import { API_ROOT } from "api/constants";
 import bomhub from "api/ky";
 import styles from "./search.module.css";
 
@@ -59,7 +60,7 @@ export default function DebouncedSearch({
 
       try {
         const results = (await bomhub
-          .get("api/search", {
+          .get(`${API_ROOT}/search`, {
             searchParams: { q: query.trim() },
             signal: ctrl.signal,
           })
