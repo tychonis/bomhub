@@ -1,5 +1,5 @@
 import styles from "./mesh.module.css";
-
+import { ErrorNote } from "components/error/error-note";
 import { useEffect, useState } from "react";
 import bomhub from "api/ky";
 import { API_ROOT } from "api/constants";
@@ -53,11 +53,11 @@ const Mesh = ({ id, digest }) => {
 
   if (!digest) {
     console.log("No digest provided");
-    return <></>;
+    return <ErrorNote />;
   }
 
   if (!bom) {
-    return <></>;
+    return <ErrorNote />;
   }
 
   return (

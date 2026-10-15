@@ -6,6 +6,7 @@ import { Workspace } from "pages/workspace/workspace";
 import { MeshPage } from "pages/mesh/mesh";
 import { MainLayout, SimpleLayout } from "layout/layout";
 import { MeshRedirect } from "pages/mesh-redirect/mesh-redirect";
+import { ErrorNote } from "components/error/error-note";
 
 const routes: RouteObject[] = [
   {
@@ -26,6 +27,7 @@ const root = [
   },
   {
     element: <SimpleLayout />,
+    errorElement: <ErrorNote />,
     children: [
       {
         path: "/mesh/:id",

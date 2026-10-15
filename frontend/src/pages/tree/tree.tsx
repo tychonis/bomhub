@@ -8,6 +8,7 @@ import { API_ROOT } from "api/constants";
 import { useParams } from "react-router-dom";
 import { TreeIndex } from "components/tree-index/tree-index";
 import { Attachment } from "components/attachement/attachment";
+import { ErrorNote } from "components/error/error-note";
 
 interface BpcDocument {
   root: string; // root node ID
@@ -62,7 +63,7 @@ const Tree = ({ id, digest }) => {
   }, [selectedDigest]);
 
   if (!bom) {
-    return <></>;
+    return <ErrorNote />;
   }
 
   return (
