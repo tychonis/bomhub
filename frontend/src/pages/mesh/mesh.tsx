@@ -40,6 +40,7 @@ export const MeshPage = () => {
 const Mesh = ({ id, digest }) => {
   const [selectedDigest, setSelectedDigest] = useState<string | null>(null);
   const [current, setCurrent] = useState<string>("");
+  const [error, setError] = useState(false);
   const [bom, setBom] = useState<BpcDocument | null>(null);
 
   useEffect(() => {
@@ -48,16 +49,15 @@ const Mesh = ({ id, digest }) => {
         setBom(bpc);
         setSelectedDigest(bpc.root);
       })
-      .catch(console.error);
+      .catch(() => setError(true));
   }, [id, digest]);
 
-  if (!digest) {
-    console.log("No digest provided");
+  if (!digest || error) {
     return <ErrorNote />;
   }
 
   if (!bom) {
-    return <ErrorNote />;
+    return <></>;
   }
 
   return (

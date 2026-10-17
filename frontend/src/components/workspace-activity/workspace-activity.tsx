@@ -26,7 +26,6 @@ export function WorkspaceActivity({ workspaceId }: { workspaceId: string }) {
     });
   }, [workspaceId]);
 
-  console.log(revisions);
   return (
     <section className={styles["activity"]}>
       <h2 className={styles["heading"]}>Recent activity</h2>
