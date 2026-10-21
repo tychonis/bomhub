@@ -49,7 +49,10 @@ const Mesh = ({ id, digest }) => {
         setBom(bpc);
         setSelectedDigest(bpc.root);
       })
-      .catch(() => setError(true));
+      .catch((e) => {
+        console.log(e);
+        setError(true);
+      });
   }, [id, digest]);
 
   if (!digest || error) {
